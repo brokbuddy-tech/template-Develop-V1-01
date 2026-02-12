@@ -21,7 +21,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import { Menu, Building, Globe, Heart, ChevronDown } from 'lucide-react';
+import { Menu, Building, Globe, ChevronDown } from 'lucide-react';
 import { NAV_LINKS, SITE_NAME } from '@/lib/constants';
 import { ScrollArea } from '../ui/scroll-area';
 import type { NavLink } from '@/lib/types';
@@ -139,9 +139,6 @@ const MobileNav = () => (
             Instant Vant Valuation
         </Button>
         <div className="flex items-center justify-center gap-4">
-            <Button variant="ghost" size="icon" aria-label="Favorites">
-                <Heart className="h-5 w-5 text-primary" />
-            </Button>
             <LanguageSwitcher />
         </div>
       </div>
@@ -176,9 +173,6 @@ export function Header() {
         </div>
         <div className="flex items-center gap-2 md:gap-4">
           <div className="hidden lg:flex items-center gap-2">
-            <Button variant="ghost" size="icon" aria-label="Favorites">
-              <Heart className="h-5 w-5 text-primary" />
-            </Button>
             <LanguageSwitcher />
           </div>
           <Button className="hidden sm:inline-flex px-5 py-2 h-auto font-semibold text-sm bg-primary text-primary-foreground hover:bg-primary/90 transition-opacity rounded-md">
