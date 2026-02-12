@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export function SearchFilters() {
   return (
-    <div className="bg-background/80 backdrop-blur-sm p-4 w-full max-w-4xl mx-auto rounded-lg">
+    <div className="dark bg-background/80 backdrop-blur-sm p-4 w-full max-w-4xl mx-auto rounded-lg">
       <Tabs defaultValue="manual-search" className="w-full">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="manual-search">
