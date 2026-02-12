@@ -39,7 +39,7 @@ const FlippableImageCard = ({ image, className }: { image: ImagePlaceholder | un
           />
         </div>
         {/* Back */}
-        <div className="absolute inset-0 h-full w-full rounded-xl bg-primary text-primary-foreground [transform:rotateY(180deg)] [backface-visibility:hidden]">
+        <div className="absolute inset-0 h-full w-full rounded-xl bg-white text-black [transform:rotateY(180deg)] [backface-visibility:hidden]">
           <div className="flex h-full flex-col items-center justify-center text-center p-4">
             <h3 className="text-lg font-bold">{title}</h3>
             <p className="text-sm mt-2">{image.description}</p>
