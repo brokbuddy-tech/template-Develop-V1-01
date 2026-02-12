@@ -71,7 +71,6 @@ export const NAV_LINKS: NavLink[] = [
       { href: '/area-guides', label: 'Area Guides' },
     ],
   },
-  { href: '/about', label: 'About Us' },
 ];
 
 

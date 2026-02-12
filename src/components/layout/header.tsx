@@ -44,7 +44,6 @@ const HoverDropdownMenu = ({ link }: { link: NavLink }) => {
           href={link.href}
           className="text-muted-foreground transition-colors hover:text-foreground flex items-center gap-1.5"
         >
-          {link.label === 'About Us' && <Globe className="h-4 w-4" />}
           {link.label}
         </Link>
     )
@@ -126,7 +125,6 @@ const MobileNav = () => (
                   href={link.href}
                   className="flex items-center py-3 text-lg font-medium text-muted-foreground transition-colors hover:text-foreground border-b mx-6"
                 >
-                  {link.label === 'About Us' && <Globe className="mr-2 h-5 w-5" />}
                   {link.label}
                 </Link>
               </SheetClose>
