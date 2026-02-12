@@ -11,6 +11,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Loader2, Mail, MapPin, Phone } from 'lucide-react';
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
+import Image from 'next/image';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 const FormSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters.'),
@@ -32,6 +34,8 @@ export default function ContactPage() {
     },
   });
 
+  const contactBgImage = PlaceHolderImages.find(p => p.id === 'contact-background');
+
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     setIsLoading(true);
     // Simulate API call
@@ -45,118 +49,130 @@ export default function ContactPage() {
   }
 
   return (
-    <div className="container py-12 md:py-24">
-      <div className="text-center mb-12">
-        <h1 className="text-4xl font-bold tracking-tight">Contact Us</h1>
-        <p className="text-muted-foreground mt-2 max-w-2xl mx-auto">
-          We're here to help with all your real estate needs. Whether you have a question about a property, need an expert consultation, or anything else, our team is ready to answer all your questions.
-        </p>
-      </div>
+    <div className="relative">
+      {contactBgImage && (
+        <Image
+          src={contactBgImage.imageUrl}
+          alt={contactBgImage.description}
+          fill
+          className="object-cover"
+          data-ai-hint={contactBgImage.imageHint}
+        />
+      )}
+      <div className="absolute inset-0 bg-black/60" />
+      <div className="relative z-10 container py-12 md:py-24">
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold tracking-tight text-white">Contact Us</h1>
+          <p className="text-gray-300 mt-2 max-w-2xl mx-auto">
+            We're here to help with all your real estate needs. Whether you have a question about a property, need an expert consultation, or anything else, our team is ready to answer all your questions.
+          </p>
+        </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-        <Card>
-          <CardHeader>
-            <CardTitle>Send us a Message</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                <FormField
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Full Name</FormLabel>
-                      <FormControl>
-                        <Input placeholder="John Doe" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Email Address</FormLabel>
-                      <FormControl>
-                        <Input placeholder="john.doe@example.com" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="subject"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Subject</FormLabel>
-                      <FormControl>
-                        <Input placeholder="e.g., Inquiry about Downtown properties" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="message"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Message</FormLabel>
-                      <FormControl>
-                        <Textarea placeholder="Your message..." {...field} rows={5} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <Button type="submit" disabled={isLoading} className="w-full bg-primary text-primary-foreground">
-                  {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Mail className="mr-2 h-4 w-4" />}
-                  Send Message
-                </Button>
-              </form>
-            </Form>
-          </CardContent>
-        </Card>
-
-        <div className="space-y-8">
-          <Card>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+          <Card className="bg-background/80 backdrop-blur-sm border-gray-600">
             <CardHeader>
-              <CardTitle>Contact Information</CardTitle>
+              <CardTitle>Send us a Message</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4 text-muted-foreground">
-              <div className="flex items-start gap-4">
-                <MapPin className="h-6 w-6 text-primary mt-1" />
-                <div>
-                  <h3 className="font-semibold text-foreground">Our Office</h3>
-                  <p>123 Luxury Lane, Business Bay, Dubai, UAE</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-4">
-                <Phone className="h-6 w-6 text-primary mt-1" />
-                <div>
-                  <h3 className="font-semibold text-foreground">Phone</h3>
-                  <p>+971 4 123 4567</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-4">
-                <Mail className="h-6 w-6 text-primary mt-1" />
-                <div>
-                  <h3 className="font-semibold text-foreground">Email</h3>
-                  <p>contact@develop.com</p>
-                </div>
-              </div>
+            <CardContent>
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Full Name</FormLabel>
+                        <FormControl>
+                          <Input placeholder="John Doe" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Email Address</FormLabel>
+                        <FormControl>
+                          <Input placeholder="john.doe@example.com" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="subject"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Subject</FormLabel>
+                        <FormControl>
+                          <Input placeholder="e.g., Inquiry about Downtown properties" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="message"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Message</FormLabel>
+                        <FormControl>
+                          <Textarea placeholder="Your message..." {...field} rows={5} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <Button type="submit" disabled={isLoading} className="w-full bg-primary text-primary-foreground">
+                    {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Mail className="mr-2 h-4 w-4" />}
+                    Send Message
+                  </Button>
+                </form>
+              </Form>
             </CardContent>
           </Card>
 
-          <Card className="overflow-hidden">
-            <div className="h-64 bg-muted flex items-center justify-center">
-               <p className="text-muted-foreground">Map placeholder</p>
-            </div>
-          </Card>
+          <div className="space-y-8">
+            <Card className="bg-background/80 backdrop-blur-sm border-gray-600">
+              <CardHeader>
+                <CardTitle>Contact Information</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-start gap-4">
+                  <MapPin className="h-6 w-6 text-primary mt-1" />
+                  <div>
+                    <h3 className="font-semibold text-foreground">Our Office</h3>
+                    <p className="text-muted-foreground">123 Luxury Lane, Business Bay, Dubai, UAE</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4">
+                  <Phone className="h-6 w-6 text-primary mt-1" />
+                  <div>
+                    <h3 className="font-semibold text-foreground">Phone</h3>
+                    <p className="text-muted-foreground">+971 4 123 4567</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4">
+                  <Mail className="h-6 w-6 text-primary mt-1" />
+                  <div>
+                    <h3 className="font-semibold text-foreground">Email</h3>
+                    <p className="text-muted-foreground">contact@develop.com</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="overflow-hidden bg-background/80 backdrop-blur-sm border-gray-600">
+              <div className="h-64 bg-muted/30 flex items-center justify-center">
+                 <p className="text-muted-foreground">Map placeholder</p>
+              </div>
+            </Card>
+          </div>
         </div>
       </div>
     </div>
