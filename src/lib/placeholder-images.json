@@ -171,8 +171,8 @@
     {
       "id": "contact-background",
       "description": "Modern office building in Dubai",
-      "imageUrl": "https://images.unsplash.com/photo-1600989993248-5287a17f254c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8ZHViYWklMjBvZmZpY2V8ZW58MHx8fHwxNzcxMDM1MjA0fDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "dubai office"
+      "imageUrl": "https://images.unsplash.com/photo-1459787915554-b34915863013?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8ZHViYWl8ZW58MHx8fHwxNzcwOTEzOTA1fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "dubai"
     }
   ]
 }
