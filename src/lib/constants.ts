@@ -18,8 +18,10 @@ export const NAV_LINKS: NavLink[] = [
     href: '/rent',
     label: 'Rent',
     children: [
-      { href: '/rent/annual', label: 'Annual Rentals' },
-      { href: '/rent/short-term', label: 'Short-term Homes' },
+      { href: '/rent/apartments', label: 'Apartments' },
+      { href: '/rent/villas', label: 'Villas' },
+      { href: '/rent/penthouses', label: 'Penthouses' },
+      { href: '/rent/townhouses', label: 'Townhouses' },
     ],
   },
   {
