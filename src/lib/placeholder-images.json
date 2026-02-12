@@ -1,3 +1,106 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "hero-dubai-skyline",
+      "description": "Cinematic 8k drone shot of the Dubai Creek Harbour at sunset",
+      "imageUrl": "https://images.unsplash.com/photo-1612873649383-edf91f1cf7fe?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxkdWJhaSUyMHNreWxpbmV8ZW58MHx8fHwxNzcwODA0NDMwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "dubai skyline"
+    },
+    {
+      "id": "property-1",
+      "description": "Modern apartment with city view",
+      "imageUrl": "https://images.unsplash.com/photo-1624204386084-dd8c05e32226?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxtb2Rlcm4lMjBhcGFydG1lbnR8ZW58MHx8fHwxNzcwODIxMDg1fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "modern apartment"
+    },
+    {
+      "id": "property-2",
+      "description": "Luxury villa with a pool",
+      "imageUrl": "https://images.unsplash.com/photo-1613977257365-aaae5a9817ff?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxsdXh1cnklMjB2aWxsYXxlbnwwfHx8fDE3NzA4MTgzNzl8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "luxury villa"
+    },
+    {
+      "id": "property-3",
+      "description": "Spacious penthouse overlooking the marina",
+      "imageUrl": "https://images.unsplash.com/photo-1642976975710-1d8890dbf5ab?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxzcGFjaW91cyUyMHBlbnRob3VzZXxlbnwwfHx8fDE3NzA4OTcyMDZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "spacious penthouse"
+    },
+    {
+      "id": "property-4",
+      "description": "Elegant townhouse in a quiet neighborhood",
+      "imageUrl": "https://images.unsplash.com/photo-1745808909538-78d6ac1da31c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxlbGVnYW50JTIwdG93bmhvdXNlfGVufDB8fHx8MTc3MDg5NzIwNnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "elegant townhouse"
+    },
+    {
+      "id": "property-5",
+      "description": "Beachfront apartment with ocean views",
+      "imageUrl": "https://images.unsplash.com/photo-1766792235052-c829c54997ff?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxiZWFjaGZyb250JTIwYXBhcnRtZW50fGVufDB8fHx8MTc3MDg5NzIwN3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "beachfront apartment"
+    },
+    {
+      "id": "property-6",
+      "description": "Contemporary villa with minimalist design",
+      "imageUrl": "https://images.unsplash.com/photo-1670589953903-b4e2f17a70a9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxjb250ZW1wb3JhcnklMjB2aWxsYXxlbnwwfHx8fDE3NzA4OTcyMDZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "contemporary villa"
+    },
+    {
+      "id": "area-marina",
+      "description": "Dubai Marina skyline at night",
+      "imageUrl": "https://images.unsplash.com/photo-1682410601760-6372fd33ad2b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxkdWJhaSUyMG1hcmluYXxlbnwwfHx8fDE3NzA4OTcyMDd8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "dubai marina"
+    },
+    {
+      "id": "area-hills",
+      "description": "Lush green landscape of Dubai Hills Estate",
+      "imageUrl": "https://images.unsplash.com/photo-1546768292-cbae6d521a7d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxkdWJhaSUyMGhpbGxzfGVufDB8fHx8MTc3MDg5NzIwN3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "dubai hills"
+    },
+    {
+      "id": "area-downtown",
+      "description": "View of Burj Khalifa in Downtown Dubai",
+      "imageUrl": "https://images.unsplash.com/flagged/photo-1559717201-fbb671ff56b7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxkb3dudG93biUyMGR1YmFpfGVufDB8fHx8MTc3MDg5NzIwNnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "downtown dubai"
+    },
+    {
+      "id": "area-palm",
+      "description": "Aerial view of Palm Jumeirah",
+      "imageUrl": "https://images.unsplash.com/photo-1702070114450-94d981d72233?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8cGFsbSUyMGp1bWVpcmFofGVufDB8fHx8MTc3MDg5NzIwNnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "palm jumeirah"
+    },
+    {
+      "id": "testimonial-1",
+      "description": "Happy client portrait",
+      "imageUrl": "https://images.unsplash.com/photo-1694885273329-4b1c7466e4c5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxjbGllbnQlMjBwb3J0cmFpdHxlbnwwfHx8fDE3NzA3OTQwMjR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "client portrait"
+    },
+    {
+      "id": "testimonial-2",
+      "description": "Satisfied customer portrait",
+      "imageUrl": "https://images.unsplash.com/photo-1574641264510-d656942d6380?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxjdXN0b21lciUyMHBvcnRyYWl0fGVufDB8fHx8MTc3MDgzMTA2MXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "customer portrait"
+    },
+    {
+      "id": "testimonial-3",
+      "description": "Professional headshot of a client",
+      "imageUrl": "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxwcm9mZXNzaW9uYWwlMjBoZWFkc2hvdHxlbnwwfHx8fDE3NzA4MDY2OTl8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "professional headshot"
+    },
+    {
+      "id": "agent-1",
+      "description": "Professional portrait of a male real estate agent",
+      "imageUrl": "https://images.unsplash.com/photo-1647580425101-0728b90c0bfa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxtYWxlJTIwYWdlbnR8ZW58MHx8fHwxNzcwODk3MjA3fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "male agent"
+    },
+    {
+      "id": "agent-2",
+      "description": "Professional portrait of a female real estate agent",
+      "imageUrl": "https://images.unsplash.com/photo-1744902092359-df5b4c543fcf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxmZW1hbGUlMjBhZ2VudHxlbnwwfHx8fDE3NzA4OTcyMDd8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "female agent"
+    },
+    {
+      "id": "agent-3",
+      "description": "Friendly portrait of a real estate agent",
+      "imageUrl": "https://picsum.photos/seed/403/400/400",
+      "imageHint": "friendly agent"
+    }
+  ]
 }
