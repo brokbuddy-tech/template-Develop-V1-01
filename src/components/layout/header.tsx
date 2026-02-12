@@ -134,7 +134,7 @@ const MobileNav = () => (
       </ScrollArea>
       <div className="mt-auto p-4 border-t space-y-4">
         <Button className="w-full font-semibold bg-primary text-primary-foreground hover:bg-primary/90 transition-opacity">
-            Instant Vant Valuation
+            Contact Us
         </Button>
         <div className="flex items-center justify-center gap-4">
             <LanguageSwitcher />
@@ -174,7 +174,7 @@ export function Header() {
             <LanguageSwitcher />
           </div>
           <Button className="hidden sm:inline-flex px-5 py-2 h-auto font-semibold text-sm bg-primary text-primary-foreground hover:bg-primary/90 transition-opacity rounded-md">
-            Instant Vant Valuation
+            Contact Us
           </Button>
           <MobileNav />
         </div>
