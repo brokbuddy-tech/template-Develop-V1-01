@@ -4,14 +4,61 @@ export const SITE_NAME = 'DEVELOP';
 
 export const NAV_LINKS: NavLink[] = [
   { href: '/buy', label: 'Buy' },
-  { href: '/rent', label: 'Rent' },
-  { href: '/commercial', label: 'Commercial' },
-  { href: '/services/property-management', label: 'Property Management' },
-  { href: '/invest/off-plan', label: 'Off-Plan' },
-  { href: '/media', label: 'Media' },
+  {
+    href: '/rent',
+    label: 'Rent',
+    children: [
+      { href: '/rent/annual', label: 'Annual Rentals' },
+      { href: '/rent/short-term', label: 'Short-term Homes' },
+    ],
+  },
+  {
+    href: '/developers',
+    label: 'For Developers',
+    children: [
+      { href: '/developers/land-sales', label: 'Land Sales' },
+      { href: '/developers/development-consultancy', label: 'Development Consultancy' },
+    ],
+  },
+  {
+    href: '/commercial',
+    label: 'Commercial',
+    children: [
+      { href: '/commercial/offices', label: 'Offices' },
+      { href: '/commercial/retail', label: 'Retail' },
+      { href: '/commercial/industrial', label: 'Industrial' },
+    ],
+  },
+  {
+    href: '/invest',
+    label: 'Invest Projects',
+    children: [
+      { href: '/invest/off-plan', label: 'Off-Plan' },
+      { href: '/invest/dubai-investment-guide', label: 'Dubai Investment Guide' },
+    ],
+  },
+  {
+    href: '/services',
+    label: 'Services',
+    children: [
+      { href: '/services/property-management', label: 'Property Management' },
+      { href: '/services/interior-design', label: 'Interior Design' },
+      { href: '/services/mortgage', label: 'Mortgage Consultancy' },
+      { href: '/services/relocation', label: 'Relocation Services' },
+    ],
+  },
+  {
+    href: '/content-hub',
+    label: 'Content Hub',
+    children: [
+      { href: '/media', label: 'Media Hub' },
+      { href: '/blog', label: 'Blog' },
+      { href: '/area-guides', label: 'Area Guides' },
+    ],
+  },
   { href: '/about', label: 'About Us' },
-  { href: '/vip-portal', label: 'VIP Portal'},
 ];
+
 
 export const FOOTER_LINKS: Record<string, NavLink[]> = {
   'For Sale': [

@@ -14,7 +14,7 @@ export type Property = {
 };
 
 export type Area = {
-  id: string;
+  id:string;
   name: string;
   yield: string;
   imageId: string;
@@ -38,4 +38,5 @@ export type Agent = {
 export type NavLink = {
   href: string;
   label: string;
+  children?: NavLink[];
 };
