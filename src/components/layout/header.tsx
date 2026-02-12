@@ -39,7 +39,15 @@ const HoverDropdownMenu = ({ link }: { link: NavLink }) => {
   const [open, setOpen] = React.useState(false);
 
   if (!link.children) {
-    return null;
+    return (
+       <Link
+          href={link.href}
+          className="text-muted-foreground transition-colors hover:text-foreground flex items-center gap-1.5"
+        >
+          {link.label === 'About Us' && <Globe className="h-4 w-4" />}
+          {link.label}
+        </Link>
+    )
   }
 
   return (
@@ -73,20 +81,7 @@ const HoverDropdownMenu = ({ link }: { link: NavLink }) => {
 
 const DesktopNav = () => (
   <nav className="hidden lg:flex items-center gap-6 text-sm font-medium">
-    {NAV_LINKS.map((link) =>
-      link.children ? (
-        <HoverDropdownMenu key={link.label} link={link} />
-      ) : (
-        <Link
-          key={link.href}
-          href={link.href}
-          className="text-muted-foreground transition-colors hover:text-foreground flex items-center gap-1.5"
-        >
-          {link.label === 'About Us' && <Globe className="h-4 w-4" />}
-          {link.label}
-        </Link>
-      )
-    )}
+    {NAV_LINKS.map((link) => <HoverDropdownMenu key={link.label} link={link} />)}
   </nav>
 );
 
@@ -140,7 +135,7 @@ const MobileNav = () => (
         </Accordion>
       </ScrollArea>
       <div className="mt-auto p-4 border-t space-y-4">
-        <Button className="w-full font-semibold bg-gradient-to-r from-[#002B5B] to-[#C5A059] text-white hover:opacity-90 transition-opacity">
+        <Button className="w-full font-semibold bg-primary text-primary-foreground hover:bg-primary/90 transition-opacity">
             Instant Vant Valuation
         </Button>
         <div className="flex items-center justify-center gap-4">
@@ -186,7 +181,7 @@ export function Header() {
             </Button>
             <LanguageSwitcher />
           </div>
-          <Button className="hidden sm:inline-flex px-5 py-2 h-auto font-semibold text-sm bg-gradient-to-r from-[#002B5B] to-[#C5A059] text-white hover:opacity-90 transition-opacity rounded-md">
+          <Button className="hidden sm:inline-flex px-5 py-2 h-auto font-semibold text-sm bg-primary text-primary-foreground hover:bg-primary/90 transition-opacity rounded-md">
             Instant Vant Valuation
           </Button>
           <MobileNav />
