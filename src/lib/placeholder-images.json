@@ -2,9 +2,9 @@
   "placeholderImages": [
     {
       "id": "hero-dubai-skyline",
-      "description": "Cinematic 8k drone shot of the Dubai Creek Harbour at sunset",
-      "imageUrl": "https://images.unsplash.com/photo-1612873649383-edf91f1cf7fe?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxkdWJhaSUyMHNreWxpbmV8ZW58MHx8fHwxNzcwODA0NDMwfDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "dubai skyline"
+      "description": "Dubai skyline at night with city lights",
+      "imageUrl": "https://images.unsplash.com/photo-1531366936337-7c912a4589a7?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "imageHint": "dubai skyline night"
     },
     {
       "id": "property-1",
