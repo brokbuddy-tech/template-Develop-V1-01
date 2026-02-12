@@ -143,6 +143,30 @@
       "description": "Portrait of a female author",
       "imageUrl": "https://images.unsplash.com/photo-1509868918748-a554ad25f858?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxmZW1hbGUlMjBwb3J0cmFpdHxlbnwwfHx8fDE3NzA4OTQ5Mjh8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "female portrait"
+    },
+    {
+      "id": "area-guide-bridge",
+      "description": "Wide angle shot of Dubai Water Canal bridge at night",
+      "imageUrl": "https://images.unsplash.com/photo-1531299839655-763443e7436b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxkdWJhaSUyMGNhbmFsfGVufDB8fHx8MTc3MDk5NzYwNnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "dubai canal"
+    },
+    {
+      "id": "area-guide-city-walk",
+      "description": "Neon sign at City Walk Dubai",
+      "imageUrl": "https://images.unsplash.com/photo-1549495333-4775235f5247?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjaXR5JTIwd2FsayUyMGR1YmFpfGVufDB8fHx8MTc3MDk5NzcwMnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "city walk"
+    },
+    {
+      "id": "area-guide-burj",
+      "description": "Burj Khalifa tower against a clear sky",
+      "imageUrl": "https://images.unsplash.com/photo-1597651272839-889b74715a9b74?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxhZXJpYWwlMjBkdWJhaXxlbnwwfHx8fDE3NzA5OTc4OTF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "burj khalifa"
+    },
+    {
+      "id": "area-guide-villa",
+      "description": "Modern villa in a suburban community",
+      "imageUrl": "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjB2aWxsYSUyMHBvb2x8ZW58MHx8fHwxNzcwOTk3OTQzfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "modern villa"
     }
   ]
 }

@@ -8,6 +8,7 @@ import { featuredOffPlan, featuredReady, areaGuides, testimonials, blogPosts } f
 import { CityIndex } from '@/components/home/city-index';
 import { FAQ } from '@/components/home/faq';
 import { BlogSection } from '@/components/home/blog-section';
+import { AreaGuidesDiscovery } from '@/components/home/area-guides-discovery';
 
 export default function Home() {
   return (
@@ -18,6 +19,7 @@ export default function Home() {
       <FeaturedProperties title="Premium Off-Plan Launches" properties={featuredOffPlan} />
       <AreaGuides title="Explore Dubai's Prime Areas" guides={areaGuides} />
       <FeaturedProperties title="Ready-to-Move Residences" properties={featuredReady} />
+      <AreaGuidesDiscovery />
       <DevelopEcosystem />
       <Testimonials testimonials={testimonials} />
       <FAQ />
