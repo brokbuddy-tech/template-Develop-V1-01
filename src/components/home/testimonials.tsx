@@ -1,11 +1,12 @@
 'use client';
 
 import Image from 'next/image';
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, type CarouselApi } from '@/components/ui/carousel';
 import { Card, CardContent } from '@/components/ui/card';
 import type { Testimonial } from '@/lib/types';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { Star, StarHalf } from 'lucide-react';
+import { Star } from 'lucide-react';
+import * as React from 'react';
 
 interface TestimonialsProps {
   testimonials: Testimonial[];
@@ -22,11 +23,39 @@ const Rating = () => (
 );
 
 export function Testimonials({ testimonials }: TestimonialsProps) {
+  const [api, setApi] = React.useState<CarouselApi>();
+
+  React.useEffect(() => {
+    if (!api) {
+      return;
+    }
+
+    const interval = setInterval(() => {
+      api.scrollNext();
+    }, 2000);
+
+    // Stop autoplay on user interaction
+    const stopAutoplay = () => {
+      clearInterval(interval);
+      api.off('pointerDown', stopAutoplay);
+    };
+
+    api.on('pointerDown', stopAutoplay);
+
+    return () => {
+        clearInterval(interval);
+        if (api) {
+            api.off('pointerDown', stopAutoplay);
+        }
+    };
+  }, [api]);
+
   return (
     <section className="py-16 bg-card">
       <div className="container">
         <h2 className="text-3xl font-bold text-center mb-8">What Our Clients Say</h2>
         <Carousel
+          setApi={setApi}
           opts={{
             align: 'start',
             loop: true,
