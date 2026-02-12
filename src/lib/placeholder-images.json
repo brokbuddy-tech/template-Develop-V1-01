@@ -107,6 +107,42 @@
       "description": "Black and white skyline of a modern city for city index comparison",
       "imageUrl": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxkdWJhaSUyMHNreWxpbmV8ZW58MHx8fHwxNzcwODA0NDMwfDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "dubai skyline"
+    },
+    {
+      "id": "blog-1",
+      "description": "Architectural model of a futuristic city loop",
+      "imageUrl": "https://images.unsplash.com/photo-1619618020341-5de1cad0d965?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxmdXR1cmlzdGljJTIwYXJjaGl0ZWN0dXJlfGVufDB8fHx8MTc3MDkwMzk5OXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "futuristic architecture"
+    },
+    {
+      "id": "blog-2",
+      "description": "Modern luxury villa at dusk",
+      "imageUrl": "https://images.unsplash.com/photo-1622015663319-e97e697503ee?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxsdXh1cnklMjB2aWxsYXxlbnwwfHx8fDE3NzA4MTgzNzl8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "luxury villa"
+    },
+    {
+      "id": "blog-3",
+      "description": "Charts and graphs showing real estate trends",
+      "imageUrl": "https://images.unsplash.com/photo-1591696205602-2f950c417cb9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8ZGF0YSUyMGFuYWx5c2lzfGVufDB8fHx8MTc3MDgyNzY5OHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "data analysis"
+    },
+    {
+      "id": "blog-4",
+      "description": "Person working on a laptop with a cup of coffee",
+      "imageUrl": "https://images.unsplash.com/photo-1588196749597-9ff075ee6b5b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxyZW1vdGUlMjB3b3JrfGVufDB8fHx8MTc3MDkwMzk5OXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "remote work"
+    },
+    {
+      "id": "author-1",
+      "description": "Portrait of a male author",
+      "imageUrl": "https://images.unsplash.com/photo-1715423058726-ddea1ec51b66?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxtYWxlJTIwcG9ydHJhaXR8ZW58MHx8fHwxNzcwOTAzOTg0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "male portrait"
+    },
+    {
+      "id": "author-2",
+      "description": "Portrait of a female author",
+      "imageUrl": "https://images.unsplash.com/photo-1509868918748-a554ad25f858?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxmZW1hbGUlMjBwb3J0cmFpdHxlbnwwfHx8fDE3NzA4OTQ5Mjh8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "female portrait"
     }
   ]
 }

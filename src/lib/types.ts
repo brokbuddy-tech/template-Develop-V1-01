@@ -40,3 +40,15 @@ export type NavLink = {
   label: string;
   children?: NavLink[];
 };
+
+export type Blog = {
+  id: string;
+  readTime: string;
+  title: string;
+  excerpt: string;
+  author: {
+    name: string;
+    avatarId: string;
+  };
+  imageId: string;
+};

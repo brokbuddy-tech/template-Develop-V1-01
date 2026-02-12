@@ -1,4 +1,4 @@
-import type { Property, Area, Testimonial } from './types';
+import type { Property, Area, Testimonial, Blog } from './types';
 
 export const featuredOffPlan: Property[] = [
   {
@@ -103,5 +103,52 @@ export const testimonials: Testimonial[] = [
     name: 'Rashid Al Maktoum',
     quote: 'As an investor, DEVELOP provides unparalleled insights and access to exclusive off-market deals. Highly recommended.',
     imageId: 'testimonial-3',
+  },
+];
+
+export const blogPosts: Blog[] = [
+  {
+    id: 'blog-1',
+    readTime: '5 min read',
+    title: 'Dubai Loop Tunnel Set to Serve 80% of The City’s Population',
+    excerpt: 'The visionary project aims to revolutionize urban mobility in Dubai, connecting key districts with a high-speed transit network.',
+    author: {
+      name: 'John Doe',
+      avatarId: 'author-1',
+    },
+    imageId: 'blog-1',
+  },
+  {
+    id: 'blog-2',
+    readTime: '7 min read',
+    title: 'Top 5 Most Expensive Villas in Dubai in 2024',
+    excerpt: 'A deep dive into the most opulent and sought-after villa properties that are setting new benchmarks in luxury living.',
+    author: {
+      name: 'Jane Smith',
+      avatarId: 'author-2',
+    },
+    imageId: 'blog-2',
+  },
+  {
+    id: 'blog-3',
+    readTime: '4 min read',
+    title: 'The Rise of Branded Residences: A New Era of Luxury',
+    excerpt: 'Explore the growing trend of branded residences and why they represent a compelling investment opportunity in Dubai.',
+    author: {
+      name: 'Alex Johnson',
+      avatarId: 'author-1',
+    },
+    imageId: 'blog-3',
+  },
+  {
+    id: 'blog-4',
+    readTime: '6 min read',
+    title: 'How to Secure a Mortgage in Dubai as an Expat',
+    excerpt: 'A comprehensive guide to navigating the mortgage process in Dubai for non-residents looking to invest in property.',
+    author: {
+      name: 'Emily Chen',
+      avatarId: 'author-2',
+    },
+    imageId: 'blog-4',
   },
 ];
