@@ -6,6 +6,7 @@ import { Testimonials } from '@/components/home/testimonials';
 import { TrustSignals } from '@/components/home/trust-signals';
 import { featuredOffPlan, featuredReady, areaGuides, testimonials } from '@/lib/data';
 import { CityIndex } from '@/components/home/city-index';
+import { FAQ } from '@/components/home/faq';
 
 export default function Home() {
   return (
@@ -18,6 +19,7 @@ export default function Home() {
       <FeaturedProperties title="Ready-to-Move Residences" properties={featuredReady} />
       <DevelopEcosystem />
       <Testimonials testimonials={testimonials} />
+      <FAQ />
     </div>
   );
 }
