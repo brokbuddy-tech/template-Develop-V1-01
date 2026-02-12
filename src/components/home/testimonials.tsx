@@ -32,7 +32,7 @@ export function Testimonials({ testimonials }: TestimonialsProps) {
 
     const interval = setInterval(() => {
       api.scrollNext();
-    }, 2000);
+    }, 3000);
 
     // Stop autoplay on user interaction
     const stopAutoplay = () => {
