@@ -32,7 +32,7 @@ export function AreaGuides({ title, guides }: AreaGuidesProps) {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
                   <CardContent className="absolute bottom-0 left-0 p-4 text-white">
                     <h3 className="text-xl font-bold">{guide.name}</h3>
-                    <p className="text-sm text-primary">{guide.yield}</p>
+                    <p className="text-sm">{guide.yield}</p>
                   </CardContent>
                 </Card>
               </Link>
