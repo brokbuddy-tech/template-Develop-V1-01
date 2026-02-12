@@ -71,6 +71,10 @@ export const NAV_LINKS: NavLink[] = [
       { href: '/area-guides', label: 'Area Guides' },
     ],
   },
+   {
+    href: '/contact',
+    label: 'Contact Us',
+  },
 ];
 
 

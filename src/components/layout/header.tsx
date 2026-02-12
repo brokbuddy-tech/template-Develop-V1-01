@@ -25,6 +25,7 @@ import { Menu, Building, Globe, ChevronDown } from 'lucide-react';
 import { NAV_LINKS, SITE_NAME } from '@/lib/constants';
 import { ScrollArea } from '../ui/scroll-area';
 import type { NavLink } from '@/lib/types';
+import { useRouter } from 'next/navigation';
 
 const Logo = () => (
   <Link href="/" className="flex items-center gap-2">
@@ -37,7 +38,13 @@ const Logo = () => (
 
 const HoverDropdownMenu = ({ link }: { link: NavLink }) => {
   const [open, setOpen] = React.useState(false);
+  const router = useRouter();
 
+  const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    router.push(link.href);
+  };
+  
   if (!link.children) {
     return (
       <Button asChild variant="ghost" className="font-medium">
@@ -58,13 +65,8 @@ const HoverDropdownMenu = ({ link }: { link: NavLink }) => {
         onPointerEnter={() => setOpen(true)}
         onPointerLeave={() => setOpen(false)}
       >
-        <Button asChild variant="ghost" className="font-medium">
-          <Link
-            href={link.href}
-            className="text-muted-foreground transition-colors hover:text-foreground p-2 pr-1"
-          >
+        <Button variant="ghost" className="font-medium p-2 pr-1" onClick={handleButtonClick}>
             {link.label}
-          </Link>
         </Button>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" size="icon" className="p-1 h-auto w-auto focus-visible:ring-0 focus-visible:ring-offset-0">
@@ -144,8 +146,8 @@ const MobileNav = () => (
         </Accordion>
       </ScrollArea>
       <div className="mt-auto p-4 border-t space-y-4">
-        <Button className="w-full font-semibold bg-primary text-primary-foreground hover:bg-primary/90 transition-opacity">
-            Contact Us
+        <Button asChild className="w-full font-semibold bg-primary text-primary-foreground hover:bg-primary/90 transition-opacity">
+            <Link href="/contact">Contact Us</Link>
         </Button>
         <div className="flex items-center justify-center gap-4">
             <LanguageSwitcher />
@@ -184,8 +186,8 @@ export function Header() {
           <div className="hidden lg:flex items-center gap-2">
             <LanguageSwitcher />
           </div>
-          <Button className="hidden sm:inline-flex px-5 py-2 h-auto font-semibold text-sm bg-primary text-primary-foreground hover:bg-primary/90 transition-opacity rounded-md">
-            Contact Us
+          <Button asChild className="hidden sm:inline-flex px-5 py-2 h-auto font-semibold text-sm bg-primary text-primary-foreground hover:bg-primary/90 transition-opacity rounded-md">
+            <Link href="/contact">Contact Us</Link>
           </Button>
           <MobileNav />
         </div>
