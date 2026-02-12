@@ -40,31 +40,40 @@ const HoverDropdownMenu = ({ link }: { link: NavLink }) => {
 
   if (!link.children) {
     return (
-       <Link
+      <Button asChild variant="ghost" className="font-medium">
+        <Link
           href={link.href}
-          className="text-muted-foreground transition-colors hover:text-foreground flex items-center gap-1.5"
+          className="text-muted-foreground transition-colors hover:text-foreground p-2"
         >
           {link.label}
         </Link>
-    )
+      </Button>
+    );
   }
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
-      <DropdownMenuTrigger
-        asChild
+      <div
+        className="flex items-center"
         onPointerEnter={() => setOpen(true)}
         onPointerLeave={() => setOpen(false)}
       >
-        <Button
-          variant="ghost"
-          className="flex items-center gap-1 text-muted-foreground hover:text-foreground p-0 h-auto focus-visible:ring-0 focus-visible:ring-offset-0"
-        >
-          {link.label}
-          <ChevronDown className="h-4 w-4" />
+        <Button asChild variant="ghost" className="font-medium">
+          <Link
+            href={link.href}
+            className="text-muted-foreground transition-colors hover:text-foreground p-2 pr-1"
+          >
+            {link.label}
+          </Link>
         </Button>
-      </DropdownMenuTrigger>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" size="icon" className="p-1 h-auto w-auto focus-visible:ring-0 focus-visible:ring-offset-0">
+            <ChevronDown className="h-4 w-4" />
+          </Button>
+        </DropdownMenuTrigger>
+      </div>
       <DropdownMenuContent
+        align="start"
         onPointerEnter={() => setOpen(true)}
         onPointerLeave={() => setOpen(false)}
       >
@@ -79,7 +88,7 @@ const HoverDropdownMenu = ({ link }: { link: NavLink }) => {
 };
 
 const DesktopNav = () => (
-  <nav className="hidden lg:flex items-center gap-6 text-sm font-medium">
+  <nav className="hidden lg:flex items-center gap-2 text-sm font-medium">
     {NAV_LINKS.map((link) => <HoverDropdownMenu key={link.label} link={link} />)}
   </nav>
 );
@@ -102,7 +111,9 @@ const MobileNav = () => (
             link.children ? (
               <AccordionItem value={link.label} key={link.label} className="border-b-0">
                 <AccordionTrigger className="py-3 text-lg font-medium text-muted-foreground hover:no-underline hover:text-foreground">
-                  {link.label}
+                  <SheetClose asChild>
+                    <Link href={link.href}>{link.label}</Link>
+                  </SheetClose>
                 </AccordionTrigger>
                 <AccordionContent>
                   <nav className="grid gap-2 py-2 pl-4">
