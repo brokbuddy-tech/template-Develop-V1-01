@@ -27,10 +27,6 @@ export const NAV_LINKS: NavLink[] = [
   {
     href: '/developers',
     label: 'For Developers',
-    children: [
-      { href: '/developers/land-sales', label: 'Land Sales' },
-      { href: '/developers/development-consultancy', label: 'Development Consultancy' },
-    ],
   },
   {
     href: '/commercial',
