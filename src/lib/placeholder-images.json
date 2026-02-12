@@ -2,9 +2,9 @@
   "placeholderImages": [
     {
       "id": "hero-dubai-skyline",
-      "description": "Dubai skyline at night with city lights",
-      "imageUrl": "https://images.unsplash.com/photo-1531366936337-7c912a4589a7?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      "imageHint": "dubai skyline night"
+      "description": "View of Burj Khalifa in Downtown Dubai",
+      "imageUrl": "https://images.unsplash.com/flagged/photo-1559717201-fbb671ff56b7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxkb3dudG93biUyMGR1YmFpfGVufDB8fHx8MTc3MDg5NzIwNnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "downtown dubai"
     },
     {
       "id": "property-1",
