@@ -1,13 +1,45 @@
+'use client';
+
 import Image from 'next/image';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { PlaceHolderImages, type ImagePlaceholder } from '@/lib/placeholder-images';
 import { Button } from '@/components/ui/button';
+import { useState } from 'react';
+import { cn } from '@/lib/utils';
+
+const imageSets = [
+  ['area-guide-villa', 'area-guide-city-walk', 'area-guide-burj', 'area-guide-bridge'],
+  ['area-marina', 'area-hills', 'area-downtown', 'area-palm'],
+  ['property-1', 'property-2', 'property-3', 'property-4'],
+];
+
+const getImageById = (id: string): ImagePlaceholder | undefined => PlaceHolderImages.find(p => p.id === id);
 
 export function AreaGuidesDiscovery() {
-  const bridgeImage = PlaceHolderImages.find(p => p.id === 'area-guide-bridge');
-  const cityWalkImage = PlaceHolderImages.find(p => p.id === 'area-guide-city-walk');
-  const burjImage = PlaceHolderImages.find(p => p.id === 'area-guide-burj');
-  const villaImage = PlaceHolderImages.find(p => p.id === 'area-guide-villa');
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isFading, setIsFading] = useState(false);
+
+  const changeImageSet = (newIndex: number) => {
+    if (isFading) return;
+    setIsFading(true);
+    setTimeout(() => {
+      setCurrentIndex(newIndex);
+      setIsFading(false);
+    }, 300); // Match this with transition duration
+  };
+
+  const handleNext = () => {
+    const newIndex = (currentIndex + 1) % imageSets.length;
+    changeImageSet(newIndex);
+  };
+
+  const handlePrev = () => {
+    const newIndex = (currentIndex - 1 + imageSets.length) % imageSets.length;
+    changeImageSet(newIndex);
+  };
+
+  const currentImageIds = imageSets[currentIndex];
+  const [img1, img2, img3, img4] = currentImageIds.map(getImageById);
 
   return (
     <section className="bg-black text-white py-24 sm:py-32">
@@ -19,27 +51,30 @@ export function AreaGuidesDiscovery() {
               Explore our comprehensive area guides and discover the city's diverse offerings from bustling waterfront and urban locations to serene gated communities.
             </p>
             <div className="flex items-center gap-4 justify-center lg:justify-start">
-              <Button variant="outline" size="icon" className="bg-transparent border-gray-600 hover:bg-gray-800 text-white rounded-full">
+              <Button onClick={handlePrev} variant="outline" size="icon" className="bg-transparent border-gray-600 hover:bg-gray-800 text-white rounded-full">
                 <ChevronLeft className="h-6 w-6" />
               </Button>
-              <Button variant="outline" size="icon" className="bg-transparent border-gray-600 hover:bg-gray-800 text-white rounded-full">
+              <Button onClick={handleNext} variant="outline" size="icon" className="bg-transparent border-gray-600 hover:bg-gray-800 text-white rounded-full">
                 <ChevronRight className="h-6 w-6" />
               </Button>
             </div>
           </div>
           <div className="lg:w-3/5 xl:w-2/3 w-full">
-            <div className="grid grid-cols-3 grid-rows-2 gap-4 h-[500px]">
+            <div className={cn(
+              "grid grid-cols-3 grid-rows-2 gap-4 h-[500px] transition-opacity duration-300 ease-in-out",
+              isFading ? 'opacity-0' : 'opacity-100'
+            )}>
               <div className="col-span-1 row-span-1 relative">
-                {villaImage && <Image src={villaImage.imageUrl} alt={villaImage.description} fill className="rounded-xl object-cover" data-ai-hint={villaImage.imageHint} />}
+                {img1 && <Image src={img1.imageUrl} alt={img1.description} fill className="rounded-xl object-cover" data-ai-hint={img1.imageHint} />}
               </div>
               <div className="col-span-1 row-span-2 relative">
-                {cityWalkImage && <Image src={cityWalkImage.imageUrl} alt={cityWalkImage.description} fill className="rounded-xl object-cover" data-ai-hint={cityWalkImage.imageHint} />}
+                {img2 && <Image src={img2.imageUrl} alt={img2.description} fill className="rounded-xl object-cover" data-ai-hint={img2.imageHint} />}
               </div>
               <div className="col-span-1 row-span-2 relative">
-                {burjImage && <Image src={burjImage.imageUrl} alt={burjImage.description} fill className="rounded-xl object-cover" data-ai-hint={burjImage.imageHint} />}
+                {img3 && <Image src={img3.imageUrl} alt={img3.description} fill className="rounded-xl object-cover" data-ai-hint={img3.imageHint} />}
               </div>
               <div className="col-span-1 row-span-1 relative">
-                {bridgeImage && <Image src={bridgeImage.imageUrl} alt={bridgeImage.description} fill className="rounded-xl object-cover" data-ai-hint={bridgeImage.imageHint} />}
+                {img4 && <Image src={img4.imageUrl} alt={img4.description} fill className="rounded-xl object-cover" data-ai-hint={img4.imageHint} />}
               </div>
             </div>
           </div>
