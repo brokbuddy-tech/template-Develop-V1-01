@@ -33,8 +33,8 @@ export default function AboutPage() {
   const aboutBgImage = PlaceHolderImages.find(p => p.id === 'about-us-background');
 
   return (
-    <div className="relative isolate">
-      <div className="absolute inset-0 -z-10 h-[50vh]">
+    <div className="relative">
+      <div className="absolute inset-0 h-[50vh]">
         {aboutBgImage && (
           <Image
             src={aboutBgImage.imageUrl}
@@ -47,8 +47,8 @@ export default function AboutPage() {
         <div className="absolute inset-0 bg-black/60" />
       </div>
 
-      <div className="container pt-24 pb-12 md:pt-48 md:pb-24">
-        <div className="text-center mb-12 relative text-white">
+      <div className="relative container pt-24 pb-12 md:pt-48 md:pb-24">
+        <div className="text-center mb-12 text-white">
           <h1 className="text-4xl font-bold tracking-tight">About DEVELOP</h1>
           <p className="mt-4 max-w-3xl mx-auto text-lg text-gray-300">
             Pioneering the future of luxury real estate in Dubai with data-driven insights and unparalleled client service.
