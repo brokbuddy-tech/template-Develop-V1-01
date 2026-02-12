@@ -71,8 +71,8 @@ export default function ContactPage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-          <Card className="bg-background/80 backdrop-blur-sm border-gray-600">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:mx-16">
+          <Card className="bg-background/80 backdrop-blur-sm border-gray-600 rounded-[10px]">
             <CardHeader>
               <CardTitle>Send us a Message</CardTitle>
             </CardHeader>
@@ -141,7 +141,7 @@ export default function ContactPage() {
           </Card>
 
           <div className="space-y-8">
-            <Card className="bg-background/80 backdrop-blur-sm border-gray-600">
+            <Card className="bg-background/80 backdrop-blur-sm border-gray-600 rounded-[10px]">
               <CardHeader>
                 <CardTitle>Contact Information</CardTitle>
               </CardHeader>
@@ -170,7 +170,7 @@ export default function ContactPage() {
               </CardContent>
             </Card>
 
-            <Card className="overflow-hidden bg-background/80 backdrop-blur-sm border-gray-600">
+            <Card className="overflow-hidden bg-background/80 backdrop-blur-sm border-gray-600 rounded-[10px]">
               <div className="h-64 bg-muted/30 flex items-center justify-center">
                  <p className="text-muted-foreground">Map placeholder</p>
               </div>
