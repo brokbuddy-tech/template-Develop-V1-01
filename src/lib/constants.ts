@@ -40,6 +40,10 @@ export const NAV_LINKS: NavLink[] = [
     ],
   },
   {
+    href: '/off-plan',
+    label: 'Off-Plan',
+  },
+  {
     href: '/invest',
     label: 'Invest Projects',
     children: [
