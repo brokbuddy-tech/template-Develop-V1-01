@@ -3,7 +3,17 @@ import type { NavLink } from './types';
 export const SITE_NAME = 'DEVELOP';
 
 export const NAV_LINKS: NavLink[] = [
-  { href: '/buy', label: 'Buy' },
+  {
+    href: '/buy',
+    label: 'Buy',
+    children: [
+      { href: '/buy/apartments', label: 'Apartments' },
+      { href: '/buy/villas', label: 'Villas' },
+      { href: '/buy/penthouses', label: 'Penthouses' },
+      { href: '/buy/townhouses', label: 'Townhouses' },
+      { href: '/buy/plots', label: 'Plots' },
+    ],
+  },
   {
     href: '/rent',
     label: 'Rent',
@@ -66,6 +76,7 @@ export const FOOTER_LINKS: Record<string, NavLink[]> = {
     { href: '/buy/villas', label: 'Villas' },
     { href: '/buy/penthouses', label: 'Penthouses' },
     { href: '/buy/townhouses', label: 'Townhouses' },
+    { href: '/buy/plots', label: 'Plots' },
   ],
   'For Rent': [
     { href: '/rent/annual', label: 'Annual Rentals' },
