@@ -101,6 +101,12 @@
       "description": "Friendly portrait of a real estate agent",
       "imageUrl": "https://picsum.photos/seed/403/400/400",
       "imageHint": "friendly agent"
+    },
+    {
+      "id": "city-index-skyline",
+      "description": "Black and white skyline of a modern city for city index comparison",
+      "imageUrl": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxkdWJhaSUyMHNreWxpbmV8ZW58MHx8fHwxNzcwODA0NDMwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "dubai skyline"
     }
   ]
 }

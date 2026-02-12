@@ -5,12 +5,14 @@ import { HeroSection } from '@/components/home/hero-section';
 import { Testimonials } from '@/components/home/testimonials';
 import { TrustSignals } from '@/components/home/trust-signals';
 import { featuredOffPlan, featuredReady, areaGuides, testimonials } from '@/lib/data';
+import { CityIndex } from '@/components/home/city-index';
 
 export default function Home() {
   return (
     <div className="flex flex-col">
       <HeroSection />
       <TrustSignals />
+      <CityIndex />
       <FeaturedProperties title="Premium Off-Plan Launches" properties={featuredOffPlan} />
       <AreaGuides title="Explore Dubai's Prime Areas" guides={areaGuides} />
       <FeaturedProperties title="Ready-to-Move Residences" properties={featuredReady} />
