@@ -1,3 +1,4 @@
+
 import type { NavLink } from './types';
 
 export const SITE_NAME = 'DEVELOP';
@@ -72,8 +73,8 @@ export const NAV_LINKS: NavLink[] = [
     ],
   },
    {
-    href: '/contact',
-    label: 'Contact Us',
+    href: '/about',
+    label: 'About Us',
   },
 ];
 
