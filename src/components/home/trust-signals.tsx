@@ -1,8 +1,8 @@
 import { Award, Briefcase, TrendingUp, Users, Languages, Globe } from 'lucide-react';
 
 const Signal = ({ icon: Icon, value, label }: { icon: React.ElementType, value: string, label: string }) => (
-  <div className="bg-card p-6 flex flex-col items-center justify-center text-center group h-full transition-all duration-300 hover:bg-accent cursor-pointer">
-    <Icon className="h-8 w-8 text-primary mb-2 transition-transform duration-300 group-hover:scale-110" />
+  <div className="bg-card p-6 flex flex-col items-center justify-center text-center group h-full transition-all duration-300 ease-out cursor-pointer">
+    <Icon className="h-8 w-8 text-primary mb-2 transition-transform duration-300 ease-out group-hover:scale-110" />
     <p className="text-2xl md:text-3xl font-bold">{value}</p>
     <p className="text-sm text-muted-foreground">{label}</p>
   </div>
