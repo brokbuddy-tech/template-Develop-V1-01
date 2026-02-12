@@ -15,6 +15,42 @@ const imageSets = [
 
 const getImageById = (id: string): ImagePlaceholder | undefined => PlaceHolderImages.find(p => p.id === id);
 
+const FlippableImageCard = ({ image, className }: { image: ImagePlaceholder | undefined, className: string }) => {
+  if (!image) return <div className={cn("rounded-xl bg-card/10", className)} />;
+
+  // A simple way to generate a title from the ID
+  const title = image.id
+    .replace(/-/g, ' ')
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+
+  return (
+    <div className={cn("group rounded-xl [perspective:1000px]", className)}>
+      <div className="relative h-full w-full rounded-xl transition-all duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
+        {/* Front */}
+        <div className="absolute inset-0 [backface-visibility:hidden]">
+          <Image
+            src={image.imageUrl}
+            alt={image.description}
+            fill
+            className="rounded-xl object-cover"
+            data-ai-hint={image.imageHint}
+          />
+        </div>
+        {/* Back */}
+        <div className="absolute inset-0 h-full w-full rounded-xl bg-primary text-primary-foreground [transform:rotateY(180deg)] [backface-visibility:hidden]">
+          <div className="flex h-full flex-col items-center justify-center text-center p-4">
+            <h3 className="text-lg font-bold">{title}</h3>
+            <p className="text-sm mt-2">{image.description}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+
 export function AreaGuidesDiscovery() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFading, setIsFading] = useState(false);
@@ -64,18 +100,10 @@ export function AreaGuidesDiscovery() {
               "grid grid-cols-3 grid-rows-2 gap-4 h-[500px] transition-opacity duration-300 ease-in-out",
               isFading ? 'opacity-0' : 'opacity-100'
             )}>
-              <div className="col-span-1 row-span-1 relative">
-                {img1 && <Image src={img1.imageUrl} alt={img1.description} fill className="rounded-xl object-cover" data-ai-hint={img1.imageHint} />}
-              </div>
-              <div className="col-span-1 row-span-2 relative">
-                {img2 && <Image src={img2.imageUrl} alt={img2.description} fill className="rounded-xl object-cover" data-ai-hint={img2.imageHint} />}
-              </div>
-              <div className="col-span-1 row-span-2 relative">
-                {img3 && <Image src={img3.imageUrl} alt={img3.description} fill className="rounded-xl object-cover" data-ai-hint={img3.imageHint} />}
-              </div>
-              <div className="col-span-1 row-span-1 relative">
-                {img4 && <Image src={img4.imageUrl} alt={img4.description} fill className="rounded-xl object-cover" data-ai-hint={img4.imageHint} />}
-              </div>
+              <FlippableImageCard image={img1} className="col-span-1 row-span-1" />
+              <FlippableImageCard image={img2} className="col-span-1 row-span-2" />
+              <FlippableImageCard image={img3} className="col-span-1 row-span-2" />
+              <FlippableImageCard image={img4} className="col-span-1 row-span-1" />
             </div>
           </div>
         </div>
