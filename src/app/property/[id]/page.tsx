@@ -10,6 +10,7 @@ import { Separator } from '@/components/ui/separator';
 import { PropertyGallery } from '@/components/property-gallery';
 import Link from 'next/link';
 import { MortgageCalculator } from '@/components/mortgage-calculator';
+import { FeaturedProperties } from '@/components/home/featured-properties';
 
 function Stat({ icon: Icon, value, label }: { icon: React.ElementType, value: string | number, label: string }) {
     return (
@@ -28,14 +29,14 @@ function AgentContactCard({ agent }: { agent: any }) {
     const agentImage = PlaceHolderImages.find(p => p.id === agent.avatarId);
     return (
         <Card>
-            <CardHeader className="text-center p-4">
-                <Avatar className="h-12 w-12 mx-auto mb-2">
+            <CardHeader className="text-center p-3">
+                <Avatar className="h-10 w-10 mx-auto mb-2">
                     {agentImage && <AvatarImage src={agentImage.imageUrl} alt={agent.name} />}
                     <AvatarFallback>{agent.name.charAt(0)}</AvatarFallback>
                 </Avatar>
-                <CardTitle className="text-base">{agent.name}</CardTitle>
+                <CardTitle className="text-sm">{agent.name}</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-2 p-4 pt-0">
+            <CardContent className="space-y-2 p-3 pt-0">
                 <Button size="sm" className="w-full text-xs"><Phone className="mr-2 h-3 w-3" /> Call Agent</Button>
                 <Button size="sm" className="w-full text-xs" variant="outline"><Mail className="mr-2 h-3 w-3" /> Email Agent</Button>
                 <Button size="sm" className="w-full bg-[#25D366] hover:bg-[#25D366]/90 text-white text-xs"><MessageCircle className="mr-2 h-3 w-3" /> WhatsApp</Button>
@@ -50,6 +51,8 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
     if (!property) {
         notFound();
     }
+
+    const relatedProperties = properties.filter(p => p.type === property.type && p.id !== property.id).slice(0, 3);
     
     return (
         <div className="bg-background">
@@ -144,6 +147,11 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
                     </div>
                 </div>
             </div>
+            {relatedProperties.length > 0 && (
+                <div className="bg-card border-t">
+                    <FeaturedProperties title="You might also like" properties={relatedProperties} />
+                </div>
+            )}
         </div>
     )
 }
