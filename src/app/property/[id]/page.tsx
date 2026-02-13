@@ -10,7 +10,8 @@ import { Separator } from '@/components/ui/separator';
 import { PropertyGallery } from '@/components/property-gallery';
 import Link from 'next/link';
 import { MortgageCalculator } from '@/components/mortgage-calculator';
-import { FeaturedProperties } from '@/components/home/featured-properties';
+import { PropertyCard } from '@/components/property-card';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 
 function Stat({ icon: Icon, value, label }: { icon: React.ElementType, value: string | number, label: string }) {
     return (
@@ -146,12 +147,35 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
                         </div>
                     </div>
                 </div>
+
+                {relatedProperties.length > 0 && (
+                    <div className="mt-16">
+                        <Separator />
+                        <section className="py-16">
+                            <h2 className="text-3xl font-bold text-center mb-8">You might also like</h2>
+                            <Carousel
+                                opts={{
+                                    align: 'start',
+                                    loop: true,
+                                }}
+                                className="w-full"
+                            >
+                                <CarouselContent>
+                                    {relatedProperties.map((property) => (
+                                    <CarouselItem key={property.id} className="md:basis-1/2 lg:basis-1/3">
+                                        <div className="p-1 h-full">
+                                        <PropertyCard property={property} />
+                                        </div>
+                                    </CarouselItem>
+                                    ))}
+                                </CarouselContent>
+                                <CarouselPrevious className="ml-12" />
+                                <CarouselNext className="mr-12" />
+                            </Carousel>
+                        </section>
+                    </div>
+                )}
             </div>
-            {relatedProperties.length > 0 && (
-                <div className="bg-card border-t">
-                    <FeaturedProperties title="You might also like" properties={relatedProperties} />
-                </div>
-            )}
         </div>
     )
 }
