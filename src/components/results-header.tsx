@@ -14,11 +14,13 @@ import {
 } from '@/components/ui/dialog';
 import { ListFilter, Building } from 'lucide-react';
 import { AreaGuidesPopup } from './area-guides-popup';
+import type { ReactNode } from 'react';
 
-export function ResultsHeader({ title, resultsCount }: { title: string; resultsCount: number }) {
+export function ResultsHeader({ children, title, resultsCount }: { children?: ReactNode; title: string; resultsCount: number }) {
   return (
     <div className="flex justify-between items-center py-4">
       <div>
+        {children}
         <h2 className="text-2xl font-bold tracking-tight">{title}</h2>
         <p className="text-blue-500">{resultsCount.toLocaleString()} results</p>
       </div>
