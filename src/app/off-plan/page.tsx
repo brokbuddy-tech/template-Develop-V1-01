@@ -1,16 +1,22 @@
 import { SearchFilters } from "@/components/search-filters";
 import { ClipboardList } from "lucide-react";
+import { ResultsHeader } from "@/components/results-header";
+import { Separator } from "@/components/ui/separator";
 
 export default function OffPlanPage() {
   return (
     <div>
-      <div className="sticky top-16 z-10 py-4 bg-background border-b">
-        <div className="container">
+      <div className="sticky top-16 z-10 bg-background border-b">
+        <div className="container py-4">
           <h1 className="bg-muted inline-flex items-center gap-2 text-foreground font-bold text-base tracking-tight mb-4 p-3 rounded-lg">
             <ClipboardList className="h-4 w-4" />
             <span>Off-Plan Properties</span>
           </h1>
           <SearchFilters context="page" />
+        </div>
+        <Separator />
+        <div className="container">
+          <ResultsHeader title="Off-Plan Properties in Dubai" resultsCount={876} />
         </div>
       </div>
       <div className="container py-12">
