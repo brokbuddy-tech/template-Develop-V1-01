@@ -27,7 +27,7 @@ import { Separator } from './ui/separator';
 import { Checkbox } from './ui/checkbox';
 import { Label } from './ui/label';
 import { Switch } from './ui/switch';
-import { Sparkles, Search, ChevronDown, SlidersHorizontal } from 'lucide-react';
+import { Sparkles, Search, ChevronDown, SlidersHorizontal, Crown } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { Textarea } from './ui/textarea';
 
@@ -170,7 +170,7 @@ export function SearchFilters() {
                             </div>
                             <div className="hidden lg:flex items-center pr-2">
                                 <Button variant="ghost" className="text-muted-foreground rounded-full font-bold">
-                                    <Sparkles className="mr-2 h-4 w-4" />
+                                    <Crown className="mr-2 h-4 w-4" />
                                     Luxury
                                 </Button>
                             </div>
