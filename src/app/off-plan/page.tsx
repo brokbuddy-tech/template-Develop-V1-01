@@ -18,11 +18,11 @@ export default function OffPlanPage() {
           </h1>
           <SearchFilters context="page" />
         </div>
-        <Separator />
-        <div className="container">
-          <ResultsHeader title="Off-Plan Properties in Dubai" resultsCount={offPlanProperties.length} />
-        </div>
       </div>
+      <div className="container">
+        <ResultsHeader title="Off-Plan Properties in Dubai" resultsCount={offPlanProperties.length} />
+      </div>
+      <Separator />
       <div className="container py-12">
         <PropertyListings properties={offPlanProperties} />
       </div>

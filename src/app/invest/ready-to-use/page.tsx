@@ -18,11 +18,11 @@ export default function ReadyToUsePage() {
           </h1>
           <SearchFilters context="page" />
         </div>
-        <Separator />
-        <div className="container">
-          <ResultsHeader title="Ready to Use Properties in Dubai" resultsCount={readyProperties.length} />
-        </div>
       </div>
+      <div className="container">
+        <ResultsHeader title="Ready to Use Properties in Dubai" resultsCount={readyProperties.length} />
+      </div>
+      <Separator />
       <div className="container py-12">
         <PropertyListings properties={readyProperties} />
       </div>

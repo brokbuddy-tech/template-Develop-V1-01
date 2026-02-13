@@ -14,11 +14,11 @@ export default function MapPage() {
           </h1>
           <SearchFilters context="page" />
         </div>
-        <Separator />
-        <div className="container">
-          <ResultsHeader title="Properties in Dubai" resultsCount={10987} />
-        </div>
       </div>
+      <div className="container">
+        <ResultsHeader title="Properties in Dubai" resultsCount={10987} />
+      </div>
+      <Separator />
       <div className="container py-12">
         <div className="relative aspect-video bg-card border border-border flex flex-col items-center justify-center">
           <MapIcon className="w-24 h-24 text-muted-foreground/20" />

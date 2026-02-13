@@ -18,11 +18,11 @@ export default function RentPage() {
           </h1>
           <SearchFilters context="page" />
         </div>
-        <Separator />
-        <div className="container">
-          <ResultsHeader title="Properties for Rent in Dubai" resultsCount={rentProperties.length} />
-        </div>
       </div>
+      <div className="container">
+        <ResultsHeader title="Properties for Rent in Dubai" resultsCount={rentProperties.length} />
+      </div>
+      <Separator />
       <div className="container py-12">
         <PropertyListings properties={rentProperties} />
       </div>

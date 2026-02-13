@@ -18,11 +18,11 @@ export default function BuyPage() {
           </h1>
           <SearchFilters context="page" />
         </div>
-        <Separator />
-        <div className="container">
-          <ResultsHeader title="Properties for Sale in Dubai" resultsCount={saleProperties.length} />
-        </div>
       </div>
+      <div className="container">
+        <ResultsHeader title="Properties for Sale in Dubai" resultsCount={saleProperties.length} />
+      </div>
+      <Separator />
       <div className="container py-12">
         <PropertyListings properties={saleProperties} />
       </div>

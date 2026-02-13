@@ -18,11 +18,11 @@ export default function CommercialPage() {
           </h1>
           <SearchFilters context="page" />
         </div>
-        <Separator />
-        <div className="container">
-          <ResultsHeader title="Commercial Properties in Dubai" resultsCount={commercialProperties.length} />
-        </div>
       </div>
+      <div className="container">
+        <ResultsHeader title="Commercial Properties in Dubai" resultsCount={commercialProperties.length} />
+      </div>
+      <Separator />
       <div className="container py-12">
         <PropertyListings properties={commercialProperties} />
       </div>
