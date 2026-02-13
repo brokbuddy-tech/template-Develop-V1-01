@@ -2,8 +2,12 @@ import { SearchFilters } from "@/components/search-filters";
 import { CheckCircle } from "lucide-react";
 import { ResultsHeader } from "@/components/results-header";
 import { Separator } from "@/components/ui/separator";
+import { PropertyListings } from "@/components/property-listings";
+import { properties } from "@/lib/data";
 
 export default function ReadyToUsePage() {
+  const readyProperties = properties.filter(p => p.status === 'Ready');
+
   return (
     <div>
       <div className="sticky top-16 z-10 bg-background border-b">
@@ -16,13 +20,11 @@ export default function ReadyToUsePage() {
         </div>
         <Separator />
         <div className="container">
-          <ResultsHeader title="Ready to Use Properties in Dubai" resultsCount={1234} />
+          <ResultsHeader title="Ready to Use Properties in Dubai" resultsCount={readyProperties.length} />
         </div>
       </div>
       <div className="container py-12">
-        <div className="mt-8">
-          <p className="text-center text-muted-foreground">Ready to use property listings would be displayed here.</p>
-        </div>
+        <PropertyListings properties={readyProperties} />
       </div>
     </div>
   );

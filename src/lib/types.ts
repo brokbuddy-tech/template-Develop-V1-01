@@ -8,8 +8,9 @@ export type PropertyAgent = {
 export type Property = {
   id: string;
   name: string;
-  type: 'Apartment' | 'Villa' | 'Penthouse' | 'Townhouse' | 'Plot' | 'Studio';
-  purpose: 'Buy' | 'Rent' | 'Commercial';
+  type: 'Apartment' | 'Villa' | 'Penthouse' | 'Townhouse' | 'Plot' | 'Studio' | 'Office' | 'Retail' | 'Industrial';
+  purpose: 'Buy' | 'Rent';
+  status: 'Off-plan' | 'Ready';
   price: string;
   bedrooms: number;
   bathrooms: number;
@@ -17,6 +18,9 @@ export type Property = {
   imageId: string;
   location: string;
   agent?: PropertyAgent;
+  description: string;
+  amenities: string[];
+  galleryImageIds: string[];
 };
 
 export type Area = {

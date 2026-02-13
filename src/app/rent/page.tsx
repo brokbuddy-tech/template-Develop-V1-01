@@ -2,8 +2,12 @@ import { SearchFilters } from "@/components/search-filters";
 import { Key } from "lucide-react";
 import { ResultsHeader } from "@/components/results-header";
 import { Separator } from "@/components/ui/separator";
+import { PropertyListings } from "@/components/property-listings";
+import { properties } from "@/lib/data";
 
 export default function RentPage() {
+  const rentProperties = properties.filter(p => p.purpose === 'Rent' && (p.type !== 'Office' && p.type !== 'Retail' && p.type !== 'Industrial'));
+
   return (
     <div>
       <div className="sticky top-16 z-10 bg-background border-b">
@@ -16,13 +20,11 @@ export default function RentPage() {
         </div>
         <Separator />
         <div className="container">
-          <ResultsHeader title="Properties for Rent in Dubai" resultsCount={4321} />
+          <ResultsHeader title="Properties for Rent in Dubai" resultsCount={rentProperties.length} />
         </div>
       </div>
       <div className="container py-12">
-        <div className="mt-8">
-          <p className="text-center text-muted-foreground">Rental listings would be displayed here.</p>
-        </div>
+        <PropertyListings properties={rentProperties} />
       </div>
     </div>
   );

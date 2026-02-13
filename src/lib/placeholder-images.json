@@ -43,6 +43,24 @@
       "imageHint": "contemporary villa"
     },
     {
+      "id": "property-7",
+      "description": "City apartment with balcony",
+      "imageUrl": "https://images.unsplash.com/photo-1551583996-f0a1d53f5bfd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8Y2l0eSUyMGFwYXJ0bWVudHxlbnwwfHx8fDE3NzA4ODAxODd8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "city apartment"
+    },
+    {
+      "id": "property-8",
+      "description": "Suburban family home",
+      "imageUrl": "https://images.unsplash.com/photo-1577897113292-3b95936e5206?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxmYW1pbHklMjBob21lfGVufDB8fHx8MTc3MDkwNTQ5NHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "family home"
+    },
+    {
+      "id": "property-9",
+      "description": "Luxury downtown office space",
+      "imageUrl": "https://images.unsplash.com/photo-1587702068694-a909ef4aa346?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxvZmZpY2UlMjBzcGFjZXxlbnwwfHx8fDE3NzA5Nzg5MDl8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "office space"
+    },
+    {
       "id": "area-marina",
       "description": "Dubai Marina skyline at night",
       "imageUrl": "https://images.unsplash.com/photo-1682410601760-6372fd33ad2b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxkdWJhaSUyMG1hcmluYXxlbnwwfHx8fDE3NzA4OTcyMDd8MA&ixlib=rb-4.1.0&q=80&w=1080",
@@ -103,6 +121,12 @@
       "imageHint": "friendly agent"
     },
     {
+      "id": "agent-4",
+      "description": "Corporate headshot of an agent",
+      "imageUrl": "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxjb3Jwb3JhdGUlMjBoZWFkc2hvdHxlbnwwfHx8fDE3NzA5Nzg5MDl8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "corporate headshot"
+    },
+    {
       "id": "city-index-skyline",
       "description": "Black and white skyline of a modern city for city index comparison",
       "imageUrl": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxkdWJhaSUyMHNreWxpbmV8ZW58MHx8fHwxNzcwODA0NDMwfDA&ixlib=rb-4.1.0&q=80&w=1080",
@@ -145,6 +169,18 @@
       "imageHint": "female portrait"
     },
     {
+      "id": "author-3",
+      "description": "Portrait of a non-binary person",
+      "imageUrl": "https://images.unsplash.com/photo-1521119989659-a83eee488004?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxwZXJzb24lMjBwb3J0cmFpdHxlbnwwfHx8fDE3NzA5MzM1ODV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "person portrait"
+    },
+    {
+      "id": "author-4",
+      "description": "Headshot of a person",
+      "imageUrl": "https://images.unsplash.com/photo-1707919021498-bf1cebc43aa1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxwZXJzb24lMjBoZWFkc2hvdHxlbnwwfHx8fDE3NzA5MDExNzJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "person headshot"
+    },
+    {
       "id": "area-guide-bridge",
       "description": "Wide angle shot of Dubai Water Canal bridge at night",
       "imageUrl": "https://images.unsplash.com/photo-1676279559487-0cc2d920a96a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8ZHViYWklMjBjYW5hbHxlbnwwfHx8fDE3NzA5MDk3MzJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
@@ -179,6 +215,36 @@
       "description": "Architectural detail of a modern building in Dubai",
       "imageUrl": "https://images.unsplash.com/photo-1594498762512-16a7e02584d4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxhcmNoaXRlY3R1cmUlMjBkdWJhaXxlbnwwfHx8fDE3NzExMDUyNDd8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "architecture dubai"
+    },
+    {
+      "id": "gallery-1",
+      "description": "Interior of a modern living room",
+      "imageUrl": "https://images.unsplash.com/photo-1600210492493-0946911123ea?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxtb2Rlcm4lMjBpbnRlcmlvcnxlbnwwfHx8fDE3NzA5MTc1Mzd8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "modern interior"
+    },
+    {
+      "id": "gallery-2",
+      "description": "Luxury kitchen with marble countertops",
+      "imageUrl": "https://images.unsplash.com/photo-1628745277862-bc0b2d68c50c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxsdXh1cnklMjBraXRjaGVufGVufDB8fHx8MTc3MDk3ODkwOXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "luxury kitchen"
+    },
+    {
+      "id": "gallery-3",
+      "description": "Bedroom with a view of the city",
+      "imageUrl": "https://images.unsplash.com/photo-1654625972034-dc41d4ad977b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxiZWRyb29tJTIwdmlld3xlbnwwfHx8fDE3NzA5MjczMTF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "bedroom view"
+    },
+    {
+      "id": "gallery-4",
+      "description": "Spacious modern bathroom",
+      "imageUrl": "https://images.unsplash.com/photo-1638799869566-b17fa794c4de?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBiYXRocm9vbXxlbnwwfHx8fDE3NzA4ODY5NTF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "modern bathroom"
+    },
+    {
+      "id": "gallery-5",
+      "description": "Building exterior and swimming pool",
+      "imageUrl": "https://images.unsplash.com/photo-1696592876192-57097a5f4309?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxidWlsZGluZyUyMGV4dGVyaW9yfGVufDB8fHx8MTc3MDkxMzM3M3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "building exterior"
     }
   ]
 }

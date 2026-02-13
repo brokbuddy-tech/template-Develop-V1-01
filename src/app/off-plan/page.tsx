@@ -2,8 +2,12 @@ import { SearchFilters } from "@/components/search-filters";
 import { ClipboardList } from "lucide-react";
 import { ResultsHeader } from "@/components/results-header";
 import { Separator } from "@/components/ui/separator";
+import { PropertyListings } from "@/components/property-listings";
+import { properties } from "@/lib/data";
 
 export default function OffPlanPage() {
+  const offPlanProperties = properties.filter(p => p.status === 'Off-plan');
+
   return (
     <div>
       <div className="sticky top-16 z-10 bg-background border-b">
@@ -16,13 +20,11 @@ export default function OffPlanPage() {
         </div>
         <Separator />
         <div className="container">
-          <ResultsHeader title="Off-Plan Properties in Dubai" resultsCount={876} />
+          <ResultsHeader title="Off-Plan Properties in Dubai" resultsCount={offPlanProperties.length} />
         </div>
       </div>
       <div className="container py-12">
-        <div className="mt-8">
-          <p className="text-center text-muted-foreground">Off-plan property listings would be displayed here.</p>
-        </div>
+        <PropertyListings properties={offPlanProperties} />
       </div>
     </div>
   );

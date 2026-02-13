@@ -2,8 +2,12 @@ import { SearchFilters } from "@/components/search-filters";
 import { Building2 } from "lucide-react";
 import { ResultsHeader } from "@/components/results-header";
 import { Separator } from "@/components/ui/separator";
+import { PropertyListings } from "@/components/property-listings";
+import { properties } from "@/lib/data";
 
 export default function CommercialPage() {
+  const commercialProperties = properties.filter(p => p.type === 'Office' || p.type === 'Retail' || p.type === 'Industrial');
+
   return (
     <div>
       <div className="sticky top-16 z-10 bg-background border-b">
@@ -16,13 +20,11 @@ export default function CommercialPage() {
         </div>
         <Separator />
         <div className="container">
-          <ResultsHeader title="Commercial Properties in Dubai" resultsCount={543} />
+          <ResultsHeader title="Commercial Properties in Dubai" resultsCount={commercialProperties.length} />
         </div>
       </div>
       <div className="container py-12">
-        <div className="mt-8">
-          <p className="text-center text-muted-foreground">Commercial property listings would be displayed here.</p>
-        </div>
+        <PropertyListings properties={commercialProperties} />
       </div>
     </div>
   );
