@@ -45,15 +45,6 @@ export const NAV_LINKS: NavLink[] = [
     label: 'Off-Plan',
   },
   {
-    href: '/invest',
-    label: 'Invest Projects',
-    children: [
-      { href: '/invest/off-plan', label: 'Off-Plan' },
-      { href: '/invest/ready-to-use', label: 'Ready to use' },
-      { href: '/invest/dubai-investment-guide', label: 'Dubai Investment Guide' },
-    ],
-  },
-  {
     href: '/services',
     label: 'Services',
     children: [
