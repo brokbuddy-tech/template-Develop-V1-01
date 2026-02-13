@@ -1,9 +1,14 @@
 import type { ImagePlaceholder } from './placeholder-images';
 
+export type PropertyAgent = {
+  name: string;
+  avatarId: string;
+};
+
 export type Property = {
   id: string;
   name: string;
-  type: 'Apartment' | 'Villa' | 'Penthouse' | 'Townhouse' | 'Plot';
+  type: 'Apartment' | 'Villa' | 'Penthouse' | 'Townhouse' | 'Plot' | 'Studio';
   purpose: 'Buy' | 'Rent' | 'Commercial';
   price: string;
   bedrooms: number;
@@ -11,6 +16,7 @@ export type Property = {
   areaSqFt: number;
   imageId: string;
   location: string;
+  agent?: PropertyAgent;
 };
 
 export type Area = {

@@ -3,15 +3,19 @@ import type { Property, Area, Testimonial, Blog } from './types';
 export const featuredOffPlan: Property[] = [
   {
     id: 'prop-1',
-    name: 'Emaar Beachfront Tower',
-    type: 'Apartment',
+    name: 'Emaar Beachfront Studio',
+    type: 'Studio',
     purpose: 'Buy',
-    price: 'AED 3.2M',
-    bedrooms: 2,
-    bathrooms: 3,
-    areaSqFt: 1180,
+    price: 'AED 1.2M',
+    bedrooms: 0,
+    bathrooms: 1,
+    areaSqFt: 450,
     imageId: 'property-1',
     location: 'Emaar Beachfront',
+    agent: {
+      name: 'John Doe',
+      avatarId: 'author-1',
+    },
   },
   {
     id: 'prop-2',
@@ -24,6 +28,10 @@ export const featuredOffPlan: Property[] = [
     areaSqFt: 4500,
     imageId: 'property-2',
     location: 'Dubai Creek Harbour',
+    agent: {
+      name: 'Jane Smith',
+      avatarId: 'author-2',
+    },
   },
   {
     id: 'prop-3',
@@ -36,6 +44,10 @@ export const featuredOffPlan: Property[] = [
     areaSqFt: 7200,
     imageId: 'property-3',
     location: 'Palm Jumeirah',
+    agent: {
+      name: 'Alex Johnson',
+      avatarId: 'author-1',
+    },
   },
 ];
 
@@ -51,6 +63,10 @@ export const featuredReady: Property[] = [
     areaSqFt: 1750,
     imageId: 'property-5',
     location: 'Downtown Dubai',
+    agent: {
+      name: 'Emily Chen',
+      avatarId: 'author-2',
+    },
   },
   {
     id: 'prop-5',
@@ -63,6 +79,10 @@ export const featuredReady: Property[] = [
     areaSqFt: 2100,
     imageId: 'property-4',
     location: 'Arabian Ranches III',
+    agent: {
+      name: 'John Doe',
+      avatarId: 'author-1',
+    },
   },
   {
     id: 'prop-6',
@@ -75,6 +95,10 @@ export const featuredReady: Property[] = [
     areaSqFt: 8000,
     imageId: 'property-6',
     location: 'Mohammed Bin Rashid City',
+    agent: {
+      name: 'Jane Smith',
+      avatarId: 'author-2',
+    },
   },
 ];
 
