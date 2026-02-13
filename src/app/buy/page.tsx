@@ -6,8 +6,8 @@ export default function BuyPage() {
     <div>
       <div className="sticky top-16 z-10 py-4 bg-background border-b">
         <div className="container">
-          <h1 className="bg-muted inline-flex items-center gap-2 text-foreground font-bold text-xs tracking-tight mb-4 p-3 rounded-lg">
-            <Home className="h-3 w-3" />
+          <h1 className="bg-muted inline-flex items-center gap-2 text-foreground font-bold text-base tracking-tight mb-4 p-3 rounded-lg">
+            <Home className="h-4 w-4" />
             <span>Properties for Sale</span>
           </h1>
           <SearchFilters context="page" />
