@@ -8,6 +8,7 @@ import { Separator } from '@/components/ui/separator';
 import { testimonials, awards } from '@/lib/data';
 import { Testimonials } from '@/components/home/testimonials';
 import { AwardsSection } from '@/components/awards-section';
+import { FAQ } from '@/components/home/faq';
 
 const teamMembers: Agent[] = [
   {
@@ -176,6 +177,7 @@ export default function AboutPage() {
       </div>
       <AwardsSection awards={awards} />
       <Testimonials testimonials={testimonials} />
+      <FAQ />
     </div>
   );
 }
