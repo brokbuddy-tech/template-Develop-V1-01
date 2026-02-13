@@ -245,6 +245,30 @@
       "description": "Building exterior and swimming pool",
       "imageUrl": "https://images.unsplash.com/photo-1696592876192-57097a5f4309?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxidWlsZGluZyUyMGV4dGVyaW9yfGVufDB8fHx8MTc3MDkxMzM3M3ww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "building exterior"
+    },
+    {
+      "id": "award-1",
+      "description": "Golden trophy for best real estate agency",
+      "imageUrl": "https://images.unsplash.com/photo-1667205462612-09a2e51d29ee?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxnb2xkZW4lMjB0cm9waHl8ZW58MHx8fHwxNzcwODgwNjMyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "golden trophy"
+    },
+    {
+      "id": "award-2",
+      "description": "Glass plaque for customer service excellence",
+      "imageUrl": "https://images.unsplash.com/photo-1768508948849-b2ee9e074ab1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxnbGFzcyUyMGF3YXJkfGVufDB8fHx8MTc3MTAwMDI0Mnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "glass award"
+    },
+    {
+      "id": "award-3",
+      "description": "Certificate for top sales performance",
+      "imageUrl": "https://images.unsplash.com/photo-1761178334145-76c3d8ac30dd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxhd2FyZCUyMGNlcnRpZmljYXRlfGVufDB8fHx8MTc3MTAwMDI0Mnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "award certificate"
+    },
+    {
+      "id": "award-4",
+      "description": "Medal for innovation in real estate",
+      "imageUrl": "https://images.unsplash.com/photo-1613826488249-b67eba609bed?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxpbm5vdmF0aW9uJTIwbWVkYWx8ZW58MHx8fHwxNzcxMDAwMjQyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "innovation medal"
     }
   ]
 }

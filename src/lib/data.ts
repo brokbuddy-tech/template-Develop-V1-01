@@ -1,4 +1,4 @@
-import type { Property, Area, Testimonial, Blog } from './types';
+import type { Property, Area, Testimonial, Blog, Award } from './types';
 
 export const properties: Property[] = [
   {
@@ -236,4 +236,31 @@ export const blogPosts: Blog[] = [
     },
     imageId: 'blog-4',
   },
+];
+
+export const awards: Award[] = [
+  {
+    id: 'award-1',
+    title: 'Top Real Estate Agency 2023',
+    description: 'Awarded by the Dubai Real Estate Institute for outstanding sales and customer satisfaction.',
+    imageId: 'award-1',
+  },
+  {
+    id: 'award-2',
+    title: 'Excellence in Luxury Properties',
+    description: 'Recognized for our exceptional portfolio and service in the high-end market segment.',
+    imageId: 'award-2',
+  },
+  {
+    id: 'award-3',
+    title: 'Innovation in PropTech',
+    description: 'Awarded for our data-driven platform and use of technology to enhance client experience.',
+    imageId: 'award-3',
+  },
+  {
+    id: 'award-4',
+    title: 'Best Property Management Firm',
+    description: 'For delivering market-leading returns and service quality in property management.',
+    imageId: 'award-4',
+  }
 ];

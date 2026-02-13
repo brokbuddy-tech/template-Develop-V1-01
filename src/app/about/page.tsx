@@ -5,8 +5,9 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import type { Agent } from '@/lib/types';
 import { Separator } from '@/components/ui/separator';
-import { testimonials } from '@/lib/data';
+import { testimonials, awards } from '@/lib/data';
 import { Testimonials } from '@/components/home/testimonials';
+import { AwardsSection } from '@/components/awards-section';
 
 const teamMembers: Agent[] = [
   {
@@ -173,6 +174,7 @@ export default function AboutPage() {
             </div>
         </div>
       </div>
+      <AwardsSection awards={awards} />
       <Testimonials testimonials={testimonials} />
     </div>
   );

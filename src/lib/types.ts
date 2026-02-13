@@ -62,3 +62,10 @@ export type Blog = {
   };
   imageId: string;
 };
+
+export type Award = {
+  id: string;
+  title: string;
+  description: string;
+  imageId: string;
+};
