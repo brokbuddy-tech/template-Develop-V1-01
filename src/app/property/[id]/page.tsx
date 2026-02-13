@@ -64,6 +64,11 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
                 <div className="mb-4">
                     <Link href="/buy" className="text-sm text-primary hover:underline">‹ Back to listings</Link>
                 </div>
+
+                <div className="mb-4">
+                    <p className="text-3xl font-bold text-primary">{property.price}</p>
+                </div>
+                
                 <div className="mb-8">
                     <h1 className="text-4xl font-bold tracking-tight">{property.name}</h1>
                     <div className="flex items-center gap-2 mt-2 text-muted-foreground">
@@ -135,14 +140,6 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
 
                     <div className="lg:col-span-1">
                         <div className="sticky top-24 space-y-4">
-                           <Card className="bg-primary/5 border-primary/20">
-                               <CardHeader className="p-3">
-                                   <CardTitle className="text-center text-sm">Price</CardTitle>
-                               </CardHeader>
-                               <CardContent className="p-3 pt-0">
-                                   <p className="text-xl font-bold text-center text-primary">{property.price}</p>
-                               </CardContent>
-                           </Card>
                            <AgentContactCard agent={property.agent} />
                         </div>
                     </div>
