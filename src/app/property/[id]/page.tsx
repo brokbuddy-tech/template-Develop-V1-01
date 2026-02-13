@@ -26,17 +26,17 @@ function AgentContactCard({ agent }: { agent: any }) {
     const agentImage = PlaceHolderImages.find(p => p.id === agent.avatarId);
     return (
         <Card>
-            <CardHeader className="text-center">
-                <Avatar className="h-24 w-24 mx-auto mb-4">
+            <CardHeader className="text-center p-4">
+                <Avatar className="h-20 w-20 mx-auto mb-2">
                     {agentImage && <AvatarImage src={agentImage.imageUrl} alt={agent.name} />}
                     <AvatarFallback>{agent.name.charAt(0)}</AvatarFallback>
                 </Avatar>
-                <CardTitle>{agent.name}</CardTitle>
+                <CardTitle className="text-xl">{agent.name}</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-                <Button className="w-full" size="lg"><Phone className="mr-2 h-5 w-5" /> Call Agent</Button>
-                <Button className="w-full" size="lg" variant="outline"><Mail className="mr-2 h-5 w-5" /> Email Agent</Button>
-                <Button className="w-full" size="lg" className="bg-[#25D366] hover:bg-[#25D366]/90 text-white"><MessageCircle className="mr-2 h-5 w-5" /> WhatsApp</Button>
+            <CardContent className="space-y-3 p-4 pt-0">
+                <Button className="w-full"><Phone className="mr-2 h-4 w-4" /> Call Agent</Button>
+                <Button className="w-full" variant="outline"><Mail className="mr-2 h-4 w-4" /> Email Agent</Button>
+                <Button className="w-full" className="bg-[#25D366] hover:bg-[#25D366]/90 text-white"><MessageCircle className="mr-2 h-4 w-4" /> WhatsApp</Button>
             </CardContent>
         </Card>
     );
@@ -103,13 +103,13 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
                     </div>
 
                     <div className="lg:col-span-1">
-                        <div className="sticky top-24 space-y-8">
+                        <div className="sticky top-24 space-y-6">
                            <Card className="bg-primary/5 border-primary/20">
-                               <CardHeader>
-                                   <CardTitle className="text-center">Price</CardTitle>
+                               <CardHeader className="p-4">
+                                   <CardTitle className="text-center text-lg">Price</CardTitle>
                                </CardHeader>
-                               <CardContent>
-                                   <p className="text-4xl font-bold text-center text-primary">{property.price}</p>
+                               <CardContent className="p-4 pt-0">
+                                   <p className="text-3xl font-bold text-center text-primary">{property.price}</p>
                                </CardContent>
                            </Card>
                            <AgentContactCard agent={property.agent} />
