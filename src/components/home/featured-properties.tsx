@@ -1,3 +1,5 @@
+'use client';
+
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { PropertyCard } from '@/components/property-card';
 import type { Property } from '@/lib/types';
