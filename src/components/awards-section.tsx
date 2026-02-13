@@ -19,7 +19,7 @@ export function AwardsSection({ awards }: AwardsSectionProps) {
             const awardImage = PlaceHolderImages.find(p => p.id === award.imageId);
             return (
               <div key={award.id} className="group relative overflow-hidden rounded-lg">
-                <Card className="h-96">
+                <Card className="h-96 relative">
                   {awardImage && (
                     <Image
                       src={awardImage.imageUrl}
