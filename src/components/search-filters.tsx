@@ -47,7 +47,7 @@ export function SearchFilters() {
                         <div className="flex items-center gap-1 md:gap-2">
                             {/* Purpose Dropdown */}
                             <Select defaultValue="buy">
-                                <SelectTrigger className="w-auto md:w-[150px] font-bold focus:ring-0 border-0 focus:ring-offset-0 rounded-l-full h-auto py-3 pl-4 pr-2 text-base">
+                                <SelectTrigger className="w-auto text-foreground md:w-[150px] font-bold focus:ring-0 border-0 focus:ring-offset-0 rounded-l-full h-auto py-3 pl-4 pr-2 text-base">
                                     <SelectValue placeholder="Purpose" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -65,7 +65,7 @@ export function SearchFilters() {
                                 <Input
                                     type="text"
                                     placeholder="Search by Area, Building, or Community..."
-                                    className="w-full bg-transparent border-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-base h-auto py-3"
+                                    className="w-full text-foreground bg-transparent border-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-base h-auto py-3"
                                 />
                             </div>
 
@@ -186,7 +186,7 @@ export function SearchFilters() {
                      <div className="bg-white/95 backdrop-blur-sm p-4 rounded-xl shadow-lg focus-within:shadow-xl transition-shadow duration-300 flex flex-col gap-4">
                          <Textarea
                             placeholder="e.g., I'm looking for a 3-bedroom villa in Dubai Hills with a private pool and a modern kitchen, suitable for a young family. My budget is around AED 5M."
-                            className="w-full bg-transparent border rounded-md p-3 focus-visible:ring-1 focus-visible:ring-offset-0 text-base h-auto"
+                            className="w-full text-foreground bg-transparent border rounded-md p-3 focus-visible:ring-1 focus-visible:ring-offset-0 text-base h-auto"
                             rows={3}
                         />
                         <Button className="bg-primary text-primary-foreground rounded-md h-12 w-full text-base">
