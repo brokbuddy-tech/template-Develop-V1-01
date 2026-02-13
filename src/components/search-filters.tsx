@@ -42,10 +42,6 @@ export function SearchFilters() {
     return (
         <div className="w-full max-w-5xl mx-auto">
             <Tabs defaultValue="manual-search" className="w-full">
-                <TabsList className="grid w-full grid-cols-2 max-w-xs mx-auto mb-4 bg-black/20 border border-white/20 backdrop-blur-sm rounded-full">
-                    <TabsTrigger value="manual-search" className="text-white data-[state=active]:bg-white/90 data-[state=active]:text-black rounded-full">Manual Search</TabsTrigger>
-                    <TabsTrigger value="ai-search" className="text-white data-[state=active]:bg-gradient-to-r from-blue-500 to-purple-600 data-[state=active]:text-white rounded-full">Search with AI</TabsTrigger>
-                </TabsList>
                 <TabsContent value="manual-search">
                     <div className="bg-white p-2 rounded-full shadow-lg focus-within:shadow-xl transition-shadow duration-300">
                         <div className="flex items-center gap-1 md:gap-2">
@@ -197,6 +193,10 @@ export function SearchFilters() {
                         </Button>
                     </div>
                 </TabsContent>
+                <TabsList className="grid w-full grid-cols-2 max-w-xs mx-auto mt-4 bg-black/20 border border-white/20 backdrop-blur-sm rounded-full">
+                    <TabsTrigger value="manual-search" className="text-white data-[state=active]:bg-white/90 data-[state=active]:text-black rounded-full">Manual Search</TabsTrigger>
+                    <TabsTrigger value="ai-search" className="text-white data-[state=active]:bg-gradient-to-r from-blue-500 to-purple-600 data-[state=active]:text-white rounded-full">Search with AI</TabsTrigger>
+                </TabsList>
             </Tabs>
         </div>
     );
