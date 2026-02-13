@@ -7,20 +7,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { ListFilter, Building, Search } from 'lucide-react';
+import { ListFilter, Building } from 'lucide-react';
 import Link from 'next/link';
-
-const dubaiAreas = ["Downtown", "Palm Jumeirah", "Dubai Marina", "Dubai Hills Estate", "Business Bay"];
-const abuDhabiAreas = ["Yas Island", "Saadiyat Island", "Al Reem Island"];
-const northernEmiratesAreas = ["Sharjah (Aljada)", "Ras Al Khaimah (Al Marjan Island)"];
 
 export function ResultsHeader({ title, resultsCount }: { title: string; resultsCount: number }) {
   return (
@@ -46,43 +34,12 @@ export function ResultsHeader({ title, resultsCount }: { title: string; resultsC
           </DropdownMenuContent>
         </DropdownMenu>
 
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button className="bg-black text-white hover:bg-gray-800 rounded-lg">
-              <Building className="mr-2 h-4 w-4" />
-              Area Guides
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[600px]">
-            <DialogHeader>
-              <DialogTitle>Explore Area Guides</DialogTitle>
-            </DialogHeader>
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input placeholder="Search for a neighborhood..." className="pl-10" />
-            </div>
-            <div className="grid gap-6 py-4 max-h-[60vh] overflow-y-auto pr-4">
-              <div>
-                <h4 className="font-semibold mb-2">Dubai</h4>
-                <div className="grid grid-cols-2 gap-2">
-                  {dubaiAreas.map(area => <Link key={area} href="#" className="text-sm text-muted-foreground hover:text-foreground hover:underline">{area}</Link>)}
-                </div>
-              </div>
-              <div>
-                <h4 className="font-semibold mb-2">Abu Dhabi</h4>
-                <div className="grid grid-cols-2 gap-2">
-                  {abuDhabiAreas.map(area => <Link key={area} href="#" className="text-sm text-muted-foreground hover:text-foreground hover:underline">{area}</Link>)}
-                </div>
-              </div>
-              <div>
-                <h4 className="font-semibold mb-2">Northern Emirates</h4>
-                <div className="grid grid-cols-2 gap-2">
-                  {northernEmiratesAreas.map(area => <Link key={area} href="#" className="text-sm text-muted-foreground hover:text-foreground hover:underline">{area}</Link>)}
-                </div>
-              </div>
-            </div>
-          </DialogContent>
-        </Dialog>
+        <Button asChild className="bg-black text-white hover:bg-gray-800 rounded-lg">
+          <Link href="/area-guides">
+            <Building className="mr-2 h-4 w-4" />
+            Area Guides
+          </Link>
+        </Button>
       </div>
     </div>
   );
