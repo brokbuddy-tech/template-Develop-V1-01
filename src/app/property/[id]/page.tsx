@@ -1,3 +1,4 @@
+
 import { properties } from '@/lib/data';
 import { notFound } from 'next/navigation';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
@@ -103,6 +104,28 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
                         <Separator className="my-8" />
 
                         <MortgageCalculator propertyPriceString={property.price} />
+
+                        <Separator className="my-8" />
+
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>RERA Permit Information</CardTitle>
+                            </CardHeader>
+                            <CardContent className="flex flex-col sm:flex-row items-center gap-6">
+                                <div className="w-32 h-32 bg-muted flex items-center justify-center rounded-md">
+                                    <p className="text-xs text-muted-foreground">QR Code</p>
+                                </div>
+                                <div className="flex-1">
+                                    <p className="text-muted-foreground">
+                                        This listing is compliant with the Real Estate Regulatory Agency (RERA) regulations in Dubai.
+                                    </p>
+                                    <p className="text-muted-foreground mt-2">
+                                        Scan the QR code to verify the official permit and view detailed property information on the DLD/Trakheesi system.
+                                    </p>
+                                    <p className="text-sm font-semibold mt-4">Permit No: <span className="font-mono bg-muted px-2 py-1 rounded-md">7117457559</span></p>
+                                </div>
+                            </CardContent>
+                        </Card>
 
                     </div>
 
