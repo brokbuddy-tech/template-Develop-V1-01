@@ -168,9 +168,11 @@ export function SearchFilters() {
                                 </Dialog>
 
                             </div>
-                            <div className="hidden lg:flex items-center space-x-2 pr-2">
-                                <Switch id="luxury-only" />
-                                <Label htmlFor="luxury-only" className="text-sm font-medium">Luxury</Label>
+                            <div className="hidden lg:flex items-center pr-2">
+                                <Button variant="ghost" className="text-muted-foreground rounded-full font-bold">
+                                    <Sparkles className="mr-2 h-4 w-4" />
+                                    Luxury
+                                </Button>
                             </div>
 
                             <Button className="bg-primary text-primary-foreground rounded-full h-12 w-12 p-0 flex-shrink-0">
