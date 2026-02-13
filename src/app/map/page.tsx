@@ -6,7 +6,7 @@ import { Separator } from "@/components/ui/separator";
 export default function MapPage() {
   return (
     <div>
-      <div className="sticky top-16 z-10 bg-background border-b">
+      <div className="bg-background border-b">
         <div className="container py-4">
           <SearchFilters context="page" />
         </div>
