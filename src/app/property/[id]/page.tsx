@@ -66,7 +66,7 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
                 </div>
 
                 <div className="mb-4">
-                    <p className="text-3xl font-bold text-primary">{property.price}</p>
+                    <p className="inline-block bg-muted/50 p-3 rounded-lg text-3xl font-bold text-primary">{property.price}</p>
                 </div>
                 
                 <div className="mb-8">
