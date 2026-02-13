@@ -7,8 +7,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import { ListFilter, Building } from 'lucide-react';
-import Link from 'next/link';
+import { AreaGuidesPopup } from './area-guides-popup';
 
 export function ResultsHeader({ title, resultsCount }: { title: string; resultsCount: number }) {
   return (
@@ -34,12 +39,18 @@ export function ResultsHeader({ title, resultsCount }: { title: string; resultsC
           </DropdownMenuContent>
         </DropdownMenu>
 
-        <Button asChild className="bg-black text-white hover:bg-gray-800 rounded-lg">
-          <Link href="/area-guides">
-            <Building className="mr-2 h-4 w-4" />
-            Area Guides
-          </Link>
-        </Button>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button className="bg-black text-white hover:bg-gray-800 rounded-lg">
+              <Building className="mr-2 h-4 w-4" />
+              Area Guides
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-5xl p-0">
+             <AreaGuidesPopup />
+          </DialogContent>
+        </Dialog>
+
       </div>
     </div>
   );
