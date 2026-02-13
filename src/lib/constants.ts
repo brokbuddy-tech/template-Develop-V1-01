@@ -63,15 +63,6 @@ export const NAV_LINKS: NavLink[] = [
       { href: '/services/relocation', label: 'Relocation Services' },
     ],
   },
-  {
-    href: '/content-hub',
-    label: 'Content Hub',
-    children: [
-      { href: '/media', label: 'Media Hub' },
-      { href: '/blog', label: 'Blog' },
-      { href: '/area-guides', label: 'Area Guides' },
-    ],
-  },
    {
     href: '/about',
     label: 'About Us',
