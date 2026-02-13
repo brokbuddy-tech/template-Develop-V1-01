@@ -52,7 +52,7 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
         notFound();
     }
 
-    const relatedProperties = properties.filter(p => p.type === property.type && p.id !== property.id).slice(0, 3);
+    const relatedProperties = properties.filter(p => p.type === property.type && p.id !== property.id).slice(0, 6);
     
     return (
         <div className="bg-background">
