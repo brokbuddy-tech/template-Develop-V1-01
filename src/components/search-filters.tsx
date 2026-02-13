@@ -26,10 +26,10 @@ import {
 import { Separator } from './ui/separator';
 import { Checkbox } from './ui/checkbox';
 import { Label } from './ui/label';
-import { Switch } from './ui/switch';
 import { Sparkles, Search, ChevronDown, SlidersHorizontal, Crown } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { Textarea } from './ui/textarea';
+import { cn } from '@/lib/utils';
 
 const propertyTypes = ["Apartment", "Villa", "Penthouse", "Townhouse", "Duplex", "Office", "Warehouse", "Plot"];
 const amenities = [
@@ -38,7 +38,11 @@ const amenities = [
   "High-speed Elevators", "Shell & Core", "Fitted"
 ];
 
-export function SearchFilters() {
+interface SearchFiltersProps {
+  context?: 'hero' | 'page';
+}
+
+export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
     return (
         <div className="w-full max-w-5xl mx-auto">
             <Tabs defaultValue="manual-search" className="w-full">
@@ -97,6 +101,8 @@ export function SearchFilters() {
                                         </div>
                                     </DropdownMenuContent>
                                 </DropdownMenu>
+
+                                <Separator orientation="vertical" className="h-6" />
 
                                 <Dialog>
                                     <DialogTrigger asChild>
@@ -168,6 +174,7 @@ export function SearchFilters() {
                                 </Dialog>
 
                             </div>
+                            <Separator orientation="vertical" className="h-6 hidden lg:flex" />
                             <div className="hidden lg:flex items-center pr-2">
                                 <Button variant="ghost" className="text-muted-foreground rounded-full font-bold">
                                     <Crown className="mr-2 h-4 w-4" />
@@ -195,9 +202,34 @@ export function SearchFilters() {
                         </Button>
                     </div>
                 </TabsContent>
-                <TabsList className="grid w-full grid-cols-2 max-w-xs mx-auto mt-4 bg-black/20 border border-white/20 backdrop-blur-sm rounded-full">
-                    <TabsTrigger value="manual-search" className="text-white data-[state=active]:bg-white/90 data-[state=active]:text-black rounded-full">Manual Search</TabsTrigger>
-                    <TabsTrigger value="ai-search" className="text-white data-[state=active]:bg-gradient-to-r from-blue-500 to-purple-600 data-[state=active]:text-white rounded-full">Search with AI</TabsTrigger>
+                <TabsList className={cn(
+                    "grid w-full grid-cols-2 max-w-xs mx-auto mt-4",
+                    context === 'hero' 
+                        ? "bg-black/20 border border-white/20 backdrop-blur-sm rounded-full"
+                        : "bg-muted text-muted-foreground p-1 rounded-md"
+                )}>
+                    <TabsTrigger 
+                        value="manual-search" 
+                        className={cn(
+                           "data-[state=active]:shadow-sm",
+                           context === 'hero' 
+                                ? "text-white data-[state=active]:bg-white/90 data-[state=active]:text-black rounded-full" 
+                                : "data-[state=active]:bg-background data-[state=active]:text-foreground rounded-sm"
+                        )}
+                    >
+                        Manual Search
+                    </TabsTrigger>
+                    <TabsTrigger 
+                        value="ai-search" 
+                        className={cn(
+                           "data-[state=active]:shadow-sm",
+                           context === 'hero' 
+                                ? "text-white data-[state=active]:bg-gradient-to-r from-blue-500 to-purple-600 data-[state=active]:text-white rounded-full"
+                                : "data-[state=active]:bg-background data-[state=active]:text-foreground rounded-sm"
+                        )}
+                    >
+                        Search with AI
+                    </TabsTrigger>
                 </TabsList>
             </Tabs>
         </div>

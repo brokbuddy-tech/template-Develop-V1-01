@@ -23,7 +23,7 @@ export function HeroSection() {
         <h1 className="text-4xl md:text-6xl font-bold tracking-tighter uppercase mb-6">
           Redefining Real Estate in Dubai
         </h1>
-        <SearchFilters />
+        <SearchFilters context="hero" />
       </div>
     </section>
   );
