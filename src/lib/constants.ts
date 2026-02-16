@@ -26,24 +26,12 @@ export const NAV_LINKS: NavLink[] = [
     ],
   },
   {
-    href: '/for-developers',
-    label: 'For Developers',
-  },
-  {
     href: '/commercial',
     label: 'Commercial',
     children: [
       { href: '/commercial/for-sale', label: 'For Sale' },
       { href: '/commercial/for-rent', label: 'For Rent' },
     ],
-  },
-  {
-    href: '/invest',
-    label: 'Invest',
-  },
-  {
-    href: '/projects',
-    label: 'Projects',
   },
   {
     href: '/services',
@@ -53,10 +41,6 @@ export const NAV_LINKS: NavLink[] = [
       { href: '/services/interior-design', label: 'Interior Design' },
       { href: '/services/mortgage', label: 'Mortgage Consultancy' },
     ],
-  },
-  {
-    href: '/content-hub',
-    label: 'Content Hub',
   },
   {
     href: '/about',
