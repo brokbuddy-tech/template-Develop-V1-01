@@ -46,9 +46,9 @@ const faqs = [
 export function SellerFaq() {
   return (
     <section className="bg-white py-24 sm:py-32">
-      <div className="container max-w-4xl mx-auto">
+      <div className="container">
         <h2 className="text-3xl font-bold text-center mb-12">Frequently Asked Questions:</h2>
-        <Accordion type="single" collapsible className="w-full">
+        <Accordion type="single" collapsible className="w-full max-w-4xl mx-auto">
           {faqs.map((faq, index) => (
             <AccordionItem value={`item-${index}`} key={index} className="border-b border-gray-200">
               <AccordionTrigger className="text-lg font-bold text-black text-left hover:no-underline py-6">

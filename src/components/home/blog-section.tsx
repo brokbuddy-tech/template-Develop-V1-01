@@ -1,3 +1,4 @@
+
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -52,7 +53,7 @@ function BlogCard({ blog }: { blog: Blog }) {
 export function BlogSection({ blogs }: { blogs: Blog[] }) {
   return (
     <section className="py-16 bg-background">
-      <div className="container max-w-7xl mx-auto px-4">
+      <div className="container">
         <h2 className="text-3xl font-bold mb-10 text-center">
           The latest blogs, podcasts, and real estate insights
         </h2>

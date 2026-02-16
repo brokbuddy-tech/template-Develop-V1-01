@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -71,7 +72,7 @@ export default function ContactPage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:mx-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           <Card className="bg-background/80 backdrop-blur-sm border-gray-600 rounded-[10px]">
             <CardHeader>
               <CardTitle>Send us a Message</CardTitle>

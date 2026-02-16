@@ -106,7 +106,7 @@ export default function AboutPage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:mx-16 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
           <Card className="bg-card/80 backdrop-blur-sm border-border rounded-[10px]">
             <CardHeader>
               <CardTitle>Our Mission</CardTitle>
@@ -125,7 +125,7 @@ export default function AboutPage() {
           </Card>
         </div>
 
-        <div className="lg:mx-16">
+        <div>
             <h2 className="text-3xl font-bold text-center mb-8">Meet Our Leadership</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                 {teamMembers.map(member => {
@@ -151,7 +151,7 @@ export default function AboutPage() {
         
         <Separator className="my-16" />
 
-        <div className="lg:mx-16">
+        <div>
             <h2 className="text-3xl font-bold text-center mb-8">Meet Our Expert Agents</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                 {otherTeamMembers.map(member => {
