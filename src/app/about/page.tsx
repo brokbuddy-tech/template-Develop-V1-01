@@ -5,10 +5,11 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import type { Agent } from '@/lib/types';
 import { Separator } from '@/components/ui/separator';
-import { testimonials, awards } from '@/lib/data';
+import { testimonials, awards, blogPosts } from '@/lib/data';
 import { Testimonials } from '@/components/home/testimonials';
 import { AwardsSection } from '@/components/awards-section';
 import { FAQ } from '@/components/home/faq';
+import { BlogSection } from '@/components/home/blog-section';
 
 const teamMembers: Agent[] = [
   {
@@ -178,6 +179,7 @@ export default function AboutPage() {
       <AwardsSection awards={awards} />
       <Testimonials testimonials={testimonials} />
       <FAQ />
+      <BlogSection blogs={blogPosts} />
     </div>
   );
 }
