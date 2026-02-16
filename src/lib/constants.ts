@@ -11,18 +11,6 @@ export const NAV_LINKS: NavLink[] = [
       { href: '/buy/apartments', label: 'Apartments' },
       { href: '/buy/villas', label: 'Villas' },
       { href: '/buy/penthouses', label: 'Penthouses' },
-      { href: '/buy/townhouses', label: 'Townhouses' },
-      { href: '/buy/plots', label: 'Plots' },
-    ],
-  },
-  {
-    href: '/rent',
-    label: 'Rent',
-    children: [
-      { href: '/rent/apartments', label: 'Apartments' },
-      { href: '/rent/villas', label: 'Villas' },
-      { href: '/rent/penthouses', label: 'Penthouses' },
-      { href: '/rent/townhouses', label: 'Townhouses' },
     ],
   },
   {
@@ -30,19 +18,32 @@ export const NAV_LINKS: NavLink[] = [
     label: 'Sell',
   },
   {
+    href: '/rent',
+    label: 'Rent',
+    children: [
+      { href: '/rent/apartments', label: 'Apartments' },
+      { href: '/rent/villas', label: 'Villas' },
+    ],
+  },
+  {
+    href: '/for-developers',
+    label: 'For Developers',
+  },
+  {
     href: '/commercial',
     label: 'Commercial',
     children: [
       { href: '/commercial/for-sale', label: 'For Sale' },
       { href: '/commercial/for-rent', label: 'For Rent' },
-      { href: '/commercial/offices', label: 'Offices' },
-      { href: '/commercial/retail', label: 'Retail' },
-      { href: '/commercial/industrial', label: 'Industrial' },
     ],
   },
   {
-    href: '/off-plan',
-    label: 'Off-Plan',
+    href: '/invest',
+    label: 'Invest',
+  },
+  {
+    href: '/projects',
+    label: 'Projects',
   },
   {
     href: '/services',
@@ -51,37 +52,41 @@ export const NAV_LINKS: NavLink[] = [
       { href: '/services/property-management', label: 'Property Management' },
       { href: '/services/interior-design', label: 'Interior Design' },
       { href: '/services/mortgage', label: 'Mortgage Consultancy' },
-      { href: '/services/relocation', label: 'Relocation Services' },
     ],
   },
-   {
+  {
+    href: '/content-hub',
+    label: 'Content Hub',
+  },
+  {
     href: '/about',
     label: 'About Us',
+  },
+  {
+    href: '/careers',
+    label: 'Careers',
   },
 ];
 
 
 export const FOOTER_LINKS: Record<string, NavLink[]> = {
-  'For Sale': [
-    { href: '/buy/apartments', label: 'Apartments' },
-    { href: '/buy/villas', label: 'Villas' },
-    { href: '/buy/penthouses', label: 'Penthouses' },
-    { href: '/buy/townhouses', label: 'Townhouses' },
-    { href: '/buy/plots', label: 'Plots' },
+  'Explore': [
+    { href: '/buy', label: 'Buy' },
+    { href: '/sell', label: 'Sell' },
+    { href: '/rent', label: 'Rent' },
+    { href: '/commercial', label: 'Commercial' },
+    { href: '/off-plan', label: 'Off-Plan' },
+    { href: '/for-developers', label: 'For Developers' },
   ],
-  'For Rent': [
-    { href: '/rent/annual', label: 'Annual Rentals' },
-    { href: '/rent/short-term', label: 'Short-term Homes' },
-  ],
-  Services: [
+  'Services': [
     { href: '/services/property-management', label: 'Property Management' },
     { href: '/services/interior-design', label: 'Interior Design' },
     { href: '/services/mortgage', label: 'Mortgage Consultancy' },
     { href: '/services/relocation', label: 'Relocation Services' },
   ],
-  Company: [
+  'Company': [
     { href: '/about', label: 'About Us' },
-    { href: '/media', label: 'Media Hub' },
+    { href: '/content-hub', label: 'Content Hub' },
     { href: '/careers', label: 'Careers' },
     { href: '/contact', label: 'Contact' },
   ],

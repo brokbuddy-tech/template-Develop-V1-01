@@ -14,6 +14,8 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
+  DropdownMenuLabel,
 } from '@/components/ui/dropdown-menu';
 import {
   Accordion,
@@ -21,15 +23,23 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import { Menu, Building, Globe, ChevronDown } from 'lucide-react';
+import { Menu, Settings, ChevronDown } from 'lucide-react';
 import { NAV_LINKS, SITE_NAME } from '@/lib/constants';
 import { ScrollArea } from '../ui/scroll-area';
 import type { NavLink } from '@/lib/types';
 import { useRouter } from 'next/navigation';
 
+const DevelopLogo = () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M7 21V11" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M12 21V3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M17 21V7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+);
+
 const Logo = () => (
   <Link href="/" className="flex items-center gap-2">
-    <Building className="h-6 w-6 text-primary" />
+    <DevelopLogo />
     <span className="text-xl font-bold tracking-wide uppercase text-foreground">
       {SITE_NAME}
     </span>
@@ -47,7 +57,7 @@ const HoverDropdownMenu = ({ link }: { link: NavLink }) => {
   
   if (!link.children) {
     return (
-      <Button asChild variant="ghost" className="font-medium">
+      <Button asChild variant="ghost" className="font-semibold text-sm">
         <Link
           href={link.href}
           className="text-muted-foreground transition-colors hover:text-foreground p-2"
@@ -65,7 +75,7 @@ const HoverDropdownMenu = ({ link }: { link: NavLink }) => {
         onPointerEnter={() => setOpen(true)}
         onPointerLeave={() => setOpen(false)}
       >
-        <Button variant="ghost" className="font-medium p-2 pr-1" onClick={handleButtonClick}>
+        <Button variant="ghost" className="font-semibold text-sm p-2 pr-1" onClick={handleButtonClick}>
             {link.label}
         </Button>
         <DropdownMenuTrigger asChild>
@@ -90,7 +100,7 @@ const HoverDropdownMenu = ({ link }: { link: NavLink }) => {
 };
 
 const DesktopNav = () => (
-  <nav className="hidden lg:flex items-center gap-2 text-sm font-medium">
+  <nav className="hidden lg:flex items-center gap-2 text-sm font-semibold">
     {NAV_LINKS.map((link) => <HoverDropdownMenu key={link.label} link={link} />)}
   </nav>
 );
@@ -147,36 +157,42 @@ const MobileNav = () => (
       </ScrollArea>
       <div className="mt-auto p-4 border-t space-y-4">
         <Button asChild className="w-full font-semibold bg-primary text-primary-foreground hover:bg-primary/90 transition-opacity">
-            <Link href="/contact">Contact Us</Link>
+            <Link href="/instant-valuation">Instant Valuation</Link>
         </Button>
         <div className="flex items-center justify-center gap-4">
-            <LanguageSwitcher />
+            <UtilitySwitcher />
         </div>
       </div>
     </SheetContent>
   </Sheet>
 );
 
-const LanguageSwitcher = () => (
+const UtilitySwitcher = () => (
   <DropdownMenu>
     <DropdownMenuTrigger asChild>
       <Button variant="ghost" size="sm" className="gap-1 text-muted-foreground">
-        <Globe className="h-5 w-5 text-primary" />
+        <Settings className="h-5 w-5 text-primary" />
         <span className="font-medium">EN</span>
         <ChevronDown className="h-4 w-4 opacity-50" />
       </Button>
     </DropdownMenuTrigger>
     <DropdownMenuContent align="end">
+      <DropdownMenuLabel>Language</DropdownMenuLabel>
       <DropdownMenuItem>English</DropdownMenuItem>
       <DropdownMenuItem>العربية</DropdownMenuItem>
       <DropdownMenuItem>中文</DropdownMenuItem>
+      <DropdownMenuSeparator />
+      <DropdownMenuLabel>Currency</DropdownMenuLabel>
+      <DropdownMenuItem>AED</DropdownMenuItem>
+      <DropdownMenuItem>USD</DropdownMenuItem>
+      <DropdownMenuItem>EUR</DropdownMenuItem>
     </DropdownMenuContent>
   </DropdownMenu>
 );
 
 export function Header() {
   return (
-    <header className="sticky top-0 z-50 w-full shadow-sm bg-white">
+    <header className="sticky top-0 z-50 w-full shadow-sm bg-background border-b">
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-6">
           <Logo />
@@ -184,10 +200,10 @@ export function Header() {
         </div>
         <div className="flex items-center gap-2 md:gap-4">
           <div className="hidden lg:flex items-center gap-2">
-            <LanguageSwitcher />
+            <UtilitySwitcher />
           </div>
-          <Button asChild className="hidden sm:inline-flex px-5 py-2 h-auto font-semibold text-sm bg-primary text-primary-foreground hover:bg-primary/90 transition-opacity rounded-md">
-            <Link href="/contact">Contact Us</Link>
+          <Button asChild className="hidden sm:inline-flex px-5 py-2 h-auto font-semibold text-sm bg-primary text-primary-foreground hover:bg-primary/90 transition-opacity rounded-none">
+            <Link href="/instant-valuation">Instant Valuation</Link>
           </Button>
           <MobileNav />
         </div>
