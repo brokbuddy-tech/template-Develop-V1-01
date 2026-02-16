@@ -6,7 +6,7 @@ import { Check, CheckCircle, Phone, Globe } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const BuyerVerificationCard = () => (
-    <div className="relative w-full max-w-xs mx-auto">
+    <div className="relative w-full max-w-[280px] mx-auto">
         <div className="absolute -top-8 -right-4 bg-green-500/80 text-white p-4 rounded-full shadow-lg backdrop-blur-sm">
             <Check className="h-8 w-8" />
         </div>
@@ -31,7 +31,7 @@ const BuyerVerificationCard = () => (
 
 const WorldMap = () => (
     <div className="relative w-full h-full flex items-center justify-center">
-        <Globe className="w-full h-auto max-w-[280px] text-emerald-400 opacity-50" strokeWidth={0.5} />
+        <Globe className="w-full h-auto max-w-[250px] text-emerald-400 opacity-50" strokeWidth={0.5} />
          {/* Pulses */}
         <div className="absolute top-[45%] left-[51%]">
             <div className="w-3 h-3 bg-emerald-400 rounded-full animate-ping"></div>
@@ -76,7 +76,7 @@ export function WhySell() {
   return (
     <section className="bg-black text-white relative py-24 sm:py-32">
         <div className="container">
-            <h2 className="text-4xl lg:text-5xl font-bold mb-16">Why Sell with DEVELOP?</h2>
+            <h2 className="text-3xl lg:text-4xl font-bold mb-12">Why Sell with DEVELOP?</h2>
 
             <Carousel setApi={setApi} className="w-full">
                 <CarouselContent>
@@ -84,10 +84,10 @@ export function WhySell() {
                     <CarouselItem>
                          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
                             <div className="space-y-4">
-                                <h3 className="text-2xl font-bold">Top Quality Buyers</h3>
-                                <p className="text-gray-300">We rigorously screen prospective buyers to ensure that you receive the most qualified opportunities.</p>
+                                <h3 className="text-xl font-bold">Top Quality Buyers</h3>
+                                <p className="text-gray-300 text-sm">We rigorously screen prospective buyers to ensure that you receive the most qualified opportunities.</p>
                             </div>
-                            <div className="py-16">
+                            <div className="py-8">
                                 <BuyerVerificationCard />
                             </div>
                         </div>
@@ -96,10 +96,10 @@ export function WhySell() {
                     <CarouselItem>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
                             <div className="space-y-4">
-                                <h3 className="text-2xl font-bold">Unmatched Market Exposure</h3>
-                                <p className="text-gray-300">Leveraging our network of 1000+ local and international agencies to find the right investor for your asset.</p>
+                                <h3 className="text-xl font-bold">Unmatched Market Exposure</h3>
+                                <p className="text-gray-300 text-sm">Leveraging our network of 1000+ local and international agencies to find the right investor for your asset.</p>
                             </div>
-                             <div className="h-80">
+                             <div className="h-56">
                                 <WorldMap />
                             </div>
                         </div>
@@ -108,7 +108,7 @@ export function WhySell() {
             </Carousel>
             
             {/* Custom Pagination */}
-            <div className="flex gap-3 items-center mt-16">
+            <div className="flex gap-3 items-center mt-12">
                 {Array.from({ length: count }).map((_, index) => (
                     <button
                         key={index}
