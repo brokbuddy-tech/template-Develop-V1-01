@@ -20,8 +20,8 @@ export function TrustSignals() {
 
   return (
     <section className="bg-card">
-      <div className="container py-12 text-center">
-        <div className="inline-grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-px bg-border border-y border-border">
+      <div className="py-12">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-px bg-border border-y border-border">
           {signals.map((signal, index) => (
             <Signal key={index} {...signal} />
           ))}
