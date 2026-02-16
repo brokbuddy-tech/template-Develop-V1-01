@@ -37,6 +37,14 @@ export type Testimonial = {
   imageId: string;
 };
 
+export type SellerTestimonial = {
+  id: string;
+  name: string;
+  property: string;
+  quote: string;
+  avatarFallback: string;
+};
+
 export type Agent = {
   id: string;
   name: string;

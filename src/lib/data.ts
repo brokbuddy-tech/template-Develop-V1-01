@@ -1,4 +1,4 @@
-import type { Property, Area, Testimonial, Blog, Award } from './types';
+import type { Property, Area, Testimonial, Blog, Award, SellerTestimonial } from './types';
 
 export const properties: Property[] = [
   {
@@ -188,6 +188,51 @@ export const testimonials: Testimonial[] = [
     name: 'Rashid Al Maktoum',
     quote: 'As an investor, DEVELOP provides unparalleled insights and access to exclusive off-market deals. Highly recommended.',
     imageId: 'testimonial-3',
+  },
+];
+
+export const sellerTestimonials: SellerTestimonial[] = [
+  {
+    id: 'seller-1',
+    name: 'David & Sarah Johnson',
+    property: 'Villa in Arabian Ranches',
+    quote: 'Selling our family home was an emotional process, but the DEVELOP team handled it with incredible sensitivity and professionalism. Their valuation was spot-on, and they secured a buyer faster than we ever expected.',
+    avatarFallback: 'DS',
+  },
+  {
+    id: 'seller-2',
+    name: 'Fatima Al-Marzooqi',
+    property: 'Apartment in Downtown Dubai',
+    quote: 'As a first-time seller, I was nervous. DEVELOP\'s data-driven approach gave me confidence. Their marketing reach is phenomenal, and the quality of offers we received was a testament to their expertise.',
+    avatarFallback: 'FA',
+  },
+  {
+    id: 'seller-3',
+    name: 'Chen Wei',
+    property: 'Portfolio of 3 Units',
+    quote: 'I needed to liquidate part of my property portfolio quickly. DEVELOP\'s team provided a clear strategy, managed the entire process flawlessly, and exceeded my financial goals. True professionals.',
+    avatarFallback: 'CW',
+  },
+    {
+    id: 'seller-4',
+    name: 'Robert Smith',
+    property: 'Penthouse in Dubai Marina',
+    quote: 'The attention to detail was impeccable. From the professional photography to the qualified buyer screenings, every step was handled with the utmost care. I wouldn\'t trust anyone else with a high-value asset.',
+    avatarFallback: 'RS',
+  },
+  {
+    id: 'seller-5',
+    name: 'Elena Petrova',
+    property: 'Off-plan unit in Emaar Beachfront',
+    quote: 'DEVELOP helped me sell my off-plan property before handover. Their understanding of the secondary market for off-plan is unmatched, and they made a complex transaction feel simple.',
+    avatarFallback: 'EP',
+  },
+  {
+    id: 'seller-6',
+    name: 'The Miller Family',
+    property: 'Townhouse in Dubai Hills',
+    quote: 'We were impressed by the global reach. Our property was marketed to investors we could never have reached on our own, resulting in a fantastic sale price. Thank you, DEVELOP!',
+    avatarFallback: 'MF',
   },
 ];
 

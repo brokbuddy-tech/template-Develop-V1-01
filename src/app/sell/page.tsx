@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { ArrowRight } from 'lucide-react';
 import { WhySell } from '@/components/sell/why-sell';
+import { SellerTestimonials } from '@/components/sell/testimonials';
 
 export default function SellPage() {
   const heroImage = PlaceHolderImages.find(p => p.id === 'blog-4');
@@ -14,7 +15,7 @@ export default function SellPage() {
         <div className="container">
             <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-12 py-12 md:py-24 min-h-[calc(100vh-64px)]">
                 <div className="flex flex-col items-start text-left">
-                    <h1 className="text-3xl lg:text-5xl font-bold tracking-tight text-foreground font-headline">
+                    <h1 className="text-3xl lg:text-4xl font-bold tracking-tight text-foreground font-headline">
                         Sell Your Property in Dubai 2026 | Residential & Commercial
                     </h1>
                     <p className="mt-6 text-base text-muted-foreground max-w-xl">
@@ -27,7 +28,7 @@ export default function SellPage() {
                         </Link>
                     </Button>
                 </div>
-                <div className="relative h-80 md:h-[450px] w-full">
+                <div className="relative h-64 md:h-[400px] w-full">
                     {heroImage && (
                     <Image
                         src={heroImage.imageUrl}
@@ -41,6 +42,7 @@ export default function SellPage() {
             </div>
         </div>
         <WhySell />
+        <SellerTestimonials />
     </>
   );
 }
