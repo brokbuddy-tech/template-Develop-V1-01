@@ -196,8 +196,8 @@ export function Header() {
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-6">
           <Logo />
-          <DesktopNav />
         </div>
+        <DesktopNav />
         <div className="flex items-center gap-2 md:gap-4">
           <div className="hidden lg:flex items-center gap-2">
             <UtilitySwitcher />
