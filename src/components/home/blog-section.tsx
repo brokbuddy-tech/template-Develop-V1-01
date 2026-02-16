@@ -11,7 +11,7 @@ function BlogCard({ blog }: { blog: Blog }) {
   const authorImage = PlaceHolderImages.find(p => p.id === blog.author.avatarId);
 
   return (
-    <div className="border rounded-xl overflow-hidden hover:shadow-lg transition-shadow bg-card flex flex-col">
+    <div className="border rounded-xl overflow-hidden hover:shadow-lg transition-shadow bg-card flex flex-col text-left">
       {blogImage && (
         <Link href={`/blog/${blog.id}`} className="relative h-48 w-full block">
           <Image
@@ -57,10 +57,12 @@ export function BlogSection({ blogs }: { blogs: Blog[] }) {
         <h2 className="text-3xl font-bold mb-10 text-center">
           The latest blogs, podcasts, and real estate insights
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {blogs.map((blog) => (
-            <BlogCard key={blog.id} blog={blog} />
-          ))}
+        <div className="text-center">
+          <div className="inline-grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {blogs.map((blog) => (
+              <BlogCard key={blog.id} blog={blog} />
+            ))}
+          </div>
         </div>
         <div className="flex justify-center mt-12">
           <Button size="lg" className="bg-primary text-primary-foreground px-8 py-3 rounded-lg font-semibold hover:bg-primary/90">
