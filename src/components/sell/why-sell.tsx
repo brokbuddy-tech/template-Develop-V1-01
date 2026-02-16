@@ -6,9 +6,9 @@ import { Check, CheckCircle, Phone, Globe } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const BuyerVerificationCard = () => (
-    <div className="relative w-full max-w-sm mx-auto">
-        <div className="absolute -top-12 -right-12 bg-green-500/80 text-white p-6 rounded-full shadow-lg backdrop-blur-sm">
-            <Check className="h-12 w-12" />
+    <div className="relative w-full max-w-xs mx-auto">
+        <div className="absolute -top-8 -right-4 bg-green-500/80 text-white p-4 rounded-full shadow-lg backdrop-blur-sm">
+            <Check className="h-8 w-8" />
         </div>
         <div className="bg-gray-800/50 backdrop-blur-md border border-gray-700 rounded-2xl p-6 shadow-2xl">
             <div className="h-2.5 bg-blue-600 rounded-t-lg -m-6 mb-6"></div>
@@ -22,8 +22,8 @@ const BuyerVerificationCard = () => (
                 ))}
             </ul>
         </div>
-         <div className="absolute -bottom-6 -left-6 bg-blue-600/80 text-white p-4 rounded-full shadow-lg backdrop-blur-sm">
-            <Phone className="h-8 w-8" />
+         <div className="absolute -bottom-4 -left-4 bg-blue-600/80 text-white p-3 rounded-full shadow-lg backdrop-blur-sm">
+            <Phone className="h-6 w-6" />
         </div>
     </div>
 );
@@ -31,7 +31,7 @@ const BuyerVerificationCard = () => (
 
 const WorldMap = () => (
     <div className="relative w-full h-full flex items-center justify-center">
-        <Globe className="w-full h-auto max-w-sm text-emerald-400 opacity-50" strokeWidth={0.5} />
+        <Globe className="w-full h-auto max-w-[280px] text-emerald-400 opacity-50" strokeWidth={0.5} />
          {/* Pulses */}
         <div className="absolute top-[45%] left-[51%]">
             <div className="w-3 h-3 bg-emerald-400 rounded-full animate-ping"></div>
@@ -87,7 +87,7 @@ export function WhySell() {
                                 <h3 className="text-2xl font-bold">Top Quality Buyers</h3>
                                 <p className="text-gray-300">We rigorously screen prospective buyers to ensure that you receive the most qualified opportunities.</p>
                             </div>
-                            <div>
+                            <div className="py-16">
                                 <BuyerVerificationCard />
                             </div>
                         </div>
