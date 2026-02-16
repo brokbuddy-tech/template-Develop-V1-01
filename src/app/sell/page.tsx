@@ -7,6 +7,8 @@ import { ArrowRight } from 'lucide-react';
 import { WhySell } from '@/components/sell/why-sell';
 import { SellerTestimonials } from '@/components/sell/testimonials';
 import { SellerFaq } from '@/components/sell/faq';
+import { BlogSection } from '@/components/home/blog-section';
+import { blogPosts } from '@/lib/data';
 
 export default function SellPage() {
   const heroImage = PlaceHolderImages.find(p => p.id === 'blog-4');
@@ -45,6 +47,7 @@ export default function SellPage() {
         <WhySell />
         <SellerTestimonials />
         <SellerFaq />
+        <BlogSection blogs={blogPosts} />
     </>
   );
 }
