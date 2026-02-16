@@ -1,11 +1,9 @@
-
 'use client';
 
 import * as React from 'react';
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from '@/components/ui/carousel';
 import { Check, CheckCircle, Phone, Globe } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { FloatingSocialBar } from './floating-social-bar';
 
 const BuyerVerificationCard = () => (
     <div className="relative w-full max-w-sm mx-auto">
@@ -77,7 +75,6 @@ export function WhySell() {
 
   return (
     <section className="bg-black text-white relative py-24 sm:py-32">
-        <FloatingSocialBar />
         <div className="container">
             <h2 className="text-4xl lg:text-5xl font-bold mb-16">Why Sell with DEVELOP?</h2>
 
