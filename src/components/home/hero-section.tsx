@@ -1,3 +1,4 @@
+
 import Image from 'next/image';
 import { SearchFilters } from '@/components/search-filters';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
@@ -19,7 +20,7 @@ export function HeroSection() {
         />
       )}
       <div className="absolute inset-0 bg-black/60" />
-      <div className="relative z-10 container flex flex-col items-center">
+      <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8 flex flex-col items-center">
         <h1 className="text-4xl md:text-6xl font-bold tracking-tighter uppercase mb-6">
           Redefining Real Estate in Dubai
         </h1>

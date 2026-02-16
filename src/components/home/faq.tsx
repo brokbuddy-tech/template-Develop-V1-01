@@ -32,7 +32,7 @@ const faqs = [
 export function FAQ() {
   return (
     <section className="py-16 bg-card">
-      <div className="container">
+      <div className="w-full px-4 sm:px-6 lg:px-8">
         <h2 className="text-3xl font-bold text-center mb-8">Frequently Asked Questions</h2>
         <Accordion type="single" collapsible className="w-full max-w-4xl mx-auto">
           {faqs.map((faq, index) => (

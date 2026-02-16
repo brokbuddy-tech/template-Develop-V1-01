@@ -1,3 +1,4 @@
+
 'use client';
 
 import * as React from 'react';
@@ -193,12 +194,14 @@ const UtilitySwitcher = () => (
 export function Header() {
   return (
     <header className="sticky top-0 z-50 w-full shadow-sm bg-background border-b">
-      <div className="container flex h-16 items-center justify-between">
-        <div className="flex items-center gap-6">
+      <div className="w-full px-4 sm:px-6 lg:px-8 flex h-16 items-center">
+        <div className="flex items-center gap-6 lg:w-1/4">
           <Logo />
         </div>
-        <DesktopNav />
-        <div className="flex items-center gap-2 md:gap-4">
+        <div className="flex-1 flex justify-center">
+          <DesktopNav />
+        </div>
+        <div className="flex items-center justify-end gap-2 md:gap-4 lg:w-1/4">
           <div className="hidden lg:flex items-center gap-2">
             <UtilitySwitcher />
           </div>

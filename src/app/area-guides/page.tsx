@@ -14,7 +14,7 @@ const popularNorthernEmiratesAreas = ["Sharjah (Aljada)", "Ras Al Khaimah (Al Ma
 export default function AreaGuidesPage() {
   return (
     <div className="bg-white">
-      <div className="container py-12">
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-12">
         {/* Section One: Featured Communities (The Visual Grid) */}
         <h2 className="text-3xl font-bold tracking-tight text-black">Explore Area Guides</h2>
         <Separator className="my-6" />

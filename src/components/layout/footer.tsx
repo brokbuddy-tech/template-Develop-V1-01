@@ -1,3 +1,4 @@
+
 import Link from 'next/link';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -13,7 +14,7 @@ const SocialLink = ({ href, icon: Icon }: { href: string; icon: React.ElementTyp
 export function Footer() {
   return (
     <footer className="border-t">
-      <div className="container py-12">
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
           <div className="lg:col-span-2 pr-8">
             <Link href="/" className="flex items-center gap-2 mb-4">

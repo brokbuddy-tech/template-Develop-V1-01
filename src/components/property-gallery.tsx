@@ -1,3 +1,4 @@
+
 'use client';
 
 import Image from 'next/image';
@@ -50,7 +51,7 @@ export function PropertyGallery({ galleryImageIds }: PropertyGalleryProps) {
                     </button>
                 </div>
             </div>
-            <div className="container mt-4">
+            <div className="w-full px-4 sm:px-6 lg:px-8 mt-4">
                 <div className="grid grid-cols-5 gap-2">
                     {images.map(image => (
                         <div

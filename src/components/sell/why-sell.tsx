@@ -1,3 +1,4 @@
+
 'use client';
 
 import * as React from 'react';
@@ -6,8 +7,8 @@ import { Check, CheckCircle, Phone, Globe } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const BuyerVerificationCard = () => (
-    <div className="relative w-full max-w-[280px] mx-auto">
-        <div className="absolute -top-8 -right-4 bg-green-500/80 text-white p-4 rounded-full shadow-lg backdrop-blur-sm">
+    <div className="relative w-full max-w-[280px] mx-auto py-8">
+        <div className="absolute -top-4 -right-0 bg-green-500/80 text-white p-4 rounded-full shadow-lg backdrop-blur-sm">
             <Check className="h-8 w-8" />
         </div>
         <div className="bg-gray-800/50 backdrop-blur-md border border-gray-700 rounded-2xl p-6 shadow-2xl">
@@ -22,7 +23,7 @@ const BuyerVerificationCard = () => (
                 ))}
             </ul>
         </div>
-         <div className="absolute -bottom-4 -left-4 bg-blue-600/80 text-white p-3 rounded-full shadow-lg backdrop-blur-sm">
+         <div className="absolute -bottom-0 -left-0 bg-blue-600/80 text-white p-3 rounded-full shadow-lg backdrop-blur-sm">
             <Phone className="h-6 w-6" />
         </div>
     </div>
@@ -75,8 +76,8 @@ export function WhySell() {
 
   return (
     <section className="bg-black text-white relative py-24 sm:py-32">
-        <div className="container">
-            <h2 className="text-3xl lg:text-4xl font-bold mb-12">Why Sell with DEVELOP?</h2>
+        <div className="w-full px-4 sm:px-6 lg:px-8">
+            <h2 className="text-2xl lg:text-3xl font-bold mb-12">Why Sell with DEVELOP?</h2>
 
             <Carousel setApi={setApi} className="w-full">
                 <CarouselContent>

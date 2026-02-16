@@ -53,7 +53,7 @@ function BlogCard({ blog }: { blog: Blog }) {
 export function BlogSection({ blogs }: { blogs: Blog[] }) {
   return (
     <section className="py-16 bg-background">
-      <div className="container">
+      <div className="w-full px-4 sm:px-6 lg:px-8">
         <h2 className="text-3xl font-bold mb-10 text-center">
           The latest blogs, podcasts, and real estate insights
         </h2>

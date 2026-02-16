@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
@@ -12,7 +13,7 @@ interface FeaturedPropertiesProps {
 export function FeaturedProperties({ title, properties }: FeaturedPropertiesProps) {
   return (
     <section className="py-16">
-      <div className="container">
+      <div className="w-full px-4 sm:px-6 lg:px-8">
         <h2 className="text-3xl font-bold text-center mb-8">{title}</h2>
         <Carousel
           opts={{

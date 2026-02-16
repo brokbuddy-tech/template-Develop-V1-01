@@ -1,9 +1,10 @@
+
 import { Crown } from "lucide-react";
 import AIRecommendations from "./recommendations";
 
 export default function VIPPortalPage() {
   return (
-    <div className="container py-12">
+    <div className="w-full px-4 sm:px-6 lg:px-8 py-12">
       <div className="text-center mb-12">
         <Crown className="mx-auto h-12 w-12 text-primary mb-4" />
         <h1 className="text-4xl font-bold tracking-tight">VIP Portal</h1>

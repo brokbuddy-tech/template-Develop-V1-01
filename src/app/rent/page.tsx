@@ -1,3 +1,4 @@
+
 import { SearchFilters } from "@/components/search-filters";
 import { Key } from "lucide-react";
 import { ResultsHeader } from "@/components/results-header";
@@ -12,11 +13,11 @@ export default function RentPage() {
   return (
     <div>
       <div className="bg-background border-b">
-        <div className="container py-4">
+        <div className="w-full px-4 sm:px-6 lg:px-8 py-4">
           <SearchFilters context="page" />
         </div>
       </div>
-      <div className="container">
+      <div className="w-full px-4 sm:px-6 lg:px-8">
         <ResultsHeader title="Properties for Rent in Dubai" resultsCount={rentProperties.length}>
           <h1 className="bg-muted inline-flex items-center gap-2 text-foreground font-bold text-base tracking-tight mb-4 p-3 rounded-lg">
             <Key className="h-4 w-4" />
@@ -25,7 +26,7 @@ export default function RentPage() {
         </ResultsHeader>
       </div>
       <Separator />
-      <div className="container py-12">
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-12">
         <PropertyListings properties={rentProperties} />
         <div className="mt-12 flex justify-center">
             <Button size="lg" className="bg-primary text-primary-foreground rounded-none px-8 py-6 text-base font-semibold">

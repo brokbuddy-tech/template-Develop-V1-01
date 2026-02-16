@@ -1,3 +1,4 @@
+
 'use client';
 
 import Image from 'next/image';
@@ -12,7 +13,7 @@ interface AwardsSectionProps {
 export function AwardsSection({ awards }: AwardsSectionProps) {
   return (
     <section className="py-16 bg-background">
-      <div className="container">
+      <div className="w-full px-4 sm:px-6 lg:px-8">
         <h2 className="text-3xl font-bold text-center mb-8">Our Accolades</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {awards.map((award) => {

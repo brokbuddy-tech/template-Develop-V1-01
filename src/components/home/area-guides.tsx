@@ -1,3 +1,4 @@
+
 import Image from 'next/image';
 import Link from 'next/link';
 import { Card, CardContent } from '@/components/ui/card';
@@ -12,7 +13,7 @@ interface AreaGuidesProps {
 export function AreaGuides({ title, guides }: AreaGuidesProps) {
   return (
     <section className="py-16 bg-card">
-      <div className="container">
+      <div className="w-full px-4 sm:px-6 lg:px-8">
         <h2 className="text-3xl font-bold text-center mb-8">{title}</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {guides.map((guide) => {

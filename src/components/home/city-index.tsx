@@ -1,3 +1,4 @@
+
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -8,7 +9,7 @@ export function CityIndex() {
 
   return (
     <section className="bg-gray-50">
-      <div className="container">
+      <div>
         <div className="flex flex-col md:flex-row items-center min-h-[500px] md:min-h-[550px]">
           <div className="w-full md:w-1/2 h-64 md:h-[550px] relative">
             {cityIndexImage && (

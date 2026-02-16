@@ -77,7 +77,7 @@ export function SellerTestimonials() {
 
   return (
     <section className="bg-white py-24 sm:py-32">
-      <div className="container">
+      <div className="w-full px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row justify-between md:items-end mb-12">
           <div className="max-w-2xl">
             <h2 className="text-4xl font-bold tracking-tight text-foreground">

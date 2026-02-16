@@ -1,3 +1,4 @@
+
 'use client';
 
 import Image from 'next/image';
@@ -79,7 +80,7 @@ export function AreaGuidesDiscovery() {
 
   return (
     <section className="bg-black text-white py-24 sm:py-32">
-      <div className="container mx-auto px-4">
+      <div className="w-full px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col lg:flex-row items-center gap-12">
           <div className="lg:w-2/5 xl:w-1/3 text-center lg:text-left">
             <h2 className="text-4xl font-bold mb-6">Browse Our Dubai Area Guides</h2>

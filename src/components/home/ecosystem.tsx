@@ -1,3 +1,4 @@
+
 import { Building, ShieldCheck, Home } from 'lucide-react';
 
 const services = [
@@ -21,7 +22,7 @@ const services = [
 export function DevelopEcosystem() {
   return (
     <section className="py-16">
-      <div className="container">
+      <div className="w-full px-4 sm:px-6 lg:px-8">
         <h2 className="text-3xl font-bold text-center mb-2">The DEVELOP Ecosystem</h2>
         <p className="text-center text-muted-foreground mb-8 max-w-2xl mx-auto">
           A holistic suite of services designed to cover every aspect of your real estate journey.

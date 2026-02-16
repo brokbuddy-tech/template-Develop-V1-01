@@ -64,7 +64,7 @@ export default function ContactPage() {
         <div className="absolute inset-0 bg-black/60" />
       </div>
 
-      <div className="container py-12 md:py-24">
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-12 md:py-24">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold tracking-tight text-white">Contact Us</h1>
           <p className="text-gray-300 mt-2 max-w-2xl mx-auto">

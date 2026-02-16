@@ -60,7 +60,7 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
             <div className="w-full">
                 <PropertyGallery galleryImageIds={property.galleryImageIds} />
             </div>
-            <div className="container py-8">
+            <div className="w-full px-4 sm:px-6 lg:px-8 py-8">
                 <div className="mb-4">
                     <Link href="/buy" className="text-sm text-primary hover:underline">‹ Back to listings</Link>
                 </div>

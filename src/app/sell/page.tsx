@@ -15,10 +15,10 @@ export default function SellPage() {
 
   return (
     <>
-        <div className="container">
-            <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-12 py-12 md:py-24 min-h-[calc(80vh-64px)]">
+        <div className="w-full px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-12 py-12 md:py-24 min-h-[calc(70vh-64px)]">
                 <div className="flex flex-col items-start text-left">
-                    <h1 className="text-2xl lg:text-3xl font-bold tracking-tight text-foreground font-headline">
+                    <h1 className="text-xl lg:text-2xl font-bold tracking-tight text-foreground font-headline">
                         Sell Your Property in Dubai 2026 | Residential & Commercial
                     </h1>
                     <p className="mt-4 text-sm text-muted-foreground max-w-xl">
@@ -31,7 +31,7 @@ export default function SellPage() {
                         </Link>
                     </Button>
                 </div>
-                <div className="relative h-56 md:h-[350px] w-full">
+                <div className="relative h-48 md:h-[300px] w-full">
                     {heroImage && (
                     <Image
                         src={heroImage.imageUrl}

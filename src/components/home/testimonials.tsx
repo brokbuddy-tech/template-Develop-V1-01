@@ -1,3 +1,4 @@
+
 'use client';
 
 import Image from 'next/image';
@@ -52,7 +53,7 @@ export function Testimonials({ testimonials }: TestimonialsProps) {
 
   return (
     <section className="py-16 bg-card">
-      <div className="container">
+      <div className="w-full px-4 sm:px-6 lg:px-8">
         <h2 className="text-3xl font-bold text-center mb-8">What Our Clients Say</h2>
         <Carousel
           setApi={setApi}
