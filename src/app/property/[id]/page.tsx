@@ -70,7 +70,7 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
                 </div>
                 
                 <div className="mb-8">
-                    <h1 className="text-4xl font-bold tracking-tight">{property.name}</h1>
+                    <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">{property.name}</h1>
                     <div className="flex items-center gap-2 mt-2 text-muted-foreground">
                         <MapPin className="h-5 w-5" />
                         <span>{property.location}</span>

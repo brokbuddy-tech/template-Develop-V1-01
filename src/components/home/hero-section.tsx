@@ -21,7 +21,7 @@ export function HeroSection() {
       )}
       <div className="absolute inset-0 bg-black/60" />
       <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8 flex flex-col items-center">
-        <h1 className="text-4xl md:text-6xl font-bold tracking-tighter uppercase mb-6">
+        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tighter uppercase mb-6">
           Redefining Real Estate in Dubai
         </h1>
         <SearchFilters context="hero" />

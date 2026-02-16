@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Button } from '@/components/ui/button';
@@ -18,13 +19,13 @@ import type { ReactNode } from 'react';
 
 export function ResultsHeader({ children, title, resultsCount }: { children?: ReactNode; title: string; resultsCount: number }) {
   return (
-    <div className="flex justify-between items-center py-4">
-      <div>
+    <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 py-4">
+      <div className="text-center sm:text-left">
         {children}
         <h2 className="text-2xl font-bold tracking-tight">{title}</h2>
         <p className="text-blue-500">{resultsCount.toLocaleString()} results</p>
       </div>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 self-center sm:self-auto">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button className="bg-black text-white hover:bg-gray-800 rounded-lg">

@@ -101,7 +101,7 @@ export default function AboutPage() {
 
       <div className="relative w-full px-4 sm:px-6 lg:px-8 pt-24 pb-12 md:pt-48 md:pb-24">
         <div className="text-center mb-12 text-white">
-          <h1 className="text-4xl font-bold tracking-tight">About DEVELOP</h1>
+          <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">About DEVELOP</h1>
           <p className="mt-4 max-w-3xl mx-auto text-lg text-gray-300">
             Pioneering the future of luxury real estate in Dubai with data-driven insights and unparalleled client service.
           </p>

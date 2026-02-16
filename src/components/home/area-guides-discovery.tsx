@@ -98,7 +98,7 @@ export function AreaGuidesDiscovery() {
           </div>
           <div className="lg:w-3/5 xl:w-2/3 w-full">
             <div className={cn(
-              "grid grid-cols-3 grid-rows-2 gap-4 h-[500px] transition-opacity duration-300 ease-in-out",
+              "grid grid-cols-3 grid-rows-2 gap-2 md:gap-4 h-[300px] sm:h-[400px] lg:h-[500px] transition-opacity duration-300 ease-in-out",
               isFading ? 'opacity-0' : 'opacity-100'
             )}>
               <FlippableImageCard image={img1} className="col-span-1 row-span-1" />

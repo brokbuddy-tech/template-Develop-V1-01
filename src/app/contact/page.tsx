@@ -66,7 +66,7 @@ export default function ContactPage() {
 
       <div className="w-full px-4 sm:px-6 lg:px-8 py-12 md:py-24">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold tracking-tight text-white">Contact Us</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">Contact Us</h1>
           <p className="text-gray-300 mt-2 max-w-2xl mx-auto">
             We're here to help with all your real estate needs. Whether you have a question about a property, need an expert consultation, or anything else, our team is ready to answer all your questions.
           </p>
