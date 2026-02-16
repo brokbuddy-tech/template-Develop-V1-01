@@ -33,7 +33,7 @@ const BuyerVerificationCard = () => (
 
 const WorldMap = () => (
     <div className="relative w-full h-full flex items-center justify-center">
-        <Globe className="w-full h-auto max-w-md text-emerald-400 opacity-50" strokeWidth={0.5} />
+        <Globe className="w-full h-auto max-w-sm text-emerald-400 opacity-50" strokeWidth={0.5} />
          {/* Pulses */}
         <div className="absolute top-[45%] left-[51%]">
             <div className="w-3 h-3 bg-emerald-400 rounded-full animate-ping"></div>
