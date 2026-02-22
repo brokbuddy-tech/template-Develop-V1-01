@@ -28,10 +28,6 @@ export const NAV_LINKS: NavLink[] = [
   {
     href: '/commercial',
     label: 'Commercial',
-    children: [
-      { href: '/commercial/for-sale', label: 'For Sale' },
-      { href: '/commercial/for-rent', label: 'For Rent' },
-    ],
   },
   {
     href: '/off-plan',
