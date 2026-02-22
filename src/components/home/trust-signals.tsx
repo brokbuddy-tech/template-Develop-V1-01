@@ -1,10 +1,10 @@
 import { Award, Briefcase, TrendingUp, Users, Languages, Globe } from 'lucide-react';
 
 const Signal = ({ icon: Icon, value, label }: { icon: React.ElementType, value: string, label: string }) => (
-  <div className="bg-card p-6 flex flex-col items-center justify-center text-center group h-full cursor-pointer">
-    <Icon className="h-8 w-8 text-primary mb-2 transition-transform duration-300 ease-out group-hover:scale-110" />
-    <p className="text-2xl md:text-3xl font-bold transition-transform duration-300 ease-out group-hover:scale-105">{value}</p>
-    <p className="text-sm text-muted-foreground transition-transform duration-300 ease-out group-hover:scale-105">{label}</p>
+  <div className="bg-card p-4 flex flex-col items-center justify-center text-center group h-full cursor-pointer">
+    <Icon className="h-6 w-6 text-primary mb-1 transition-transform duration-300 ease-out group-hover:scale-110" />
+    <p className="text-xl md:text-2xl font-bold transition-transform duration-300 ease-out group-hover:scale-105">{value}</p>
+    <p className="text-xs text-muted-foreground transition-transform duration-300 ease-out group-hover:scale-105">{label}</p>
   </div>
 );
 
@@ -20,8 +20,8 @@ export function TrustSignals() {
 
   return (
     <section className="bg-card">
-      <div className="py-12">
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-px bg-border border-y border-border">
+      <div className="py-8">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6">
           {signals.map((signal, index) => (
             <Signal key={index} {...signal} />
           ))}
