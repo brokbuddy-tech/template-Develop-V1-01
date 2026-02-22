@@ -1,4 +1,5 @@
 
+
 import { properties } from '@/lib/data';
 import { notFound } from 'next/navigation';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
@@ -12,6 +13,7 @@ import Link from 'next/link';
 import { MortgageCalculator } from '@/components/mortgage-calculator';
 import { PropertyCard } from '@/components/property-card';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
+import Image from 'next/image';
 
 function Stat({ icon: Icon, value, label }: { icon: React.ElementType, value: string | number, label: string }) {
     return (
@@ -29,18 +31,34 @@ function AgentContactCard({ agent }: { agent: any }) {
     if (!agent) return null;
     const agentImage = PlaceHolderImages.find(p => p.id === agent.avatarId);
     return (
-        <Card>
-            <CardHeader className="text-center p-3">
-                <Avatar className="h-10 w-10 mx-auto mb-2">
-                    {agentImage && <AvatarImage src={agentImage.imageUrl} alt={agent.name} />}
-                    <AvatarFallback>{agent.name.charAt(0)}</AvatarFallback>
-                </Avatar>
-                <CardTitle className="text-sm">{agent.name}</CardTitle>
+        <Card className="overflow-hidden">
+            <CardHeader className="bg-muted p-2">
+                <h3 className="text-center font-semibold text-sm text-muted-foreground">SELLER</h3>
             </CardHeader>
-            <CardContent className="space-y-2 p-3 pt-0">
-                <Button size="sm" className="w-full text-xs"><Phone className="mr-2 h-3 w-3" /> Call Agent</Button>
-                <Button size="sm" className="w-full text-xs" variant="outline"><Mail className="mr-2 h-3 w-3" /> Email Agent</Button>
-                <Button size="sm" className="w-full bg-[#25D366] hover:bg-[#25D366]/90 text-white text-xs"><MessageCircle className="mr-2 h-3 w-3" /> WhatsApp</Button>
+            <CardContent className="p-4 text-center">
+                {agentImage && (
+                    <div className="relative h-48 w-full mb-4">
+                        <Image
+                            src={agentImage.imageUrl}
+                            alt={agent.name}
+                            fill
+                            className="object-cover"
+                            data-ai-hint={agentImage.imageHint || ''}
+                        />
+                    </div>
+                )}
+                <h4 className="font-bold text-lg">{agent.name}</h4>
+                {agent.title && <p className="text-muted-foreground text-sm">{agent.title}</p>}
+                {agent.company && <p className="font-semibold mt-2">{agent.company}</p>}
+                {agent.orn && <p className="text-muted-foreground text-sm">ORN: {agent.orn}</p>}
+                
+                <Button variant="destructive" className="w-full mt-4">Contact</Button>
+                
+                {agent.propertyCount && (
+                    <Link href="#" className="text-sm text-muted-foreground mt-2 block hover:underline">
+                        {agent.propertyCount} properties more
+                    </Link>
+                )}
             </CardContent>
         </Card>
     );

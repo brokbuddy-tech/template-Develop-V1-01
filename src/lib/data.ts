@@ -1,3 +1,4 @@
+
 import type { Property, Area, Testimonial, Blog, Award, SellerTestimonial } from './types';
 
 export const properties: Property[] = [
@@ -19,6 +20,10 @@ export const properties: Property[] = [
     agent: {
       name: 'John Doe',
       avatarId: 'author-1',
+      title: 'Senior Consultant',
+      company: 'DEVELOP Real Estate',
+      orn: '12345',
+      propertyCount: 152,
     },
   },
   {
@@ -37,8 +42,12 @@ export const properties: Property[] = [
     amenities: ['Private Garden', 'Swimming Pool', 'Maids Room', 'Covered Parking', 'Waterfront Views'],
     galleryImageIds: ['gallery-5', 'gallery-1', 'gallery-2', 'gallery-3', 'gallery-4'],
     agent: {
-      name: 'Jane Smith',
-      avatarId: 'author-2',
+      name: 'Elvira Sharshenalieva',
+      avatarId: 'agent-2',
+      title: 'CEO',
+      company: 'EVA Real Estate LLC',
+      orn: '25800',
+      propertyCount: 377,
     },
   },
   {
@@ -59,6 +68,10 @@ export const properties: Property[] = [
     agent: {
       name: 'Alex Johnson',
       avatarId: 'author-1',
+      title: 'Luxury Specialist',
+      company: 'DEVELOP Real Estate',
+      orn: '12345',
+      propertyCount: 78,
     },
   },
   {
@@ -79,6 +92,10 @@ export const properties: Property[] = [
     agent: {
       name: 'Emily Chen',
       avatarId: 'author-2',
+      title: 'Downtown Specialist',
+      company: 'DEVELOP Real Estate',
+      orn: '12345',
+      propertyCount: 95,
     },
   },
   {
@@ -99,6 +116,10 @@ export const properties: Property[] = [
     agent: {
       name: 'John Doe',
       avatarId: 'author-1',
+      title: 'Senior Consultant',
+      company: 'DEVELOP Real Estate',
+      orn: '12345',
+      propertyCount: 152,
     },
   },
   {
@@ -119,6 +140,10 @@ export const properties: Property[] = [
     agent: {
       name: 'Jane Smith',
       avatarId: 'author-2',
+      title: 'Villa Specialist',
+      company: 'DEVELOP Real Estate',
+      orn: '12345',
+      propertyCount: 110,
     },
   },
   {
@@ -139,6 +164,10 @@ export const properties: Property[] = [
     agent: {
         name: 'Michael Brown',
         avatarId: 'author-3',
+        title: 'Commercial Specialist',
+        company: 'DEVELOP Commercial',
+        orn: '54321',
+        propertyCount: 45,
     }
   },
   {
@@ -159,6 +188,10 @@ export const properties: Property[] = [
     agent: {
         name: 'Sarah Wilson',
         avatarId: 'author-4',
+        title: 'Rental Expert',
+        company: 'DEVELOP Rentals',
+        orn: '67890',
+        propertyCount: 210,
     }
   }
 ];

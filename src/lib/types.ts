@@ -1,8 +1,13 @@
+
 import type { ImagePlaceholder } from './placeholder-images';
 
 export type PropertyAgent = {
   name: string;
   avatarId: string;
+  title?: string;
+  company?: string;
+  orn?: string;
+  propertyCount?: number;
 };
 
 export type Property = {
