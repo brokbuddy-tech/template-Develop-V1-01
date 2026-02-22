@@ -5,6 +5,7 @@ import { ResultsHeader } from "@/components/results-header";
 import { Separator } from "@/components/ui/separator";
 import { PropertyListings } from "@/components/property-listings";
 import { properties } from "@/lib/data";
+import { Button } from "@/components/ui/button";
 
 export default function OffPlanPage() {
   const offPlanProperties = properties.filter(p => p.status === 'Off-plan');
@@ -27,6 +28,11 @@ export default function OffPlanPage() {
       <Separator />
       <div className="w-full px-4 sm:px-6 lg:px-8 py-12">
         <PropertyListings properties={offPlanProperties} />
+        <div className="mt-12 flex justify-center">
+            <Button size="lg" className="bg-primary text-primary-foreground rounded-none px-8 py-6 text-base font-semibold">
+                View More
+            </Button>
+        </div>
       </div>
     </div>
   );
