@@ -1,4 +1,3 @@
-
 'use client';
 
 import * as React from 'react';
@@ -158,7 +157,7 @@ const MobileNav = () => (
       </ScrollArea>
       <div className="mt-auto p-4 border-t space-y-4">
         <Button asChild className="w-full font-semibold bg-primary text-primary-foreground hover:bg-primary/90 transition-opacity">
-            <Link href="/instant-valuation">Instant Valuation</Link>
+            <Link href="/contact">Contact Us</Link>
         </Button>
         <div className="flex items-center justify-center gap-4">
             <UtilitySwitcher />
@@ -206,7 +205,7 @@ export function Header() {
             <UtilitySwitcher />
           </div>
           <Button asChild className="hidden sm:inline-flex px-5 py-2 h-auto font-semibold text-sm bg-primary text-primary-foreground hover:bg-primary/90 transition-opacity rounded-none">
-            <Link href="/instant-valuation">Instant Valuation</Link>
+            <Link href="/contact">Contact Us</Link>
           </Button>
           <MobileNav />
         </div>
