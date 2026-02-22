@@ -52,7 +52,7 @@ function AgentContactCard({ agent }: { agent: any }) {
                 {agent.company && <p className="font-semibold mt-2">{agent.company}</p>}
                 {agent.orn && <p className="text-muted-foreground text-sm">ORN: {agent.orn}</p>}
                 
-                <Button variant="destructive" className="w-full mt-4">Contact</Button>
+                <Button variant="default" className="w-full mt-4">Contact</Button>
                 
                 {agent.propertyCount && (
                     <Link href="#" className="text-sm text-muted-foreground mt-2 block hover:underline">
