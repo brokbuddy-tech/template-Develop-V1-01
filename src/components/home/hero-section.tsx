@@ -1,5 +1,6 @@
 
 import Image from 'next/image';
+import { Suspense } from 'react';
 import { SearchFilters } from '@/components/search-filters';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { cn } from '@/lib/utils';
@@ -24,7 +25,9 @@ export function HeroSection() {
         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tighter uppercase mb-6">
           Redefining Real Estate in Dubai
         </h1>
-        <SearchFilters context="hero" />
+        <Suspense fallback={<div className="h-16 w-full max-w-5xl animate-pulse bg-white/20 rounded-full" />}>
+          <SearchFilters context="hero" />
+        </Suspense>
       </div>
     </section>
   );

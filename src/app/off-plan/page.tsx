@@ -1,4 +1,5 @@
 
+import { Suspense } from 'react';
 import { SearchFilters } from "@/components/search-filters";
 import { ClipboardList } from "lucide-react";
 import { ResultsHeader } from "@/components/results-header";
@@ -64,7 +65,9 @@ export default async function OffPlanPage({ searchParams }: OffPlanPageProps) {
     <div>
       <div className="bg-background border-b">
         <div className="w-full px-4 sm:px-6 lg:px-8 py-4">
-          <SearchFilters context="page" />
+          <Suspense fallback={<div className="h-16 w-full animate-pulse bg-muted rounded-full" />}>
+            <SearchFilters context="page" />
+          </Suspense>
         </div>
       </div>
       <div className="w-full px-4 sm:px-6 lg:px-8">
