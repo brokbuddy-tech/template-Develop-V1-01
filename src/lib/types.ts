@@ -17,6 +17,7 @@ export type Property = {
   purpose: 'Buy' | 'Rent';
   status: 'Off-plan' | 'Ready';
   price: string;
+  priceNumeric: number;
   bedrooms: number;
   bathrooms: number;
   areaSqFt: number;

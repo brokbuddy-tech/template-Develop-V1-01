@@ -1,5 +1,7 @@
 'use client';
 
+import { useState, useEffect } from 'react';
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import {
@@ -32,7 +34,7 @@ import { Textarea } from './ui/textarea';
 import { cn } from '@/lib/utils';
 
 const propertyTypes = ["Apartment", "Villa", "Penthouse", "Townhouse", "Duplex", "Office", "Warehouse", "Plot"];
-const amenities = [
+const amenitiesList = [
   "Swimming Pool", "Gym", "Private Garden", "Beach Access",
   "Covered Parking", "Maids Room", "Concierge", "Pet Friendly",
   "High-speed Elevators", "Shell & Core", "Fitted"
@@ -43,6 +45,72 @@ interface SearchFiltersProps {
 }
 
 export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const pathname = usePathname();
+
+    const [purpose, setPurpose] = useState('buy');
+    const [search, setSearch] = useState('');
+    const [minPrice, setMinPrice] = useState('');
+    const [maxPrice, setMaxPrice] = useState('');
+    const [minArea, setMinArea] = useState('');
+    const [maxArea, setMaxArea] = useState('');
+    const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
+    const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
+    const [bedrooms, setBedrooms] = useState<string>('');
+    const [bathrooms, setBathrooms] = useState<string>('');
+
+    // Sync state with URL params on mount or when URL changes
+    useEffect(() => {
+        const p = pathname.split('/')[1] || 'buy';
+        if (['buy', 'rent', 'commercial', 'off-plan'].includes(p)) {
+            setPurpose(p);
+        }
+        setSearch(searchParams.get('q') || '');
+        setMinPrice(searchParams.get('minPrice') || '');
+        setMaxPrice(searchParams.get('maxPrice') || '');
+        setMinArea(searchParams.get('minArea') || '');
+        setMaxArea(searchParams.get('maxArea') || '');
+        
+        const types = searchParams.get('types');
+        setSelectedTypes(types ? types.split(',') : []);
+        
+        const ams = searchParams.get('amenities');
+        setSelectedAmenities(ams ? ams.split(',') : []);
+        
+        setBedrooms(searchParams.get('bedrooms') || '');
+        setBathrooms(searchParams.get('bathrooms') || '');
+    }, [searchParams, pathname]);
+
+    const handleSearch = () => {
+        const params = new URLSearchParams();
+        if (search) params.set('q', search);
+        if (minPrice) params.set('minPrice', minPrice);
+        if (maxPrice) params.set('maxPrice', maxPrice);
+        if (minArea) params.set('minArea', minArea);
+        if (maxArea) params.set('maxArea', maxArea);
+        if (selectedTypes.length > 0) params.set('types', selectedTypes.join(','));
+        if (selectedAmenities.length > 0) params.set('amenities', selectedAmenities.join(','));
+        if (bedrooms) params.set('bedrooms', bedrooms);
+        if (bathrooms) params.set('bathrooms', bathrooms);
+
+        const queryString = params.toString();
+        const targetPath = `/${purpose}`;
+        router.push(`${targetPath}${queryString ? `?${queryString}` : ''}`);
+    };
+
+    const toggleType = (type: string) => {
+        setSelectedTypes(prev => 
+            prev.includes(type) ? prev.filter(t => t !== type) : [...prev, type]
+        );
+    };
+
+    const toggleAmenity = (amenity: string) => {
+        setSelectedAmenities(prev => 
+            prev.includes(amenity) ? prev.filter(a => a !== amenity) : [...prev, amenity]
+        );
+    };
+
     return (
         <div className="w-full max-w-5xl mx-auto">
             <Tabs defaultValue="manual-search" className="w-full">
@@ -50,7 +118,7 @@ export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
                     <div className="bg-white p-2 rounded-full shadow-lg focus-within:shadow-xl transition-shadow duration-300">
                         <div className="flex items-center gap-1 md:gap-2">
                             {/* Purpose Dropdown */}
-                            <Select defaultValue="buy">
+                            <Select value={purpose} onValueChange={setPurpose}>
                                 <SelectTrigger className="w-auto text-foreground md:w-[150px] font-bold focus:ring-0 border-0 focus:ring-offset-0 rounded-l-full h-auto py-3 pl-4 pr-2 text-base">
                                     <SelectValue placeholder="Purpose" />
                                 </SelectTrigger>
@@ -70,6 +138,9 @@ export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
                                     type="text"
                                     placeholder="Search by Area, Building, or Community..."
                                     className="w-full text-foreground bg-transparent border-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-base h-auto py-3"
+                                    value={search}
+                                    onChange={(e) => setSearch(e.target.value)}
+                                    onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                                 />
                             </div>
 
@@ -88,16 +159,26 @@ export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
                                         <div className='px-2'>
                                             <Label className="font-bold">Price Range (AED)</Label>
                                             <div className="flex gap-2 mt-2">
-                                                <Input placeholder="Min" type="number" />
-                                                <Input placeholder="Max" type="number" />
+                                                <Input 
+                                                    placeholder="Min" 
+                                                    type="number" 
+                                                    value={minPrice}
+                                                    onChange={(e) => setMinPrice(e.target.value)}
+                                                />
+                                                <Input 
+                                                    placeholder="Max" 
+                                                    type="number" 
+                                                    value={maxPrice}
+                                                    onChange={(e) => setMaxPrice(e.target.value)}
+                                                />
                                             </div>
                                         </div>
                                         <DropdownMenuSeparator />
                                         <div className="grid grid-cols-2 gap-2 text-sm px-2">
-                                            <Button variant="ghost" size="sm" className="justify-start">Up to 1M</Button>
-                                            <Button variant="ghost" size="sm" className="justify-start">1M - 3M</Button>
-                                            <Button variant="ghost" size="sm" className="justify-start">3M - 5M</Button>
-                                            <Button variant="ghost" size="sm" className="justify-start">5M+</Button>
+                                            <Button variant="ghost" size="sm" className="justify-start" onClick={() => setMaxPrice('1000000')}>Up to 1M</Button>
+                                            <Button variant="ghost" size="sm" className="justify-start" onClick={() => {setMinPrice('1000000'); setMaxPrice('3000000');}}>1M - 3M</Button>
+                                            <Button variant="ghost" size="sm" className="justify-start" onClick={() => {setMinPrice('3000000'); setMaxPrice('5000000');}}>3M - 5M</Button>
+                                            <Button variant="ghost" size="sm" className="justify-start" onClick={() => {setMinPrice('5000000'); setMaxPrice('');}}>5M+</Button>
                                         </div>
                                     </DropdownMenuContent>
                                 </DropdownMenu>
@@ -119,8 +200,18 @@ export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
                                             <div>
                                                 <h4 className="font-semibold mb-4 text-lg">Area (Sq. Ft.)</h4>
                                                 <div className="flex gap-2">
-                                                    <Input placeholder="Min Area" type="number" />
-                                                    <Input placeholder="Max Area" type="number" />
+                                                    <Input 
+                                                        placeholder="Min Area" 
+                                                        type="number" 
+                                                        value={minArea}
+                                                        onChange={(e) => setMinArea(e.target.value)}
+                                                    />
+                                                    <Input 
+                                                        placeholder="Max Area" 
+                                                        type="number" 
+                                                        value={maxArea}
+                                                        onChange={(e) => setMaxArea(e.target.value)}
+                                                    />
                                                 </div>
                                             </div>
                                             <Separator/>
@@ -131,7 +222,15 @@ export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
                                                         <Label>Bedrooms</Label>
                                                         <div className="flex gap-2 p-2 rounded-lg bg-muted mt-2">
                                                             {['Studio', '1', '2', '3', '4', '5+'].map(b => (
-                                                                <Button key={b} variant="outline" size="sm" className="flex-1 bg-background">{b}</Button>
+                                                                <Button 
+                                                                    key={b} 
+                                                                    variant={bedrooms === b ? "default" : "outline"} 
+                                                                    size="sm" 
+                                                                    className="flex-1 bg-background"
+                                                                    onClick={() => setBedrooms(bedrooms === b ? '' : b)}
+                                                                >
+                                                                    {b}
+                                                                </Button>
                                                             ))}
                                                         </div>
                                                     </div>
@@ -139,7 +238,15 @@ export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
                                                         <Label>Bathrooms</Label>
                                                         <div className="flex gap-2 p-2 rounded-lg bg-muted mt-2">
                                                             {['1', '2', '3', '4', '5+'].map(b => (
-                                                                <Button key={b} variant="outline" size="sm" className="flex-1 bg-background">{b}</Button>
+                                                                <Button 
+                                                                    key={b} 
+                                                                    variant={bathrooms === b ? "default" : "outline"} 
+                                                                    size="sm" 
+                                                                    className="flex-1 bg-background"
+                                                                    onClick={() => setBathrooms(bathrooms === b ? '' : b)}
+                                                                >
+                                                                    {b}
+                                                                </Button>
                                                             ))}
                                                         </div>
                                                     </div>
@@ -151,7 +258,11 @@ export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
                                                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                                                     {propertyTypes.map(type => (
                                                         <div key={type} className="flex items-center space-x-2">
-                                                            <Checkbox id={`type-${type}`} />
+                                                            <Checkbox 
+                                                                id={`type-${type}`} 
+                                                                checked={selectedTypes.includes(type)}
+                                                                onCheckedChange={() => toggleType(type)}
+                                                            />
                                                             <Label htmlFor={`type-${type}`} className="font-normal text-sm">{type}</Label>
                                                         </div>
                                                     ))}
@@ -161,13 +272,20 @@ export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
                                             <div>
                                                 <h4 className="font-semibold mb-4 text-lg">Amenities</h4>
                                                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                                                    {amenities.map(amenity => (
+                                                    {amenitiesList.map(amenity => (
                                                         <div key={amenity} className="flex items-center space-x-2">
-                                                            <Checkbox id={`amenity-${amenity}`} />
+                                                            <Checkbox 
+                                                                id={`amenity-${amenity}`} 
+                                                                checked={selectedAmenities.includes(amenity)}
+                                                                onCheckedChange={() => toggleAmenity(amenity)}
+                                                            />
                                                             <Label htmlFor={`amenity-${amenity}`} className="font-normal text-sm">{amenity}</Label>
                                                         </div>
                                                     ))}
                                                 </div>
+                                            </div>
+                                            <div className="mt-4">
+                                                <Button className="w-full" onClick={handleSearch}>Apply Filters</Button>
                                             </div>
                                         </div>
                                     </DialogContent>
@@ -182,7 +300,10 @@ export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
                                 </Button>
                             </div>
 
-                            <Button className="bg-primary text-primary-foreground rounded-full h-12 w-12 p-0 flex-shrink-0">
+                            <Button 
+                                className="bg-primary text-primary-foreground rounded-full h-12 w-12 p-0 flex-shrink-0"
+                                onClick={handleSearch}
+                            >
                                 <span className="sr-only">Search</span>
                                 <Search className="h-5 w-5" />
                             </Button>

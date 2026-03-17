@@ -17,8 +17,15 @@ const Stat = ({ icon: Icon, value }: { icon: React.ElementType; value: React.Rea
 );
 
 export function PropertyCard({ property }: { property: Property }) {
-  const placeholderImage = PlaceHolderImages.find(p => p.id === property.imageId);
-  const agentImage = property.agent ? PlaceHolderImages.find(p => p.id === property.agent?.avatarId) : undefined;
+  const isMockImage = property.imageId.startsWith('property-');
+  const imageUrl = isMockImage 
+      ? PlaceHolderImages.find(p => p.id === property.imageId)?.imageUrl 
+      : property.imageId;
+
+  const isMockAgent = property.agent?.avatarId?.startsWith('author-');
+  const agentImageUrl = isMockAgent 
+      ? PlaceHolderImages.find(p => p.id === property.agent?.avatarId)?.imageUrl 
+      : property.agent?.avatarId;
   
   const handleContactClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
@@ -32,13 +39,12 @@ export function PropertyCard({ property }: { property: Property }) {
       <Card className="overflow-hidden h-full flex flex-col rounded-xl border-border/50 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
         {/* Media Header */}
         <div className="relative aspect-[16/9] w-full">
-          {placeholderImage && (
+          {imageUrl && (
             <Image
-              src={placeholderImage.imageUrl}
+              src={imageUrl}
               alt={property.name}
               fill
               className="object-cover transition-transform duration-300 group-hover:scale-105"
-              data-ai-hint={placeholderImage.imageHint}
             />
           )}
           <div className="absolute top-3 left-3 bg-background/80 text-foreground px-2 py-1 text-xs font-semibold rounded-md backdrop-blur-sm">
@@ -73,9 +79,9 @@ export function PropertyCard({ property }: { property: Property }) {
             {property.agent && (
                 <div className="pt-4 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                    {agentImage && (
+                    {agentImageUrl && (
                     <Avatar className="h-10 w-10">
-                        <AvatarImage src={agentImage.imageUrl} alt={property.agent.name} />
+                        <AvatarImage src={agentImageUrl} alt={property.agent.name} />
                         <AvatarFallback>{property.agent.name.charAt(0)}</AvatarFallback>
                     </Avatar>
                     )}

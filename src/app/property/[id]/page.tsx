@@ -1,6 +1,3 @@
-
-
-import { properties } from '@/lib/data';
 import { notFound } from 'next/navigation';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { BedDouble, Bath, Square, MapPin, Phone, MessageCircle, Building, Check, Mail } from 'lucide-react';
@@ -14,6 +11,7 @@ import { MortgageCalculator } from '@/components/mortgage-calculator';
 import { PropertyCard } from '@/components/property-card';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import Image from 'next/image';
+import { getPropertyById, getProperties } from '@/lib/api';
 
 function Stat({ icon: Icon, value, label }: { icon: React.ElementType, value: string | number, label: string }) {
     return (
@@ -29,21 +27,22 @@ function Stat({ icon: Icon, value, label }: { icon: React.ElementType, value: st
 
 function AgentContactCard({ agent }: { agent: any }) {
     if (!agent) return null;
-    const agentImage = PlaceHolderImages.find(p => p.id === agent.avatarId);
+    const isMockAvatar = agent.avatarId && agent.avatarId.startsWith('author-');
+    const agentImageUrl = isMockAvatar ? PlaceHolderImages.find(p => p.id === agent.avatarId)?.imageUrl : agent.avatarId;
+
     return (
         <Card className="overflow-hidden">
             <CardHeader className="bg-muted p-2">
                 <h3 className="text-center font-semibold text-sm text-muted-foreground">SELLER</h3>
             </CardHeader>
             <CardContent className="p-4 text-center">
-                {agentImage && (
+                {agentImageUrl && (
                     <div className="relative h-48 w-full mb-4">
                         <Image
-                            src={agentImage.imageUrl}
+                            src={agentImageUrl}
                             alt={agent.name}
                             fill
-                            className="object-cover"
-                            data-ai-hint={agentImage.imageHint || ''}
+                            className="object-cover rounded-md"
                         />
                     </div>
                 )}
@@ -54,7 +53,7 @@ function AgentContactCard({ agent }: { agent: any }) {
                 
                 <Button variant="default" className="w-full mt-4">Contact</Button>
                 
-                {agent.propertyCount && (
+                {agent.propertyCount > 0 && (
                     <Link href="#" className="text-sm text-muted-foreground mt-2 block hover:underline">
                         {agent.propertyCount} properties more
                     </Link>
@@ -64,34 +63,39 @@ function AgentContactCard({ agent }: { agent: any }) {
     );
 }
 
-export default function PropertyDetailPage({ params }: { params: { id: string } }) {
-    const property = properties.find(p => p.id === params.id);
+// Ensure params is correctly treated as a promise in Next.js 15
+export default async function PropertyDetailPage(props: { params: Promise<{ id: string }> }) {
+    const params = await props.params;
+    const property = await getPropertyById(params.id);
 
     if (!property) {
         notFound();
     }
 
-    const relatedProperties = properties.filter(p => p.type === property.type && p.id !== property.id).slice(0, 6);
+    const prop = property as NonNullable<typeof property>;
+
+    const allProperties = await getProperties();
+    const relatedProperties = allProperties.filter(p => p.type === prop.type && p.id !== prop.id).slice(0, 6);
     
     return (
         <div className="bg-background">
             <div className="w-full">
-                <PropertyGallery galleryImageIds={property.galleryImageIds} />
+                <PropertyGallery galleryImageIds={prop.galleryImageIds} />
             </div>
             <div className="w-full px-4 sm:px-6 lg:px-8 py-8">
                 <div className="mb-4">
-                    <Link href="/buy" className="text-sm text-primary hover:underline">‹ Back to listings</Link>
+                    <Link href={prop.purpose === 'Rent' ? '/rent' : '/buy'} className="text-sm text-primary hover:underline">‹ Back to listings</Link>
                 </div>
 
                 <div className="mb-4">
-                    <p className="inline-block bg-muted/50 p-3 rounded-lg text-3xl font-bold text-primary">{property.price}</p>
+                    <p className="inline-block bg-muted/50 p-3 rounded-lg text-3xl font-bold text-primary">{prop.price}</p>
                 </div>
                 
                 <div className="mb-8">
-                    <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">{property.name}</h1>
+                    <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">{prop.name}</h1>
                     <div className="flex items-center gap-2 mt-2 text-muted-foreground">
                         <MapPin className="h-5 w-5" />
-                        <span>{property.location}</span>
+                        <span>{prop.location}</span>
                     </div>
                 </div>
                 
@@ -100,10 +104,10 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
                         <div>
                             <h2 className="text-2xl font-bold mb-6">Property Details</h2>
                             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                <Stat icon={BedDouble} value={property.bedrooms > 0 ? property.bedrooms : 'Studio'} label="Bedrooms" />
-                                <Stat icon={Bath} value={property.bathrooms} label="Bathrooms" />
-                                <Stat icon={Square} value={property.areaSqFt.toLocaleString()} label="Area (sqft)" />
-                                <Stat icon={Building} value={property.type} label="Type" />
+                                <Stat icon={BedDouble} value={prop.bedrooms > 0 ? prop.bedrooms : 'Studio'} label="Bedrooms" />
+                                <Stat icon={Bath} value={prop.bathrooms} label="Bathrooms" />
+                                <Stat icon={Square} value={prop.areaSqFt.toLocaleString()} label="Area (sqft)" />
+                                <Stat icon={Building} value={prop.type} label="Type" />
                             </div>
                         </div>
 
@@ -111,26 +115,29 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
                         
                         <div>
                            <h2 className="text-2xl font-bold mb-4">Description</h2>
-                           <p className="text-muted-foreground leading-relaxed">{property.description}</p>
+                           <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">{prop.description}</p>
                         </div>
                         
                         <Separator className="my-8" />
 
-                        <div>
-                           <h2 className="text-2xl font-bold mb-4">Amenities</h2>
-                            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                                {property.amenities.map(amenity => (
-                                    <div key={amenity} className="flex items-center gap-2">
-                                        <Check className="h-5 w-5 text-primary" />
-                                        <span className="text-muted-foreground">{amenity}</span>
+                        {prop.amenities && prop.amenities.length > 0 && (
+                            <>
+                                <div>
+                                <h2 className="text-2xl font-bold mb-4">Amenities</h2>
+                                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                                        {prop.amenities.map(amenity => (
+                                            <div key={amenity} className="flex items-center gap-2">
+                                                <Check className="h-5 w-5 text-primary" />
+                                                <span className="text-muted-foreground">{amenity}</span>
+                                            </div>
+                                        ))}
                                     </div>
-                                ))}
-                            </div>
-                        </div>
+                                </div>
+                                <Separator className="my-8" />
+                            </>
+                        )}
 
-                        <Separator className="my-8" />
-
-                        <MortgageCalculator propertyPriceString={property.price} />
+                        <MortgageCalculator propertyPriceString={prop.price} />
 
                         <Separator className="my-8" />
 
@@ -158,7 +165,7 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
 
                     <div className="lg:col-span-1">
                         <div className="sticky top-24 space-y-4">
-                           <AgentContactCard agent={property.agent} />
+                           <AgentContactCard agent={prop.agent} />
                         </div>
                     </div>
                 </div>
@@ -176,10 +183,10 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
                                 className="w-full"
                             >
                                 <CarouselContent>
-                                    {relatedProperties.map((property) => (
-                                    <CarouselItem key={property.id} className="md:basis-1/2 lg:basis-1/3">
+                                    {relatedProperties.map((p) => (
+                                    <CarouselItem key={p.id} className="md:basis-1/2 lg:basis-1/3">
                                         <div className="p-1 h-full">
-                                        <PropertyCard property={property} />
+                                        <PropertyCard property={p} />
                                         </div>
                                     </CarouselItem>
                                     ))}
