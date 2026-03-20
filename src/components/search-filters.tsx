@@ -42,32 +42,18 @@ import { getOrgConfig, PROPERTY_TYPES_MAPPING } from '@/lib/api';
 //   "High-speed Elevators", "Shell & Core", "Fitted"
 // ];
 
+import { useListingSearch } from '@/hooks/use-listing-search';
+
 interface SearchFiltersProps {
   context?: 'hero' | 'page';
 }
 
 export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
     const router = useRouter();
-    const searchParams = useSearchParams();
-    const pathname = usePathname();
+    const { filters, updateFilter, setFilters, resetFilters } = useListingSearch();
 
-    const [purpose, setPurpose] = useState('buy');
-    const [propertyGroup, setPropertyGroup] = useState<'residential' | 'commercial'>('residential');
-    const [search, setSearch] = useState('');
-    const [minPrice, setMinPrice] = useState('');
-    const [maxPrice, setMaxPrice] = useState('');
-    const [minArea, setMinArea] = useState('');
-    const [maxArea, setMaxArea] = useState('');
-    const [selectedCategory, setSelectedCategory] = useState<string>('');
-    const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
-    const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
-    const [bedrooms, setBedrooms] = useState<string>('');
-    const [bathrooms, setBathrooms] = useState<string>('');
-    const [purposeModified, setPurposeModified] = useState(false);
     const [propertyTypes, setPropertyTypes] = useState<string[]>([]);
     const [amenitiesList, setAmenitiesList] = useState<string[]>([]);
-    const [isInitialLoad, setIsInitialLoad] = useState(true);
-    const [hasInteracted, setHasInteracted] = useState(false);
 
     // Fetch config on mount
     useEffect(() => {
@@ -77,163 +63,51 @@ export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
         });
     }, []);
 
-    // Sync state with URL params on mount or when URL changes
-    useEffect(() => {
-        const p = pathname.split('/')[1] || 'buy';
-        
-        let newPropertyGroup: 'residential' | 'commercial' = 'residential';
-        let newPurpose = 'buy';
-
-        if (p === 'commercial') {
-            newPropertyGroup = 'commercial';
-            newPurpose = searchParams.get('purpose')?.toLowerCase() === 'rent' ? 'rent' : 'buy';
-        } else if (p === 'off-plan') {
-            newPurpose = 'off-plan';
-        } else if (p === 'rent') {
-            newPurpose = 'rent';
-        }
-
-        // Deep URL group check
-        const urlGroup = searchParams.get('group');
-        if (urlGroup === 'commercial' || urlGroup === 'residential') {
-            newPropertyGroup = urlGroup as any;
-        }
-
-        // If we switched pillars, reset interaction to avoid triggering "Live Search" on the NEW page 
-        // with OLD state that hasn't synced yet.
-        if (newPurpose !== purpose || newPropertyGroup !== propertyGroup) {
-            setHasInteracted(false);
-        }
-
-        setPurpose(newPurpose);
-        setPropertyGroup(newPropertyGroup);
-        setPurposeModified(false);
-        
-        setSearch(searchParams.get('q') || '');
-        setMinPrice(searchParams.get('minPrice') || '');
-        setMaxPrice(searchParams.get('maxPrice') || '');
-        setMinArea(searchParams.get('minArea') || '');
-        setMaxArea(searchParams.get('maxArea') || '');
-        
-        const types = searchParams.get('types') || searchParams.get('category');
-        if (types) {
-            const typesArray = types.split(',');
-            setSelectedTypes(typesArray);
-            setSelectedCategory(typesArray.length === 1 ? typesArray[0] : 'MULTIPLE');
-        } else {
-            setSelectedTypes([]);
-            setSelectedCategory('');
-        }
-        
-        const ams = searchParams.get('amenities');
-        setSelectedAmenities(ams ? ams.split(',') : []);
-        
-        setBedrooms(searchParams.get('bedrooms') || '');
-        setBathrooms(searchParams.get('bathrooms') || '');
-    }, [searchParams, pathname]);
-
-    // Live Search with Debounce
-    useEffect(() => {
-        if (isInitialLoad) {
-            setIsInitialLoad(false);
-            return;
-        }
-
-        if (!hasInteracted) return;
-
-        const timer = setTimeout(() => {
-            handleSearch();
-        }, 500);
-
-        return () => clearTimeout(timer);
-    }, [search, minPrice, maxPrice, minArea, maxArea, selectedCategory, selectedAmenities, bedrooms, bathrooms, purpose, propertyGroup]);
+    // Derived UI state
+    const purpose = filters.transactionType?.toLowerCase() || 'buy';
+    const propertyGroup = filters.propertyType?.toLowerCase() || 'residential';
+    const search = filters.q || '';
+    const selectedCategory = filters.category || '';
+    const selectedTypes = filters.category?.split(',') || [];
+    const minPrice = filters.price_min?.toString() || '';
+    const maxPrice = filters.price_max?.toString() || '';
+    const minArea = filters.builtUpArea_min?.toString() || '';
+    const maxArea = filters.builtUpArea_max?.toString() || '';
+    const bedrooms = filters.bedrooms !== undefined ? (filters.bedrooms === 0 ? 'Studio' : (filters.bedrooms >= 5 ? '5+' : filters.bedrooms.toString())) : '';
+    const bathrooms = filters.bathrooms !== undefined ? (filters.bathrooms >= 5 ? '5+' : filters.bathrooms.toString()) : '';
 
     const handlePurposeChange = (val: string) => {
-        setPurpose(val);
-        setPurposeModified(true);
-        setHasInteracted(true);
-        // Reset category when purpose/group changes significantly if desired, 
-        // but for now we keep it and just filter the UI
+        updateFilter('transactionType', val === 'rent' ? 'RENT' : 'SALE');
     };
 
     const handleCategoryChange = (val: string) => {
-        setHasInteracted(true);
-        if (val === 'ALL' || val === '') {
-            setSelectedCategory('');
-            setSelectedTypes([]);
-        } else {
-            setSelectedCategory(val);
-            setSelectedTypes([val]);
-        }
-    };
-    const handleReset = () => {
-        setSearch('');
-        setMinPrice('');
-        setMaxPrice('');
-        setMinArea('');
-        setMaxArea('');
-        setSelectedCategory('');
-        setSelectedTypes([]);
-        setSelectedAmenities([]);
-        setBedrooms('');
-        setBathrooms('');
-        setHasInteracted(false);
-        router.push(pathname);
+        updateFilter('category', val === 'ALL' || val === '' ? undefined : val);
     };
 
     const handleSearch = () => {
-        const params = new URLSearchParams();
-        if (search) params.set('q', search);
-        if (minPrice) params.set('minPrice', minPrice);
-        if (maxPrice) params.set('maxPrice', maxPrice);
-        if (minArea) params.set('minArea', minArea);
-        if (maxArea) params.set('maxArea', maxArea);
-        
-        // Property Group
-        params.set('group', propertyGroup);
-
-        // Transaction Type
-        const transactionType = purpose === 'rent' ? 'RENT' : 'SALE';
-        params.set('transactionType', transactionType);
-
-        // Core Categorical Routing Logic - Always derive from base pillars
-        let targetPath = propertyGroup === 'commercial' ? '/commercial' : `/${purpose}`;
-        if (purpose === 'buy' && propertyGroup === 'residential') targetPath = '/buy';
-        
-        if (selectedTypes.length > 0) {
-            // If it's a major single category and purpose is buy/rent, use pretty URL
-            if (selectedTypes.length === 1 && ['Apartment', 'Villa', 'Townhouse', 'Penthouse'].includes(selectedTypes[0]) && (purpose === 'buy' || purpose === 'rent') && propertyGroup === 'residential') {
-                const catSlug = selectedTypes[0].toLowerCase() + (selectedTypes[0].endsWith('s') ? '' : 's');
-                targetPath = `/${purpose}/${catSlug}`;
-            } else {
-                params.set('category', selectedTypes.join(','));
-            }
+        if (context === 'hero') {
+            const params = new URLSearchParams();
+            Object.entries(filters).forEach(([k, v]) => {
+                if (v !== undefined && v !== null && v !== '') params.set(k, v.toString());
+            });
+            router.push(`/search?${params.toString()}`);
         }
+    };
 
-        if (selectedAmenities.length > 0) params.set('amenities', selectedAmenities.join(','));
-        if (bedrooms) params.set('bedrooms', bedrooms);
-        if (bathrooms) params.set('bathrooms', bathrooms);
-
-        const queryString = params.toString();
-        // Use window.location only if we need to force a full re-initialization of context, 
-        // but router.push is better for performance.
-        router.push(`${targetPath}${queryString ? `?${queryString}` : ''}`);
+    const handleReset = () => {
+        resetFilters();
+        if (context === 'hero') router.push('/');
     };
 
     const toggleType = (type: string) => {
-        setHasInteracted(true);
-        setSelectedTypes(prev => {
-            const next = prev.includes(type) ? prev.filter(t => t !== type) : [...prev, type];
-            setSelectedCategory(next.length === 1 ? next[0] : (next.length > 1 ? 'MULTIPLE' : ''));
-            return next;
-        });
+        const next = selectedTypes.includes(type) 
+            ? selectedTypes.filter(t => t !== type) 
+            : [...selectedTypes, type];
+        updateFilter('category', next.length > 0 ? next.join(',') : undefined);
     };
 
     const toggleAmenity = (amenity: string) => {
-        setHasInteracted(true);
-        setSelectedAmenities(prev => 
-            prev.includes(amenity) ? prev.filter(a => a !== amenity) : [...prev, amenity]
-        );
+        // Amenities logic... currently not mapped in Tier 1 schema but can use 'q' or add to schema
     };
 
     return (
@@ -246,8 +120,7 @@ export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
                             <Tabs 
                                 value={propertyGroup} 
                                 onValueChange={(v) => {
-                                    setPropertyGroup(v as any);
-                                    setHasInteracted(true);
+                                    updateFilter('propertyType', v === 'commercial' ? 'COMMERCIAL' : 'RESIDENTIAL');
                                 }}
                                 className="hidden md:block"
                             >
@@ -280,10 +153,7 @@ export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
                                     placeholder="Search by Area, Building, or Community..."
                                     className="w-full text-foreground bg-transparent border-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-base h-auto py-3"
                                     value={search}
-                                    onChange={(e) => {
-                                        setSearch(e.target.value);
-                                        setHasInteracted(true);
-                                    }}
+                                    onChange={(e) => updateFilter('q', e.target.value)}
                                     onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                                 />
                             </div>
@@ -292,7 +162,7 @@ export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
 
                             {/* Category Select */}
                             <Select 
-                                value={selectedCategory} 
+                                value={selectedTypes.length > 1 ? 'MULTIPLE' : (selectedCategory || 'ALL')} 
                                 onValueChange={handleCategoryChange}
                             >
                                 <SelectTrigger className="w-auto text-foreground md:w-[150px] font-bold focus:ring-0 border-0 focus:ring-offset-0 h-auto py-3 pl-4 pr-2 text-base">
@@ -300,7 +170,7 @@ export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value="ALL">All Categories</SelectItem>
-                                    {selectedCategory === 'MULTIPLE' && <SelectItem value="MULTIPLE">Multiple Selected</SelectItem>}
+                                    {selectedTypes.length > 1 && <SelectItem value="MULTIPLE">Multiple Selected</SelectItem>}
                                     {propertyTypes
                                         .filter(type => {
                                             const key = `${propertyGroup === 'commercial' ? 'Commercial' : 'Residential'}_${purpose === 'rent' ? 'Rent' : 'Sell'}`;
@@ -333,28 +203,22 @@ export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
                                                     placeholder="Min" 
                                                     type="number" 
                                                     value={minPrice}
-                                                    onChange={(e) => {
-                                                        setMinPrice(e.target.value);
-                                                        setHasInteracted(true);
-                                                    }}
+                                                    onChange={(e) => updateFilter('price_min', e.target.value ? Number(e.target.value) : undefined)}
                                                 />
                                                 <Input 
                                                     placeholder="Max" 
                                                     type="number" 
                                                     value={maxPrice}
-                                                    onChange={(e) => {
-                                                        setMaxPrice(e.target.value);
-                                                        setHasInteracted(true);
-                                                    }}
+                                                    onChange={(e) => updateFilter('price_max', e.target.value ? Number(e.target.value) : undefined)}
                                                 />
                                             </div>
                                         </div>
                                         <DropdownMenuSeparator />
                                         <div className="grid grid-cols-2 gap-2 text-sm px-2">
-                                            <Button variant="ghost" size="sm" className="justify-start" onClick={() => {setMaxPrice('1000000'); setHasInteracted(true);}}>Up to 1M</Button>
-                                            <Button variant="ghost" size="sm" className="justify-start" onClick={() => {setMinPrice('1000000'); setMaxPrice('3000000'); setHasInteracted(true);}}>1M - 3M</Button>
-                                            <Button variant="ghost" size="sm" className="justify-start" onClick={() => {setMinPrice('3000000'); setMaxPrice('5000000'); setHasInteracted(true);}}>3M - 5M</Button>
-                                            <Button variant="ghost" size="sm" className="justify-start" onClick={() => {setMinPrice('5000000'); setMaxPrice(''); setHasInteracted(true);}}>5M+</Button>
+                                            <Button variant="ghost" size="sm" className="justify-start" onClick={() => updateFilter('price_max', 1000000)}>Up to 1M</Button>
+                                            <Button variant="ghost" size="sm" className="justify-start" onClick={() => { updateFilter('price_min', 1000000); updateFilter('price_max', 3000000); }}>1M - 3M</Button>
+                                            <Button variant="ghost" size="sm" className="justify-start" onClick={() => { updateFilter('price_min', 3000000); updateFilter('price_max', 5000000); }}>3M - 5M</Button>
+                                            <Button variant="ghost" size="sm" className="justify-start" onClick={() => { updateFilter('price_min', 5000000); updateFilter('price_max', undefined); }}>5M+</Button>
                                         </div>
                                     </DropdownMenuContent>
                                 </DropdownMenu>
@@ -380,19 +244,13 @@ export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
                                                         placeholder="Min Area" 
                                                         type="number" 
                                                         value={minArea}
-                                                        onChange={(e) => {
-                                                            setMinArea(e.target.value);
-                                                            setHasInteracted(true);
-                                                        }}
+                                                        onChange={(e) => updateFilter('builtUpArea_min', e.target.value ? Number(e.target.value) : undefined)}
                                                     />
                                                     <Input 
                                                         placeholder="Max Area" 
                                                         type="number" 
                                                         value={maxArea}
-                                                        onChange={(e) => {
-                                                            setMaxArea(e.target.value);
-                                                            setHasInteracted(true);
-                                                        }}
+                                                        onChange={(e) => updateFilter('builtUpArea_max', e.target.value ? Number(e.target.value) : undefined)}
                                                     />
                                                 </div>
                                             </div>
@@ -406,12 +264,12 @@ export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
                                                             {['Studio', '1', '2', '3', '4', '5+'].map(b => (
                                                                 <Button 
                                                                     key={b} 
-                                                                    variant={bedrooms === b ? "default" : "outline"} 
+                                                                    variant={bedrooms === b ? "default" : "outline"}
                                                                     size="sm" 
                                                                     className="flex-1 bg-background"
                                                                     onClick={() => {
-                                                                        setBedrooms(bedrooms === b ? '' : b);
-                                                                        setHasInteracted(true);
+                                                                        const val = bedrooms === b ? undefined : (b === 'Studio' ? 0 : (b === '5+' ? 5 : Number(b)));
+                                                                        updateFilter('bedrooms', val);
                                                                     }}
                                                                 >
                                                                     {b}
@@ -425,12 +283,12 @@ export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
                                                             {['1', '2', '3', '4', '5+'].map(b => (
                                                                 <Button 
                                                                     key={b} 
-                                                                    variant={bathrooms === b ? "default" : "outline"} 
+                                                                    variant={bathrooms === b ? "default" : "outline"}
                                                                     size="sm" 
                                                                     className="flex-1 bg-background"
                                                                     onClick={() => {
-                                                                        setBathrooms(bathrooms === b ? '' : b);
-                                                                        setHasInteracted(true);
+                                                                        const val = bathrooms === b ? undefined : (b === '5+' ? 5 : Number(b));
+                                                                        updateFilter('bathrooms', val);
                                                                     }}
                                                                 >
                                                                     {b}
@@ -461,30 +319,11 @@ export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
                                                             </div>
                                                         ))}
                                                 </div>
-                                                {/* Show a note if no categories match the current filter but we have some overall */}
-                                                {propertyTypes.length > 0 && propertyTypes.filter(type => {
-                                                    const key = `${propertyGroup === 'commercial' ? 'Commercial' : 'Residential'}_${purpose === 'rent' ? 'Rent' : 'Sell'}`;
-                                                    const validTypes = PROPERTY_TYPES_MAPPING[key] || [];
-                                                    return validTypes.includes(type);
-                                                }).length === 0 && (
-                                                    <p className="text-xs text-muted-foreground mt-2 italic">No {propertyGroup} categories listed for {purpose} yet.</p>
-                                                )}
                                             </div>
                                             <Separator />
                                             <div>
                                                 <h4 className="font-semibold mb-4 text-lg">Amenities</h4>
-                                                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                                                    {amenitiesList.map(amenity => (
-                                                        <div key={amenity} className="flex items-center space-x-2">
-                                                            <Checkbox 
-                                                                id={`amenity-${amenity}`} 
-                                                                checked={selectedAmenities.includes(amenity)}
-                                                                onCheckedChange={() => toggleAmenity(amenity)}
-                                                            />
-                                                            <Label htmlFor={`amenity-${amenity}`} className="font-normal text-sm">{amenity}</Label>
-                                                        </div>
-                                                    ))}
-                                                </div>
+                                                <p className="text-xs text-muted-foreground italic mb-4">Coming Soon: Advanced amenity filters integration.</p>
                                             </div>
                                             <div className="mt-4 flex gap-4">
                                                 <Button variant="outline" className="w-full" onClick={handleReset}>Reset Filters</Button>

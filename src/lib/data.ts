@@ -6,6 +6,7 @@ export const properties: Property[] = [
     id: 'prop-1',
     name: 'Emaar Beachfront Studio',
     type: 'Studio',
+    category: 'Apartment',
     purpose: 'Buy',
     status: 'Off-plan',
     price: 'AED 1.2M',
@@ -25,12 +26,13 @@ export const properties: Property[] = [
       orn: '12345',
       propertyCount: 152,
     },
-    priceNumeric: 0
+    priceNumeric: 1200000
   },
   {
     id: 'prop-2',
     name: 'Creek Harbour Villas',
     type: 'Villa',
+    category: 'Villa',
     purpose: 'Buy',
     status: 'Off-plan',
     price: 'AED 8.5M',
@@ -50,12 +52,13 @@ export const properties: Property[] = [
       orn: '25800',
       propertyCount: 377,
     },
-    priceNumeric: 0
+    priceNumeric: 8500000
   },
   {
     id: 'prop-3',
     name: 'The Palm Royal Penthouse',
     type: 'Penthouse',
+    category: 'Penthouse',
     purpose: 'Buy',
     status: 'Ready',
     price: 'AED 25M',
@@ -75,12 +78,13 @@ export const properties: Property[] = [
       orn: '12345',
       propertyCount: 78,
     },
-    priceNumeric: 0
+    priceNumeric: 25000000
   },
   {
     id: 'prop-4',
     name: 'Downtown Views II',
     type: 'Apartment',
+    category: 'Apartment',
     purpose: 'Buy',
     status: 'Ready',
     price: 'AED 4.1M',
@@ -100,12 +104,13 @@ export const properties: Property[] = [
       orn: '12345',
       propertyCount: 95,
     },
-    priceNumeric: 0
+    priceNumeric: 4100000
   },
   {
     id: 'prop-5',
     name: 'Arabian Ranches III - Joy',
     type: 'Townhouse',
+    category: 'Townhouse',
     purpose: 'Buy',
     status: 'Ready',
     price: 'AED 2.8M',
@@ -125,12 +130,13 @@ export const properties: Property[] = [
       orn: '12345',
       propertyCount: 152,
     },
-    priceNumeric: 0
+    priceNumeric: 2800000
   },
   {
     id: 'prop-6',
     name: 'District One Villa',
     type: 'Villa',
+    category: 'Villa',
     purpose: 'Buy',
     status: 'Ready',
     price: 'AED 15M',
@@ -150,12 +156,13 @@ export const properties: Property[] = [
       orn: '12345',
       propertyCount: 110,
     },
-    priceNumeric: 0
+    priceNumeric: 15000000
   },
   {
     id: 'prop-7',
     name: 'Business Bay Office Space',
     type: 'Office',
+    category: 'Commercial',
     purpose: 'Rent',
     status: 'Ready',
     price: 'AED 250,000/year',
@@ -175,12 +182,13 @@ export const properties: Property[] = [
       orn: '54321',
       propertyCount: 45,
     },
-    priceNumeric: 0
+    priceNumeric: 250000
   },
   {
     id: 'prop-8',
     name: 'JVC 1-Bedroom for Rent',
     type: 'Apartment',
+    category: 'Apartment',
     purpose: 'Rent',
     status: 'Ready',
     price: 'AED 85,000/year',
@@ -200,7 +208,7 @@ export const properties: Property[] = [
       orn: '67890',
       propertyCount: 210,
     },
-    priceNumeric: 0
+    priceNumeric: 85000
   }
 ];
 

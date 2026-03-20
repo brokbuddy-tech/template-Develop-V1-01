@@ -40,6 +40,7 @@ export default function AIRecommendations() {
       savedProperties: data.savedProperties.split(',').map(s => s.trim()).filter(Boolean),
       explicitPreferences: {
         luxuryVsStandard: 'Luxury',
+        furnishedVsUnfurnished: 'Furnished',
       },
     };
 
@@ -57,14 +58,20 @@ export default function AIRecommendations() {
   const adaptToPropertyCard = (rec: AIPropertyRecommendationsOutput['recommendations'][0]): Property => ({
     id: rec.id,
     name: rec.name,
-    type: rec.type as Property['type'], // Assuming type is compatible
+    type: rec.type as Property['type'],
+    category: 'Apartment', // Default or derived
     purpose: 'Buy',
+    status: 'Ready',
     price: rec.price,
+    priceNumeric: 0,
     bedrooms: rec.bedrooms || 0,
     bathrooms: rec.bathrooms || 0,
     areaSqFt: rec.areaSqFt || 0,
-    imageId: `property-${(Math.floor(Math.random() * 6) + 1)}`, // Assign a random placeholder
+    imageId: `property-${(Math.floor(Math.random() * 6) + 1)}`,
     location: rec.location,
+    description: '',
+    amenities: [],
+    galleryImageIds: [],
   });
 
   return (

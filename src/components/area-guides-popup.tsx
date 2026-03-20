@@ -15,7 +15,7 @@ const popularDubaiAreas = ["Downtown", "Palm Jumeirah", "Dubai Marina", "Dubai H
 const popularAbuDhabiAreas = ["Yas Island", "Saadiyat Island", "Al Reem Island", "Al Raha Beach"];
 const popularNorthernEmiratesAreas = ["Sharjah (Aljada)", "Ras Al Khaimah (Al Marjan Island)", "Ajman (Al Zorah)"];
 
-export function AreaGuidesPopup() {
+export function AreaGuidesPopup({ hideTitle = false }: { hideTitle?: boolean }) {
   const [guides, setGuides] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -33,10 +33,12 @@ export function AreaGuidesPopup() {
   return (
     <ScrollArea className="h-[70vh]">
         <div className="p-1">
-            <div className="px-6 pt-6 pb-0">
-                <h2 className="text-2xl font-bold tracking-tight text-foreground">Explore Area Guides</h2>
-                <Separator className="my-4" />
-            </div>
+            {!hideTitle && (
+              <div className="px-6 pt-6 pb-0">
+                  <h2 className="text-2xl font-bold tracking-tight text-foreground">Explore Area Guides</h2>
+                  <Separator className="my-4" />
+              </div>
+            )}
             {loading ? (
                 <div className="flex items-center justify-center p-12">
                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>

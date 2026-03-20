@@ -11,25 +11,25 @@ import {
 import {
   Dialog,
   DialogContent,
+  DialogHeader,
+  DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { ListFilter, Building } from 'lucide-react';
+import { ListFilter, Building2 } from 'lucide-react';
 import { AreaGuidesPopup } from './area-guides-popup';
 import type { ReactNode } from 'react';
 
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 
-export function ResultsHeader({ children, title, resultsCount }: { children?: ReactNode; title: string; resultsCount: number }) {
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  const pathname = usePathname();
+import { useListingSearch } from '@/hooks/use-listing-search';
 
-  const currentSort = searchParams.get('sort') || 'newest';
+export function ResultsHeader({ children, title }: { children?: ReactNode; title: string }) {
+  const { meta, filters, updateFilter } = useListingSearch();
+  const currentSort = filters.sort || 'newest';
+  const resultsCount = meta?.total || 0;
 
   const handleSortChange = (sortValue: string) => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set('sort', sortValue);
-    router.push(`${pathname}?${params.toString()}`);
+    updateFilter('sort', sortValue);
   };
 
   const sortOptions = [
@@ -69,12 +69,16 @@ export function ResultsHeader({ children, title, resultsCount }: { children?: Re
         <Dialog>
           <DialogTrigger asChild>
             <Button className="bg-black text-white hover:bg-gray-800 rounded-lg">
-              <Building className="mr-2 h-4 w-4" />
+              <Building2 className="mr-2 h-4 w-4" />
               Area Guides
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-5xl p-0">
-             <AreaGuidesPopup />
+             {/* Hidden DialogTitle for accessibility if needed, but we'll show it or use VisuallyHidden */}
+             <DialogHeader className="p-6 pb-0">
+                <DialogTitle className="text-2xl font-bold tracking-tight text-foreground">Explore Area Guides</DialogTitle>
+             </DialogHeader>
+             <AreaGuidesPopup hideTitle />
           </DialogContent>
         </Dialog>
 

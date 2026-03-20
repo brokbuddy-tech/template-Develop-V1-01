@@ -16,7 +16,7 @@ export default function MapPage() {
         </div>
       </div>
       <div className="w-full px-4 sm:px-6 lg:px-8">
-        <ResultsHeader title="Properties in Dubai" resultsCount={10987}>
+        <ResultsHeader title="Properties in Dubai">
           <h1 className="bg-muted inline-flex items-center gap-2 text-foreground font-bold text-base tracking-tight mb-4 p-3 rounded-lg">
             <MapIcon className="h-4 w-4" />
             <span>Search by Map</span>
