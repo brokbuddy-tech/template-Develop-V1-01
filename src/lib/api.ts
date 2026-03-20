@@ -63,25 +63,64 @@ function mapListingToProperty(listing: any): Property {
     };
 }
 
-export async function getProperties(): Promise<Property[]> {
+export interface PaginatedProperties {
+    properties: Property[];
+    total: number;
+    page: number;
+    totalPages: number;
+}
+
+export async function getProperties(params?: Record<string, string | undefined>): Promise<PaginatedProperties> {
     try {
-        const res = await fetch(`${API_BASE_URL}/public/org/${ORG_SLUG}/listings`, {
+        const queryParams = new URLSearchParams();
+        if (params) {
+            for (const [key, value] of Object.entries(params)) {
+                if (value !== undefined && value !== '') {
+                    queryParams.append(key, value);
+                }
+            }
+        }
+        
+        const queryString = queryParams.toString();
+        const url = `${API_BASE_URL}/public/org/${ORG_SLUG}/listings${queryString ? `?${queryString}` : ''}`;
+
+        const res = await fetch(url, {
             // Next.js caching optimization
             next: { revalidate: 60 } 
         } as any);
 
         if (!res.ok) {
             console.error('Failed to fetch listings:', await res.text());
-            return [];
+            return { properties: [], total: 0, page: 1, totalPages: 1 };
         }
 
         const data = await res.json();
-        if (!Array.isArray(data)) return [];
+        
+        // Handle both older array format and new paginated object format
+        let rawListings = [];
+        let total = 0;
+        let page = 1;
+        let totalPages = 1;
 
-        return data.map(mapListingToProperty);
+        if (Array.isArray(data)) {
+            rawListings = data;
+            total = rawListings.length;
+        } else if (data && Array.isArray(data.listings)) {
+            rawListings = data.listings;
+            total = data.total || rawListings.length;
+            page = data.page || 1;
+            totalPages = data.totalPages || 1;
+        }
+
+        return {
+            properties: rawListings.map(mapListingToProperty),
+            total,
+            page,
+            totalPages
+        };
     } catch (error) {
         console.error('Error fetching properties:', error);
-        return [];
+        return { properties: [], total: 0, page: 1, totalPages: 1 };
     }
 }
 

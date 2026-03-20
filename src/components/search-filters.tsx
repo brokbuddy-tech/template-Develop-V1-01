@@ -59,13 +59,17 @@ export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
     const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
     const [bedrooms, setBedrooms] = useState<string>('');
     const [bathrooms, setBathrooms] = useState<string>('');
+    const [purposeModified, setPurposeModified] = useState(false);
 
     // Sync state with URL params on mount or when URL changes
     useEffect(() => {
         const p = pathname.split('/')[1] || 'buy';
         if (['buy', 'rent', 'commercial', 'off-plan'].includes(p)) {
             setPurpose(p);
+        } else {
+            setPurpose('buy');
         }
+        setPurposeModified(false);
         setSearch(searchParams.get('q') || '');
         setMinPrice(searchParams.get('minPrice') || '');
         setMaxPrice(searchParams.get('maxPrice') || '');
@@ -82,6 +86,24 @@ export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
         setBathrooms(searchParams.get('bathrooms') || '');
     }, [searchParams, pathname]);
 
+    const handlePurposeChange = (val: string) => {
+        setPurpose(val);
+        setPurposeModified(true);
+    };
+
+    const handleReset = () => {
+        setSearch('');
+        setMinPrice('');
+        setMaxPrice('');
+        setMinArea('');
+        setMaxArea('');
+        setSelectedTypes([]);
+        setSelectedAmenities([]);
+        setBedrooms('');
+        setBathrooms('');
+        router.push(pathname);
+    };
+
     const handleSearch = () => {
         const params = new URLSearchParams();
         if (search) params.set('q', search);
@@ -95,7 +117,7 @@ export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
         if (bathrooms) params.set('bathrooms', bathrooms);
 
         const queryString = params.toString();
-        const targetPath = `/${purpose}`;
+        const targetPath = purposeModified ? `/${purpose}` : (pathname === '/' ? `/${purpose}` : pathname);
         router.push(`${targetPath}${queryString ? `?${queryString}` : ''}`);
     };
 
@@ -118,7 +140,7 @@ export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
                     <div className="bg-white p-2 rounded-full shadow-lg focus-within:shadow-xl transition-shadow duration-300">
                         <div className="flex items-center gap-1 md:gap-2">
                             {/* Purpose Dropdown */}
-                            <Select value={purpose} onValueChange={setPurpose}>
+                            <Select value={purpose} onValueChange={handlePurposeChange}>
                                 <SelectTrigger className="w-auto text-foreground md:w-[150px] font-bold focus:ring-0 border-0 focus:ring-offset-0 rounded-l-full h-auto py-3 pl-4 pr-2 text-base">
                                     <SelectValue placeholder="Purpose" />
                                 </SelectTrigger>
@@ -284,7 +306,8 @@ export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
                                                     ))}
                                                 </div>
                                             </div>
-                                            <div className="mt-4">
+                                            <div className="mt-4 flex gap-4">
+                                                <Button variant="outline" className="w-full" onClick={handleReset}>Reset Filters</Button>
                                                 <Button className="w-full" onClick={handleSearch}>Apply Filters</Button>
                                             </div>
                                         </div>

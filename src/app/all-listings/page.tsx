@@ -1,18 +1,17 @@
-
 import { Suspense } from 'react';
 import { SearchFilters } from "@/components/search-filters";
-import { Building2 } from "lucide-react";
+import { Search } from "lucide-react";
 import { ResultsHeader } from "@/components/results-header";
 import { Separator } from "@/components/ui/separator";
 import { PropertyListings } from "@/components/property-listings";
 import { getProperties } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 
-interface CommercialPageProps {
+interface AllListingsPageProps {
   searchParams: { [key: string]: string | string[] | undefined };
 }
 
-export default async function CommercialPage({ searchParams }: CommercialPageProps) {
+export default async function AllListingsPage({ searchParams }: AllListingsPageProps) {
   const q = typeof searchParams.q === 'string' ? searchParams.q : undefined;
   const minPrice = typeof searchParams.minPrice === 'string' ? searchParams.minPrice : undefined;
   const maxPrice = typeof searchParams.maxPrice === 'string' ? searchParams.maxPrice : undefined;
@@ -22,8 +21,7 @@ export default async function CommercialPage({ searchParams }: CommercialPagePro
   const bedrooms = typeof searchParams.bedrooms === 'string' ? searchParams.bedrooms : undefined;
   const bathrooms = typeof searchParams.bathrooms === 'string' ? searchParams.bathrooms : undefined;
 
-  const { properties: commercialProperties } = await getProperties({
-    propertyType: 'COMMERCIAL',
+  const { properties: allProperties } = await getProperties({
     q,
     minPrice,
     maxPrice,
@@ -44,27 +42,27 @@ export default async function CommercialPage({ searchParams }: CommercialPagePro
         </div>
       </div>
       <div className="w-full px-4 sm:px-6 lg:px-8">
-        <ResultsHeader title="Commercial Properties in Dubai" resultsCount={commercialProperties.length}>
+        <ResultsHeader title="All Properties in Dubai" resultsCount={allProperties.length}>
           <h1 className="bg-muted inline-flex items-center gap-2 text-foreground font-bold text-base tracking-tight mb-4 p-3 rounded-lg">
-            <Building2 className="h-4 w-4" />
-            <span>Commercial Properties</span>
+            <Search className="h-4 w-4" />
+            <span>All Properties</span>
           </h1>
         </ResultsHeader>
       </div>
       <Separator />
       <div className="w-full px-4 sm:px-6 lg:px-8 py-12">
-        <PropertyListings properties={commercialProperties} />
-        {commercialProperties.length > 12 && (
+        <PropertyListings properties={allProperties} />
+        {allProperties.length > 12 && (
           <div className="mt-12 flex justify-center">
               <Button size="lg" className="bg-primary text-primary-foreground rounded-none px-8 py-6 text-base font-semibold">
                   View More
               </Button>
           </div>
         )}
-        {commercialProperties.length === 0 && (
+        {allProperties.length === 0 && (
           <div className="text-center py-20">
             <h3 className="text-xl font-semibold text-muted-foreground">No properties found matching your criteria.</h3>
-            <Button variant="link" className="mt-4" asChild><a href='/commercial'>Clear all filters</a></Button>
+            <Button variant="link" className="mt-4" asChild><a href='/all-listings'>Clear all filters</a></Button>
           </div>
         )}
       </div>

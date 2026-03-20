@@ -12,7 +12,7 @@ import { BlogSection } from '@/components/home/blog-section';
 import { AreaGuidesDiscovery } from '@/components/home/area-guides-discovery';
 
 export default async function Home() {
-  const allProperties = await getProperties();
+  const { properties: allProperties } = await getProperties();
   const featuredOffPlan = allProperties.filter(p => p.status === 'Off-plan').slice(0, 3);
   const featuredReady = allProperties.filter(p => p.status === 'Ready').slice(0, 3);
 

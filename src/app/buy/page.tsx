@@ -12,52 +12,27 @@ interface BuyPageProps {
 }
 
 export default async function BuyPage({ searchParams }: BuyPageProps) {
-  const allProperties = await getProperties();
-  
-  // Extract filters
-  const q = typeof searchParams.q === 'string' ? searchParams.q.toLowerCase() : '';
-  const minPrice = Number(searchParams.minPrice) || 0;
-  const maxPrice = Number(searchParams.maxPrice) || Infinity;
-  const minArea = Number(searchParams.minArea) || 0;
-  const maxArea = Number(searchParams.maxArea) || Infinity;
-  const types = typeof searchParams.types === 'string' ? searchParams.types.split(',') : [];
-  const bedrooms = typeof searchParams.bedrooms === 'string' ? searchParams.bedrooms : '';
-  const bathrooms = typeof searchParams.bathrooms === 'string' ? searchParams.bathrooms : '';
+  // Extract filters to pass to backend API
+  const q = typeof searchParams.q === 'string' ? searchParams.q : undefined;
+  const minPrice = typeof searchParams.minPrice === 'string' ? searchParams.minPrice : undefined;
+  const maxPrice = typeof searchParams.maxPrice === 'string' ? searchParams.maxPrice : undefined;
+  const minArea = typeof searchParams.minArea === 'string' ? searchParams.minArea : undefined;
+  const maxArea = typeof searchParams.maxArea === 'string' ? searchParams.maxArea : undefined;
+  const types = typeof searchParams.types === 'string' ? searchParams.types : undefined; // e.g., 'Apartment,Villa'
+  const bedrooms = typeof searchParams.bedrooms === 'string' ? searchParams.bedrooms : undefined;
+  const bathrooms = typeof searchParams.bathrooms === 'string' ? searchParams.bathrooms : undefined;
 
-  const saleProperties = allProperties.filter(p => {
-    // Base filter: Buy purpose and non-commercial
-    if (p.purpose !== 'Buy' || p.type === 'Office' || p.type === 'Retail' || p.type === 'Industrial') return false;
-
-    // Search query filter
-    if (q && !(
-        p.name.toLowerCase().includes(q) || 
-        p.location.toLowerCase().includes(q) || 
-        p.description?.toLowerCase().includes(q)
-    )) return false;
-
-    // Price range filter
-    if (p.priceNumeric < minPrice || p.priceNumeric > maxPrice) return false;
-
-    // Area range filter
-    if (p.areaSqFt < minArea || p.areaSqFt > maxArea) return false;
-
-    // Property types filter
-    if (types.length > 0 && !types.includes(p.type)) return false;
-
-    // Bedrooms filter
-    if (bedrooms) {
-        if (bedrooms === 'Studio' && p.bedrooms !== 0) return false;
-        if (bedrooms === '5+' && p.bedrooms < 5) return false;
-        if (bedrooms !== 'Studio' && bedrooms !== '5+' && p.bedrooms !== Number(bedrooms)) return false;
-    }
-
-    // Bathrooms filter
-    if (bathrooms) {
-        if (bathrooms === '5+' && p.bathrooms < 5) return false;
-        if (bathrooms !== '5+' && p.bathrooms !== Number(bathrooms)) return false;
-    }
-
-    return true;
+  const { properties: saleProperties } = await getProperties({
+    transactionType: 'SALE',
+    propertyType: 'RESIDENTIAL',
+    q,
+    minPrice,
+    maxPrice,
+    minArea,
+    maxArea,
+    category: types,
+    bedrooms,
+    bathrooms
   });
 
   return (
@@ -90,7 +65,7 @@ export default async function BuyPage({ searchParams }: BuyPageProps) {
         {saleProperties.length === 0 && (
           <div className="text-center py-20">
             <h3 className="text-xl font-semibold text-muted-foreground">No properties found matching your criteria.</h3>
-            <Button variant="link" className="mt-4" onClick={() => window.location.href='/buy'}>Clear all filters</Button>
+            <Button variant="link" className="mt-4" asChild><a href='/buy'>Clear all filters</a></Button>
           </div>
         )}
       </div>

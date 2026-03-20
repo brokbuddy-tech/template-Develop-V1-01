@@ -74,7 +74,7 @@ export default async function PropertyDetailPage(props: { params: Promise<{ id: 
 
     const prop = property as NonNullable<typeof property>;
 
-    const allProperties = await getProperties();
+    const { properties: allProperties } = await getProperties();
     const relatedProperties = allProperties.filter(p => p.type === prop.type && p.id !== prop.id).slice(0, 6);
     
     return (
