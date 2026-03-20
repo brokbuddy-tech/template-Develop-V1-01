@@ -32,13 +32,15 @@ import { Sparkles, Search, ChevronDown, SlidersHorizontal, Crown } from 'lucide-
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { Textarea } from './ui/textarea';
 import { cn } from '@/lib/utils';
+import { getOrgConfig } from '@/lib/api';
 
-const propertyTypes = ["Apartment", "Villa", "Penthouse", "Townhouse", "Duplex", "Office", "Warehouse", "Plot"];
-const amenitiesList = [
-  "Swimming Pool", "Gym", "Private Garden", "Beach Access",
-  "Covered Parking", "Maids Room", "Concierge", "Pet Friendly",
-  "High-speed Elevators", "Shell & Core", "Fitted"
-];
+// Property types and amenities will be fetched from the backend config
+// const propertyTypes = ["Apartment", "Villa", "Penthouse", "Townhouse", "Duplex", "Office", "Warehouse", "Plot"];
+// const amenitiesList = [
+//   "Swimming Pool", "Gym", "Private Garden", "Beach Access",
+//   "Covered Parking", "Maids Room", "Concierge", "Pet Friendly",
+//   "High-speed Elevators", "Shell & Core", "Fitted"
+// ];
 
 interface SearchFiltersProps {
   context?: 'hero' | 'page';
@@ -60,6 +62,18 @@ export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
     const [bedrooms, setBedrooms] = useState<string>('');
     const [bathrooms, setBathrooms] = useState<string>('');
     const [purposeModified, setPurposeModified] = useState(false);
+    const [propertyTypes, setPropertyTypes] = useState<string[]>([]);
+    const [amenitiesList, setAmenitiesList] = useState<string[]>([]);
+    const [isInitialLoad, setIsInitialLoad] = useState(true);
+    const [hasInteracted, setHasInteracted] = useState(false);
+
+    // Fetch config on mount
+    useEffect(() => {
+        getOrgConfig().then(config => {
+            if (config.categories?.length) setPropertyTypes(config.categories);
+            if (config.amenities?.length) setAmenitiesList(config.amenities);
+        });
+    }, []);
 
     // Sync state with URL params on mount or when URL changes
     useEffect(() => {
@@ -86,9 +100,26 @@ export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
         setBathrooms(searchParams.get('bathrooms') || '');
     }, [searchParams, pathname]);
 
+    // Live Search with Debounce
+    useEffect(() => {
+        if (isInitialLoad) {
+            setIsInitialLoad(false);
+            return;
+        }
+
+        if (!hasInteracted) return;
+
+        const timer = setTimeout(() => {
+            handleSearch();
+        }, 500);
+
+        return () => clearTimeout(timer);
+    }, [search, minPrice, maxPrice, minArea, maxArea, selectedTypes, selectedAmenities, bedrooms, bathrooms, purpose]);
+
     const handlePurposeChange = (val: string) => {
         setPurpose(val);
         setPurposeModified(true);
+        setHasInteracted(true);
     };
 
     const handleReset = () => {
@@ -101,6 +132,7 @@ export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
         setSelectedAmenities([]);
         setBedrooms('');
         setBathrooms('');
+        setHasInteracted(false);
         router.push(pathname);
     };
 
@@ -111,23 +143,34 @@ export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
         if (maxPrice) params.set('maxPrice', maxPrice);
         if (minArea) params.set('minArea', minArea);
         if (maxArea) params.set('maxArea', maxArea);
-        if (selectedTypes.length > 0) params.set('types', selectedTypes.join(','));
+        
+        // Categorical Routing Logic: if single type selected and purpose is buy/rent
+        let targetPath = purposeModified ? `/${purpose}` : (pathname === '/' ? `/${purpose}` : pathname);
+        
+        if (selectedTypes.length === 1 && (purpose === 'buy' || purpose === 'rent')) {
+            const cat = selectedTypes[0].toLowerCase() + (selectedTypes[0].toLowerCase().endsWith('s') ? '' : 's');
+            targetPath = `/${purpose}/${cat}`;
+        } else if (selectedTypes.length > 0) {
+            params.set('types', selectedTypes.join(','));
+        }
+
         if (selectedAmenities.length > 0) params.set('amenities', selectedAmenities.join(','));
         if (bedrooms) params.set('bedrooms', bedrooms);
         if (bathrooms) params.set('bathrooms', bathrooms);
 
         const queryString = params.toString();
-        const targetPath = purposeModified ? `/${purpose}` : (pathname === '/' ? `/${purpose}` : pathname);
         router.push(`${targetPath}${queryString ? `?${queryString}` : ''}`);
     };
 
     const toggleType = (type: string) => {
+        setHasInteracted(true);
         setSelectedTypes(prev => 
             prev.includes(type) ? prev.filter(t => t !== type) : [...prev, type]
         );
     };
 
     const toggleAmenity = (amenity: string) => {
+        setHasInteracted(true);
         setSelectedAmenities(prev => 
             prev.includes(amenity) ? prev.filter(a => a !== amenity) : [...prev, amenity]
         );
@@ -161,7 +204,10 @@ export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
                                     placeholder="Search by Area, Building, or Community..."
                                     className="w-full text-foreground bg-transparent border-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-base h-auto py-3"
                                     value={search}
-                                    onChange={(e) => setSearch(e.target.value)}
+                                    onChange={(e) => {
+                                        setSearch(e.target.value);
+                                        setHasInteracted(true);
+                                    }}
                                     onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                                 />
                             </div>
@@ -185,22 +231,28 @@ export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
                                                     placeholder="Min" 
                                                     type="number" 
                                                     value={minPrice}
-                                                    onChange={(e) => setMinPrice(e.target.value)}
+                                                    onChange={(e) => {
+                                                        setMinPrice(e.target.value);
+                                                        setHasInteracted(true);
+                                                    }}
                                                 />
                                                 <Input 
                                                     placeholder="Max" 
                                                     type="number" 
                                                     value={maxPrice}
-                                                    onChange={(e) => setMaxPrice(e.target.value)}
+                                                    onChange={(e) => {
+                                                        setMaxPrice(e.target.value);
+                                                        setHasInteracted(true);
+                                                    }}
                                                 />
                                             </div>
                                         </div>
                                         <DropdownMenuSeparator />
                                         <div className="grid grid-cols-2 gap-2 text-sm px-2">
-                                            <Button variant="ghost" size="sm" className="justify-start" onClick={() => setMaxPrice('1000000')}>Up to 1M</Button>
-                                            <Button variant="ghost" size="sm" className="justify-start" onClick={() => {setMinPrice('1000000'); setMaxPrice('3000000');}}>1M - 3M</Button>
-                                            <Button variant="ghost" size="sm" className="justify-start" onClick={() => {setMinPrice('3000000'); setMaxPrice('5000000');}}>3M - 5M</Button>
-                                            <Button variant="ghost" size="sm" className="justify-start" onClick={() => {setMinPrice('5000000'); setMaxPrice('');}}>5M+</Button>
+                                            <Button variant="ghost" size="sm" className="justify-start" onClick={() => {setMaxPrice('1000000'); setHasInteracted(true);}}>Up to 1M</Button>
+                                            <Button variant="ghost" size="sm" className="justify-start" onClick={() => {setMinPrice('1000000'); setMaxPrice('3000000'); setHasInteracted(true);}}>1M - 3M</Button>
+                                            <Button variant="ghost" size="sm" className="justify-start" onClick={() => {setMinPrice('3000000'); setMaxPrice('5000000'); setHasInteracted(true);}}>3M - 5M</Button>
+                                            <Button variant="ghost" size="sm" className="justify-start" onClick={() => {setMinPrice('5000000'); setMaxPrice(''); setHasInteracted(true);}}>5M+</Button>
                                         </div>
                                     </DropdownMenuContent>
                                 </DropdownMenu>
@@ -226,13 +278,19 @@ export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
                                                         placeholder="Min Area" 
                                                         type="number" 
                                                         value={minArea}
-                                                        onChange={(e) => setMinArea(e.target.value)}
+                                                        onChange={(e) => {
+                                                            setMinArea(e.target.value);
+                                                            setHasInteracted(true);
+                                                        }}
                                                     />
                                                     <Input 
                                                         placeholder="Max Area" 
                                                         type="number" 
                                                         value={maxArea}
-                                                        onChange={(e) => setMaxArea(e.target.value)}
+                                                        onChange={(e) => {
+                                                            setMaxArea(e.target.value);
+                                                            setHasInteracted(true);
+                                                        }}
                                                     />
                                                 </div>
                                             </div>
@@ -249,7 +307,10 @@ export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
                                                                     variant={bedrooms === b ? "default" : "outline"} 
                                                                     size="sm" 
                                                                     className="flex-1 bg-background"
-                                                                    onClick={() => setBedrooms(bedrooms === b ? '' : b)}
+                                                                    onClick={() => {
+                                                                        setBedrooms(bedrooms === b ? '' : b);
+                                                                        setHasInteracted(true);
+                                                                    }}
                                                                 >
                                                                     {b}
                                                                 </Button>
@@ -265,7 +326,10 @@ export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
                                                                     variant={bathrooms === b ? "default" : "outline"} 
                                                                     size="sm" 
                                                                     className="flex-1 bg-background"
-                                                                    onClick={() => setBathrooms(bathrooms === b ? '' : b)}
+                                                                    onClick={() => {
+                                                                        setBathrooms(bathrooms === b ? '' : b);
+                                                                        setHasInteracted(true);
+                                                                    }}
                                                                 >
                                                                     {b}
                                                                 </Button>

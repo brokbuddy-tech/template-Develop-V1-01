@@ -25,6 +25,7 @@ export const properties: Property[] = [
       orn: '12345',
       propertyCount: 152,
     },
+    priceNumeric: 0
   },
   {
     id: 'prop-2',
@@ -49,6 +50,7 @@ export const properties: Property[] = [
       orn: '25800',
       propertyCount: 377,
     },
+    priceNumeric: 0
   },
   {
     id: 'prop-3',
@@ -73,6 +75,7 @@ export const properties: Property[] = [
       orn: '12345',
       propertyCount: 78,
     },
+    priceNumeric: 0
   },
   {
     id: 'prop-4',
@@ -97,6 +100,7 @@ export const properties: Property[] = [
       orn: '12345',
       propertyCount: 95,
     },
+    priceNumeric: 0
   },
   {
     id: 'prop-5',
@@ -121,6 +125,7 @@ export const properties: Property[] = [
       orn: '12345',
       propertyCount: 152,
     },
+    priceNumeric: 0
   },
   {
     id: 'prop-6',
@@ -145,6 +150,7 @@ export const properties: Property[] = [
       orn: '12345',
       propertyCount: 110,
     },
+    priceNumeric: 0
   },
   {
     id: 'prop-7',
@@ -162,13 +168,14 @@ export const properties: Property[] = [
     amenities: ['Fitted', 'High-speed Elevators', 'Concierge', 'Covered Parking', 'Canal View'],
     galleryImageIds: ['gallery-2', 'gallery-1', 'gallery-4', 'gallery-5', 'gallery-3'],
     agent: {
-        name: 'Michael Brown',
-        avatarId: 'author-3',
-        title: 'Commercial Specialist',
-        company: 'DEVELOP Commercial',
-        orn: '54321',
-        propertyCount: 45,
-    }
+      name: 'Michael Brown',
+      avatarId: 'author-3',
+      title: 'Commercial Specialist',
+      company: 'DEVELOP Commercial',
+      orn: '54321',
+      propertyCount: 45,
+    },
+    priceNumeric: 0
   },
   {
     id: 'prop-8',
@@ -186,13 +193,14 @@ export const properties: Property[] = [
     amenities: ['Shared Pool', 'Shared Gym', 'Covered Parking', 'Pet Friendly', 'Balcony'],
     galleryImageIds: ['gallery-3', 'gallery-2', 'gallery-1', 'gallery-4', 'gallery-5'],
     agent: {
-        name: 'Sarah Wilson',
-        avatarId: 'author-4',
-        title: 'Rental Expert',
-        company: 'DEVELOP Rentals',
-        orn: '67890',
-        propertyCount: 210,
-    }
+      name: 'Sarah Wilson',
+      avatarId: 'author-4',
+      title: 'Rental Expert',
+      company: 'DEVELOP Rentals',
+      orn: '67890',
+      propertyCount: 210,
+    },
+    priceNumeric: 0
   }
 ];
 
@@ -246,7 +254,7 @@ export const sellerTestimonials: SellerTestimonial[] = [
     quote: 'I needed to liquidate part of my property portfolio quickly. DEVELOP\'s team provided a clear strategy, managed the entire process flawlessly, and exceeded my financial goals. True professionals.',
     avatarFallback: 'CW',
   },
-    {
+  {
     id: 'seller-4',
     name: 'Robert Smith',
     property: 'Penthouse in Dubai Marina',

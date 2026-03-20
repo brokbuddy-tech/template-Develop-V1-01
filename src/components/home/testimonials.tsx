@@ -13,13 +13,11 @@ interface TestimonialsProps {
   testimonials: Testimonial[];
 }
 
-const Rating = () => (
+const Rating = ({ rating = 5 }: { rating?: number }) => (
   <div className="flex text-primary">
-    <Star fill="currentColor" className="w-4 h-4" />
-    <Star fill="currentColor" className="w-4 h-4" />
-    <Star fill="currentColor" className="w-4 h-4" />
-    <Star fill="currentColor" className="w-4 h-4" />
-    <Star fill="currentColor" className="w-4 h-4" />
+    {[...Array(5)].map((_, i) => (
+      <Star key={i} fill={i < rating ? "currentColor" : "none"} className="w-4 h-4 text-primary" />
+    ))}
   </div>
 );
 
@@ -65,25 +63,32 @@ export function Testimonials({ testimonials }: TestimonialsProps) {
         >
           <CarouselContent>
             {testimonials.map((testimonial) => {
-              const placeholderImage = PlaceHolderImages.find(p => p.id === testimonial.imageId);
+              const testImage = testimonial.imageId ? (testimonial.imageId.startsWith('http') ? { imageUrl: testimonial.imageId, id: 'api', imageHint: '' } : PlaceHolderImages.find(p => p.id === testimonial.imageId)) : null;
+              const name = testimonial.clientName || testimonial.name || 'Anonymous';
+              const quote = testimonial.content || testimonial.quote || '';
+              
               return (
                 <CarouselItem key={testimonial.id}>
                   <div className="p-4">
                     <Card className="bg-background">
                       <CardContent className="p-8 text-center flex flex-col items-center">
-                        {placeholderImage && (
+                        {testImage ? (
                           <Image
-                            src={placeholderImage.imageUrl}
-                            alt={testimonial.name}
+                            src={testImage.imageUrl}
+                            alt={name}
                             width={80}
                             height={80}
-                            className="rounded-full mb-4"
-                            data-ai-hint={placeholderImage.imageHint}
+                            className="rounded-full mb-4 object-cover aspect-square"
+                            data-ai-hint={testImage.imageHint}
                           />
+                        ) : (
+                          <div className="h-20 w-20 bg-muted rounded-full flex items-center justify-center mb-4">
+                             <span className="text-xl font-bold">{name.charAt(0)}</span>
+                          </div>
                         )}
-                        <Rating />
-                        <p className="mt-4 text-lg italic">"{testimonial.quote}"</p>
-                        <p className="mt-4 font-semibold">{testimonial.name}</p>
+                        <Rating rating={testimonial.rating} />
+                        <p className="mt-4 text-lg italic">"{quote}"</p>
+                        <p className="mt-4 font-semibold">{name}</p>
                       </CardContent>
                     </Card>
                   </div>

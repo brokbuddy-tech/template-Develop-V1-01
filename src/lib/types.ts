@@ -30,17 +30,20 @@ export type Property = {
 };
 
 export type Area = {
-  id:string;
+  id: string;
   name: string;
   yield: string;
-  imageId: string;
+  imageId: string | null;
 };
 
 export type Testimonial = {
   id: string;
-  name: string;
-  quote: string;
-  imageId: string;
+  name?: string;
+  clientName?: string; // Backend uses clientName
+  quote?: string;
+  content?: string; // Backend uses content
+  imageId?: string | null;
+  rating?: number;
 };
 
 export type SellerTestimonial = {
@@ -67,14 +70,17 @@ export type NavLink = {
 
 export type Blog = {
   id: string;
-  readTime: string;
+  readTime: string | null;
   title: string;
   excerpt: string;
-  author: {
+  content?: string | null;
+  authorName?: string | null;
+  authorAvatar?: string | null;
+  author?: {
     name: string;
     avatarId: string;
   };
-  imageId: string;
+  imageId: string | null;
 };
 
 export type Award = {

@@ -141,3 +141,69 @@ export async function getPropertyById(id: string): Promise<Property | null> {
         return null;
     }
 }
+
+export async function getOrgConfig(): Promise<{ categories: string[], amenities: string[] }> {
+    try {
+        const res = await fetch(`${API_BASE_URL}/public/org/${ORG_SLUG}/config`, {
+            next: { revalidate: 3600 } // Revalidate config every hour
+        } as any);
+        if (!res.ok) return { categories: [], amenities: [] };
+        return await res.json();
+    } catch (error) {
+        console.error('Error fetching org config:', error);
+        return { categories: [], amenities: [] };
+    }
+}
+
+export async function getAreaGuides(): Promise<any[]> {
+    try {
+        const res = await fetch(`${API_BASE_URL}/public/org/${ORG_SLUG}/area-guides`, {
+            next: { revalidate: 3600 }
+        } as any);
+        if (!res.ok) return [];
+        return await res.json();
+    } catch (error) {
+        console.error('Error fetching area guides:', error);
+        return [];
+    }
+}
+
+export async function getTestimonials(): Promise<any[]> {
+    try {
+        const res = await fetch(`${API_BASE_URL}/public/org/${ORG_SLUG}/testimonials`, {
+            next: { revalidate: 3600 }
+        } as any);
+        if (!res.ok) return [];
+        return await res.json();
+    } catch (error) {
+        console.error('Error fetching testimonials:', error);
+        return [];
+    }
+}
+
+export async function getBlogs(): Promise<any[]> {
+    try {
+        const res = await fetch(`${API_BASE_URL}/public/org/${ORG_SLUG}/blogs`, {
+            next: { revalidate: 3600 }
+        } as any);
+        if (!res.ok) return [];
+        return await res.json();
+    } catch (error) {
+        console.error('Error fetching blogs:', error);
+        return [];
+    }
+}
+
+export async function getSellerTestimonials(): Promise<any[]> {
+    try {
+        const res = await fetch(`${API_BASE_URL}/public/org/${ORG_SLUG}/seller-testimonials`, {
+            next: { revalidate: 3600 }
+        } as any);
+        if (!res.ok) return [];
+        return await res.json();
+    } catch (error) {
+        console.error('Error fetching seller testimonials:', error);
+        return [];
+    }
+}
+

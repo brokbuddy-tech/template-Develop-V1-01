@@ -7,8 +7,11 @@ import type { Blog } from '@/lib/types';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 function BlogCard({ blog }: { blog: Blog }) {
-  const blogImage = PlaceHolderImages.find(p => p.id === blog.imageId);
-  const authorImage = PlaceHolderImages.find(p => p.id === blog.author.avatarId);
+  const blogImage = blog.imageId ? (blog.imageId.startsWith('http') ? { imageUrl: blog.imageId, id: 'api', imageHint: '' } : PlaceHolderImages.find(p => p.id === blog.imageId)) : null;
+  // Handle both mock author object and real backend authorName/authorAvatar
+  const authorName = blog.authorName || blog.author?.name || 'Anonymous';
+  const authorAvatar = blog.authorAvatar || blog.author?.avatarId;
+  const authorImage = authorAvatar ? (authorAvatar.startsWith('http') ? { imageUrl: authorAvatar } : PlaceHolderImages.find(p => p.id === authorAvatar)) : null;
 
   return (
     <div className="border rounded-xl overflow-hidden hover:shadow-lg transition-shadow bg-card flex flex-col text-left">
@@ -36,14 +39,18 @@ function BlogCard({ blog }: { blog: Blog }) {
             </Button>
         </div>
 
-         <div className="flex items-center gap-2 mt-4 pt-4 border-t text-xs text-muted-foreground">
-            {authorImage && (
+          <div className="flex items-center gap-2 mt-4 pt-4 border-t text-xs text-muted-foreground">
+            {authorImage ? (
                 <Avatar className="h-6 w-6">
-                    <AvatarImage src={authorImage.imageUrl} alt={blog.author.name} />
-                    <AvatarFallback>{blog.author.name.charAt(0)}</AvatarFallback>
+                    <AvatarImage src={authorImage.imageUrl} alt={authorName} />
+                    <AvatarFallback>{authorName.charAt(0)}</AvatarFallback>
+                </Avatar>
+            ) : (
+                <Avatar className="h-6 w-6">
+                    <AvatarFallback>{authorName.charAt(0)}</AvatarFallback>
                 </Avatar>
             )}
-            <span>Written by {blog.author.name}</span>
+            <span>Written by {authorName}</span>
         </div>
       </div>
     </div>
