@@ -30,7 +30,7 @@ export function PropertyCard({ property }: { property: Property }) {
   const handleContactClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     e.preventDefault();
-    // In a real app, you'd trigger a call or open WhatsApp
+    // In a real app, you'd trigger a call or open WhatsApp  
     console.log('Contact button clicked for ' + property.agent?.name);
   }
 
