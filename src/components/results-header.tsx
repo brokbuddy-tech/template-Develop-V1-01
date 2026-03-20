@@ -17,7 +17,31 @@ import { ListFilter, Building } from 'lucide-react';
 import { AreaGuidesPopup } from './area-guides-popup';
 import type { ReactNode } from 'react';
 
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
+
 export function ResultsHeader({ children, title, resultsCount }: { children?: ReactNode; title: string; resultsCount: number }) {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const currentSort = searchParams.get('sort') || 'newest';
+
+  const handleSortChange = (sortValue: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('sort', sortValue);
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
+  const sortOptions = [
+    { label: 'Newest First', value: 'newest' },
+    { label: 'Oldest First', value: 'oldest' },
+    { label: 'Price: Low to High', value: 'price-asc' },
+    { label: 'Price: High to Low', value: 'price-desc' },
+    { label: 'Area: Small to Large', value: 'area-asc' },
+  ];
+
+  const activeSortLabel = sortOptions.find(opt => opt.value === currentSort)?.label || 'Newest';
+
   return (
     <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 py-4">
       <div className="text-center sm:text-left">
@@ -30,15 +54,15 @@ export function ResultsHeader({ children, title, resultsCount }: { children?: Re
           <DropdownMenuTrigger asChild>
             <Button className="bg-black text-white hover:bg-gray-800 rounded-lg">
               <ListFilter className="mr-2 h-4 w-4" />
-              Newest
+              {activeSortLabel}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem>Newest First</DropdownMenuItem>
-            <DropdownMenuItem>Oldest First</DropdownMenuItem>
-            <DropdownMenuItem>Price: Low to High</DropdownMenuItem>
-            <DropdownMenuItem>Price: High to Low</DropdownMenuItem>
-            <DropdownMenuItem>Area: Small to Large</DropdownMenuItem>
+            {sortOptions.map((opt) => (
+              <DropdownMenuItem key={opt.value} onClick={() => handleSortChange(opt.value)}>
+                {opt.label}
+              </DropdownMenuItem>
+            ))}
           </DropdownMenuContent>
         </DropdownMenu>
 

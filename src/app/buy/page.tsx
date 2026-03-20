@@ -22,6 +22,7 @@ export default async function BuyPage(props: BuyPageProps) {
   const types = typeof searchParams.types === 'string' ? searchParams.types : undefined; // e.g., 'Apartment,Villa'
   const bedrooms = typeof searchParams.bedrooms === 'string' ? searchParams.bedrooms : undefined;
   const bathrooms = typeof searchParams.bathrooms === 'string' ? searchParams.bathrooms : undefined;
+  const sort = typeof searchParams.sort === 'string' ? searchParams.sort : undefined;
 
   const group = typeof searchParams.group === 'string' ? searchParams.group.toUpperCase() : 'RESIDENTIAL';
 
@@ -35,7 +36,8 @@ export default async function BuyPage(props: BuyPageProps) {
     maxArea,
     category: types || (typeof searchParams.category === 'string' ? searchParams.category : undefined),
     bedrooms,
-    bathrooms
+    bathrooms,
+    sort
   });
 
   return (

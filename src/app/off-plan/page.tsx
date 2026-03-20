@@ -22,6 +22,7 @@ export default async function OffPlanPage(props: OffPlanPageProps) {
   const types = typeof searchParams.types === 'string' ? searchParams.types : undefined;
   const bedrooms = typeof searchParams.bedrooms === 'string' ? searchParams.bedrooms : undefined;
   const bathrooms = typeof searchParams.bathrooms === 'string' ? searchParams.bathrooms : undefined;
+  const sort = typeof searchParams.sort === 'string' ? searchParams.sort : undefined;
 
   const { properties: offPlanProperties } = await getProperties({
     readiness: 'OFFPLAN',
@@ -30,9 +31,10 @@ export default async function OffPlanPage(props: OffPlanPageProps) {
     maxPrice,
     minArea,
     maxArea,
-    category: types,
+    category: types || (typeof searchParams.category === 'string' ? searchParams.category : undefined),
     bedrooms,
-    bathrooms
+    bathrooms,
+    sort
   });
 
   return (

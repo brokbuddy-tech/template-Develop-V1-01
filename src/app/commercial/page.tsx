@@ -21,6 +21,9 @@ export default async function CommercialPage(props: CommercialPageProps) {
   const maxArea = typeof searchParams.maxArea === 'string' ? searchParams.maxArea : undefined;
   const types = typeof searchParams.types === 'string' ? searchParams.types : undefined;
   const purpose = typeof searchParams.purpose === 'string' ? searchParams.purpose.toUpperCase() : 'SALE';
+  const bathrooms = typeof searchParams.bathrooms === 'string' ? searchParams.bathrooms : undefined;
+  const bedrooms = typeof searchParams.bedrooms === 'string' ? searchParams.bedrooms : undefined;
+  const sort = typeof searchParams.sort === 'string' ? searchParams.sort : undefined;
 
   const { properties: commercialProperties } = await getProperties({
     transactionType: purpose === 'RENT' ? 'RENT' : 'SALE',
@@ -31,6 +34,9 @@ export default async function CommercialPage(props: CommercialPageProps) {
     minArea,
     maxArea,
     category: types || (typeof searchParams.category === 'string' ? searchParams.category : undefined),
+    bedrooms,
+    bathrooms,
+    sort
   });
 
   return (

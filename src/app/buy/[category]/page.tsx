@@ -14,6 +14,14 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
   const { category: categorySlug } = await params;
   const purpose = 'buy';
   const sParams = await searchParams;
+  const q = typeof sParams.q === 'string' ? sParams.q : undefined;
+  const minPrice = typeof sParams.minPrice === 'string' ? sParams.minPrice : undefined;
+  const maxPrice = typeof sParams.maxPrice === 'string' ? sParams.maxPrice : undefined;
+  const bedrooms = typeof sParams.bedrooms === 'string' ? sParams.bedrooms : undefined;
+  const bathrooms = typeof sParams.bathrooms === 'string' ? sParams.bathrooms : undefined;
+  const minArea = typeof sParams.minArea === 'string' ? sParams.minArea : undefined;
+  const maxArea = typeof sParams.maxArea === 'string' ? sParams.maxArea : undefined;
+  const sort = typeof sParams.sort === 'string' ? sParams.sort : undefined;
   const { getCategoryFromSlug } = await import('@/lib/api');
 
   const dbCategory = getCategoryFromSlug(categorySlug);
@@ -22,14 +30,15 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
 
   const { properties } = await getProperties({
     transactionType,
-    category: dbCategory,
-    q: typeof sParams.q === 'string' ? sParams.q : undefined,
-    minPrice: typeof sParams.minPrice === 'string' ? sParams.minPrice : undefined,
-    maxPrice: typeof sParams.maxPrice === 'string' ? sParams.maxPrice : undefined,
-    bedrooms: typeof sParams.bedrooms === 'string' ? sParams.bedrooms : undefined,
-    bathrooms: typeof sParams.bathrooms === 'string' ? sParams.bathrooms : undefined,
-    minArea: typeof sParams.minArea === 'string' ? sParams.minArea : undefined,
-    maxArea: typeof sParams.maxArea === 'string' ? sParams.maxArea : undefined,
+    category: dbCategory || categorySlug,
+    q,
+    minPrice,
+    maxPrice,
+    bedrooms,
+    bathrooms,
+    minArea,
+    maxArea,
+    sort
   });
 
   const displayPurpose = purpose.charAt(0).toUpperCase() + purpose.slice(1);

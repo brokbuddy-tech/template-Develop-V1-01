@@ -8,12 +8,28 @@ import { ChevronRight } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from './ui/button';
+import { getAreaGuides } from '@/lib/api';
+import { useState, useEffect } from 'react';
 
 const popularDubaiAreas = ["Downtown", "Palm Jumeirah", "Dubai Marina", "Dubai Hills Estate", "Business Bay", "Jumeirah Village Circle", "Arabian Ranches", "DAMAC Hills"];
 const popularAbuDhabiAreas = ["Yas Island", "Saadiyat Island", "Al Reem Island", "Al Raha Beach"];
 const popularNorthernEmiratesAreas = ["Sharjah (Aljada)", "Ras Al Khaimah (Al Marjan Island)", "Ajman (Al Zorah)"];
 
 export function AreaGuidesPopup() {
+  const [guides, setGuides] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchGuides() {
+      const data = await getAreaGuides();
+      // Combine API guides with local metadata if needed, 
+      // but for now just use API data or fallback
+      setGuides(data.length > 0 ? data : areaGuides);
+      setLoading(false);
+    }
+    fetchGuides();
+  }, []);
+
   return (
     <ScrollArea className="h-[70vh]">
         <div className="p-1">
@@ -21,29 +37,34 @@ export function AreaGuidesPopup() {
                 <h2 className="text-2xl font-bold tracking-tight text-foreground">Explore Area Guides</h2>
                 <Separator className="my-4" />
             </div>
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 px-6">
-            {areaGuides.map((guide) => {
-                const placeholderImage = PlaceHolderImages.find(p => p.id === guide.imageId);
-                return (
-                <Link href={`/area-guides/${guide.id}`} key={guide.id} className="group block overflow-hidden rounded-lg">
-                    <div className="relative aspect-[4/5]">
-                    {placeholderImage && (
+            {loading ? (
+                <div className="flex items-center justify-center p-12">
+                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+                </div>
+            ) : (
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 px-6">
+                {guides.map((guide) => {
+                    const placeholderImage = PlaceHolderImages.find(p => p.id === guide.imageId);
+                    const guideImage = guide.imageUrl || (placeholderImage ? placeholderImage.imageUrl : '/placeholder-area.jpg');
+                    
+                    return (
+                    <Link href={`/area-guides/${guide.id}`} key={guide.id} className="group block overflow-hidden rounded-lg">
+                        <div className="relative aspect-[4/5]">
                         <Image
-                        src={placeholderImage.imageUrl}
-                        alt={guide.name}
-                        fill
-                        className="object-cover transition-transform duration-300 group-hover:scale-105"
-                        data-ai-hint={placeholderImage.imageHint}
+                          src={guideImage}
+                          alt={guide.name}
+                          fill
+                          className="object-cover transition-transform duration-300 group-hover:scale-105"
                         />
-                    )}
-                    <div className="absolute bottom-0 left-0 right-0 p-2 bg-background/80 backdrop-blur-sm">
-                        <h3 className="font-bold text-foreground text-center text-sm">{guide.name}</h3>
-                    </div>
-                    </div>
-                </Link>
-                );
-            })}
-            </div>
+                        <div className="absolute bottom-0 left-0 right-0 p-2 bg-background/80 backdrop-blur-sm">
+                            <h3 className="font-bold text-foreground text-center text-sm">{guide.name}</h3>
+                        </div>
+                        </div>
+                    </Link>
+                    );
+                })}
+                </div>
+            )}
 
             <div className="mt-12 px-6 pb-6">
               <div className="flex justify-between items-center mb-6">
@@ -57,7 +78,7 @@ export function AreaGuidesPopup() {
                     <h4 className="font-semibold text-lg text-foreground mb-4">Dubai</h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                         {popularDubaiAreas.map(area => (
-                            <Link href="#" key={area} className="group">
+                            <Link href="/buy" key={area} className="group">
                                 <div className="flex justify-between items-center p-3 border rounded-md hover:bg-accent transition-colors">
                                     <span className="text-sm font-medium text-foreground">{area}</span>
                                     <ChevronRight className="h-5 w-5 text-primary" />
@@ -71,7 +92,7 @@ export function AreaGuidesPopup() {
                     <h4 className="font-semibold text-lg text-foreground mb-4">Abu Dhabi</h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                         {popularAbuDhabiAreas.map(area => (
-                            <Link href="#" key={area} className="group">
+                            <Link href="/buy" key={area} className="group">
                                 <div className="flex justify-between items-center p-3 border rounded-md hover:bg-accent transition-colors">
                                     <span className="text-sm font-medium text-foreground">{area}</span>
                                     <ChevronRight className="h-5 w-5 text-primary" />
@@ -85,7 +106,7 @@ export function AreaGuidesPopup() {
                     <h4 className="font-semibold text-lg text-foreground mb-4">Northern Emirates</h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                         {popularNorthernEmiratesAreas.map(area => (
-                            <Link href="#" key={area} className="group">
+                            <Link href="/buy" key={area} className="group">
                                 <div className="flex justify-between items-center p-3 border rounded-md hover:bg-accent transition-colors">
                                     <span className="text-sm font-medium text-foreground">{area}</span>
                                     <ChevronRight className="h-5 w-5 text-primary" />
