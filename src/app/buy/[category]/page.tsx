@@ -13,21 +13,9 @@ interface CategoryPageProps {
 export default async function CategoryPage({ params, searchParams }: CategoryPageProps) {
   const { purpose, category: categorySlug } = await params;
   const sParams = await searchParams;
+  const { getCategoryFromSlug } = await import('@/lib/api');
 
-  // Map slug back to DB category (e.g. apartments -> Apartment)
-  const categoryMap: { [key: string]: string } = {
-    'apartments': 'Apartment',
-    'villas': 'Villa',
-    'townhouses': 'Townhouse',
-    'penthouses': 'Penthouse',
-    'commercial': 'Commercial',
-    'plots': 'Plot',
-    'warehouse': 'Warehouse',
-    'office': 'Office'
-  };
-
-  const dbCategory = categoryMap[categorySlug.toLowerCase()] || 
-                     categorySlug.charAt(0).toUpperCase() + categorySlug.slice(1).replace(/s$/, '');
+  const dbCategory = getCategoryFromSlug(categorySlug);
 
   const transactionType = purpose.toLowerCase() === 'rent' ? 'RENT' : 'SALE';
 

@@ -31,6 +31,25 @@ export const PROPERTY_TYPES_MAPPING: Record<string, string[]> = {
 };
 
 /**
+ * Helper to map a URL slug back to a database category name.
+ */
+export function getCategoryFromSlug(slug: string): string {
+    const normalizedSlug = slug.toLowerCase().replace(/-/g, ' ').replace(/s$/, ''); // basic reversal
+    
+    // Find exact match in our mapping lists
+    const allCategories = Object.values(PROPERTY_TYPES_MAPPING).flat();
+    const match = allCategories.find(cat => {
+        const catSlug = cat.toLowerCase().replace(/\s+/g, '-').replace(/s$/, '');
+        return catSlug === slug.toLowerCase().replace(/s$/, '');
+    });
+    
+    if (match) return match;
+
+    // Fallback to title case
+    return slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ').replace(/s$/, '');
+}
+
+/**
  * Maps a backend listing object to the frontend Property type.
  */
 function mapListingToProperty(listing: any): Property {
@@ -42,21 +61,27 @@ function mapListingToProperty(listing: any): Property {
     // Get the original category
     const category = listing.category || 'Apartment';
     
-    // Fallback classification logic
-    let type: Property['type'] = 'Apartment';
-    const normalizedCategory = category.trim();
+    // Determine propertyGroup and sync purpose
+    let propertyGroup: 'Residential' | 'Commercial' = isCommercial ? 'Commercial' : 'Residential';
+    
+    // Determine type from category
+    let type = category; // Default to category name
 
-    // Mapping logic to core types for icons/filters
-    const cat = normalizedCategory.toLowerCase();
-    if (cat.includes('villa') || cat.includes('mansion') || cat.includes('bungalow') || cat.includes('compound')) type = 'Villa';
-    else if (cat.includes('townhouse')) type = 'Townhouse';
-    else if (cat.includes('penthouse')) type = 'Penthouse';
-    else if (cat.includes('plot') || cat.includes('land')) type = 'Plot';
-    else if (cat.includes('studio')) type = 'Studio';
-    else if (cat.includes('office') || cat.includes('business') || cat.includes('center')) type = 'Office';
-    else if (cat.includes('retail') || cat.includes('shop') || cat.includes('showroom')) type = 'Retail';
-    else if (cat.includes('industrial') || cat.includes('warehouse') || cat.includes('factory')) type = 'Industrial';
-    else if (cat.includes('apartment') || cat.includes('floor') || cat.includes('building')) type = 'Apartment';
+    // Helper to determine core type for icons/filtering
+    const getCoreType = (catName: string): string => {
+        const cat = catName.toLowerCase();
+        if (cat.includes('villa') || cat.includes('mansion') || cat.includes('bungalow') || cat.includes('compound')) return 'Villa';
+        if (cat.includes('townhouse')) return 'Townhouse';
+        if (cat.includes('penthouse')) return 'Penthouse';
+        if (cat.includes('plot') || cat.includes('land')) return 'Plot';
+        if (cat.includes('studio')) return 'Studio';
+        if (cat.includes('office') || cat.includes('business') || cat.includes('center')) return 'Office';
+        if (cat.includes('retail') || cat.includes('shop') || cat.includes('showroom')) return 'Retail';
+        if (cat.includes('industrial') || cat.includes('warehouse') || cat.includes('factory')) return 'Industrial';
+        return 'Apartment';
+    };
+
+    const coreType = getCoreType(category);
 
     // Get primary image
     const imageId = (listing.images && listing.images.length > 0) 
@@ -71,8 +96,9 @@ function mapListingToProperty(listing: any): Property {
     return {
         id: listing.id,
         name: listing.title || 'Untitled Property',
-        type,
+        type: coreType,
         category,
+        propertyGroup,
         purpose,
         status: listing.readiness?.toUpperCase() === 'OFFPLAN' ? 'Off-plan' : 'Ready',
         price: `${listing.currency || 'AED'} ${listing.price?.toLocaleString() || 'POA'}`,

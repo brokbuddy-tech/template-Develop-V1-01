@@ -13,8 +13,9 @@ export type PropertyAgent = {
 export type Property = {
   id: string;
   name: string;
-  type: 'Apartment' | 'Villa' | 'Penthouse' | 'Townhouse' | 'Plot' | 'Studio' | 'Office' | 'Retail' | 'Industrial';
+  type: string; // Dynamic based on category
   category: string;
+  propertyGroup?: 'Residential' | 'Commercial';
   purpose: 'Buy' | 'Rent';
   status: 'Off-plan' | 'Ready';
   price: string;

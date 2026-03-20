@@ -23,9 +23,11 @@ export default async function BuyPage(props: BuyPageProps) {
   const bedrooms = typeof searchParams.bedrooms === 'string' ? searchParams.bedrooms : undefined;
   const bathrooms = typeof searchParams.bathrooms === 'string' ? searchParams.bathrooms : undefined;
 
+  const group = typeof searchParams.group === 'string' ? searchParams.group.toUpperCase() : 'RESIDENTIAL';
+
   const { properties: saleProperties } = await getProperties({
     transactionType: 'SALE',
-    propertyType: 'RESIDENTIAL',
+    propertyType: group,
     q,
     minPrice,
     maxPrice,

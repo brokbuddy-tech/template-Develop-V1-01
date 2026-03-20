@@ -32,7 +32,7 @@ import { Sparkles, Search, ChevronDown, SlidersHorizontal, Crown } from 'lucide-
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { Textarea } from './ui/textarea';
 import { cn } from '@/lib/utils';
-import { getOrgConfig } from '@/lib/api';
+import { getOrgConfig, PROPERTY_TYPES_MAPPING } from '@/lib/api';
 
 // Property types and amenities will be fetched from the backend config
 // const propertyTypes = ["Apartment", "Villa", "Penthouse", "Townhouse", "Duplex", "Office", "Warehouse", "Plot"];
@@ -52,6 +52,7 @@ export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
     const pathname = usePathname();
 
     const [purpose, setPurpose] = useState('buy');
+    const [propertyGroup, setPropertyGroup] = useState<'residential' | 'commercial'>('residential');
     const [search, setSearch] = useState('');
     const [minPrice, setMinPrice] = useState('');
     const [maxPrice, setMaxPrice] = useState('');
@@ -78,11 +79,27 @@ export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
     // Sync state with URL params on mount or when URL changes
     useEffect(() => {
         const p = pathname.split('/')[1] || 'buy';
-        if (['buy', 'rent', 'commercial', 'off-plan'].includes(p)) {
-            setPurpose(p);
+        
+        if (p === 'commercial') {
+            setPropertyGroup('commercial');
+            setPurpose('buy'); // Default to buy within commercial if not specified
+        } else if (p === 'off-plan') {
+            setPurpose('off-plan');
+            setPropertyGroup('residential');
+        } else if (p === 'rent') {
+            setPurpose('rent');
+            setPropertyGroup('residential');
         } else {
             setPurpose('buy');
+            setPropertyGroup('residential');
         }
+        
+        // Overwrite if explicit params exist
+        const urlGroup = searchParams.get('group');
+        if (urlGroup === 'commercial' || urlGroup === 'residential') {
+            setPropertyGroup(urlGroup);
+        }
+
         setPurposeModified(false);
         setSearch(searchParams.get('q') || '');
         setMinPrice(searchParams.get('minPrice') || '');
@@ -144,11 +161,22 @@ export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
         if (minArea) params.set('minArea', minArea);
         if (maxArea) params.set('maxArea', maxArea);
         
-        // Categorical Routing Logic: if single type selected and purpose is buy/rent
+        // Property Group in params if not obvious from path
+        if (propertyGroup === 'commercial') params.set('group', 'commercial');
+
+        // Categorical Routing Logic
+        let basePurpose = purpose;
+        if (purpose === 'off-plan') basePurpose = 'buy';
+        
         let targetPath = purposeModified ? `/${purpose}` : (pathname === '/' ? `/${purpose}` : pathname);
         
+        // If it's commercial, we use /commercial as base or /buy?group=commercial
+        if (propertyGroup === 'commercial' && (pathname === '/' || purposeModified)) {
+            targetPath = '/commercial';
+        }
+
         if (selectedTypes.length === 1 && (purpose === 'buy' || purpose === 'rent')) {
-            const cat = selectedTypes[0].toLowerCase() + (selectedTypes[0].toLowerCase().endsWith('s') ? '' : 's');
+            const cat = selectedTypes[0].toLowerCase().replace(/\s+/g, '-') + (selectedTypes[0].toLowerCase().endsWith('s') ? '' : 's');
             targetPath = `/${purpose}/${cat}`;
         } else if (selectedTypes.length > 0) {
             params.set('types', selectedTypes.join(','));
@@ -182,16 +210,32 @@ export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
                 <TabsContent value="manual-search">
                     <div className="bg-white p-2 rounded-full shadow-lg focus-within:shadow-xl transition-shadow duration-300">
                         <div className="flex items-center gap-1 md:gap-2">
-                            {/* Purpose Dropdown */}
+                            {/* Residential/Commercial Toggle */}
+                            <Tabs 
+                                value={propertyGroup} 
+                                onValueChange={(v) => {
+                                    setPropertyGroup(v as any);
+                                    setHasInteracted(true);
+                                }}
+                                className="hidden md:block"
+                            >
+                                <TabsList className="bg-muted p-1 rounded-full">
+                                    <TabsTrigger value="residential" className="rounded-full text-xs px-3 py-1">Residential</TabsTrigger>
+                                    <TabsTrigger value="commercial" className="rounded-full text-xs px-3 py-1">Commercial</TabsTrigger>
+                                </TabsList>
+                            </Tabs>
+
+                            <Separator orientation="vertical" className="h-6 hidden md:block" />
+
+                            {/* Purpose Select */}
                             <Select value={purpose} onValueChange={handlePurposeChange}>
-                                <SelectTrigger className="w-auto text-foreground md:w-[150px] font-bold focus:ring-0 border-0 focus:ring-offset-0 rounded-l-full h-auto py-3 pl-4 pr-2 text-base">
+                                <SelectTrigger className="w-auto text-foreground md:w-[120px] font-bold focus:ring-0 border-0 focus:ring-offset-0 h-auto py-3 pl-4 pr-2 text-base">
                                     <SelectValue placeholder="Purpose" />
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value="buy">Buy</SelectItem>
                                     <SelectItem value="rent">Rent</SelectItem>
-                                    <SelectItem value="commercial">Commercial</SelectItem>
-                                    <SelectItem value="off-plan">Off-Plan</SelectItem>
+                                    {propertyGroup === 'residential' && <SelectItem value="off-plan">Off-Plan</SelectItem>}
                                 </SelectContent>
                             </Select>
                             
@@ -342,17 +386,31 @@ export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
                                             <div>
                                                 <h4 className="font-semibold mb-4 text-lg">Property Type</h4>
                                                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                                                    {propertyTypes.map(type => (
-                                                        <div key={type} className="flex items-center space-x-2">
-                                                            <Checkbox 
-                                                                id={`type-${type}`} 
-                                                                checked={selectedTypes.includes(type)}
-                                                                onCheckedChange={() => toggleType(type)}
-                                                            />
-                                                            <Label htmlFor={`type-${type}`} className="font-normal text-sm">{type}</Label>
-                                                        </div>
-                                                    ))}
+                                                    {propertyTypes
+                                                        .filter(type => {
+                                                            const key = `${propertyGroup === 'commercial' ? 'Commercial' : 'Residential'}_${purpose === 'rent' ? 'Rent' : 'Sell'}`;
+                                                            const validTypes = PROPERTY_TYPES_MAPPING[key] || [];
+                                                            return validTypes.includes(type);
+                                                        })
+                                                        .map(type => (
+                                                            <div key={type} className="flex items-center space-x-2">
+                                                                <Checkbox 
+                                                                    id={`type-${type}`} 
+                                                                    checked={selectedTypes.includes(type)}
+                                                                    onCheckedChange={() => toggleType(type)}
+                                                                />
+                                                                <Label htmlFor={`type-${type}`} className="font-normal text-sm">{type}</Label>
+                                                            </div>
+                                                        ))}
                                                 </div>
+                                                {/* Show a note if no categories match the current filter but we have some overall */}
+                                                {propertyTypes.length > 0 && propertyTypes.filter(type => {
+                                                    const key = `${propertyGroup === 'commercial' ? 'Commercial' : 'Residential'}_${purpose === 'rent' ? 'Rent' : 'Sell'}`;
+                                                    const validTypes = PROPERTY_TYPES_MAPPING[key] || [];
+                                                    return validTypes.includes(type);
+                                                }).length === 0 && (
+                                                    <p className="text-xs text-muted-foreground mt-2 italic">No {propertyGroup} categories listed for {purpose} yet.</p>
+                                                )}
                                             </div>
                                             <Separator />
                                             <div>

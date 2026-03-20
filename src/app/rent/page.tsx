@@ -23,9 +23,11 @@ export default async function RentPage(props: RentPageProps) {
   const bedrooms = typeof searchParams.bedrooms === 'string' ? searchParams.bedrooms : undefined;
   const bathrooms = typeof searchParams.bathrooms === 'string' ? searchParams.bathrooms : undefined;
 
+  const group = typeof searchParams.group === 'string' ? searchParams.group.toUpperCase() : 'RESIDENTIAL';
+
   const { properties: rentProperties } = await getProperties({
     transactionType: 'RENT',
-    propertyType: 'RESIDENTIAL',
+    propertyType: group,
     q,
     minPrice,
     maxPrice,
