@@ -11,7 +11,8 @@ interface CategoryPageProps {
 }
 
 export default async function CategoryPage({ params, searchParams }: CategoryPageProps) {
-  const { purpose, category: categorySlug } = await params;
+  const { category: categorySlug } = await params;
+  const purpose = 'buy';
   const sParams = await searchParams;
   const { getCategoryFromSlug } = await import('@/lib/api');
 

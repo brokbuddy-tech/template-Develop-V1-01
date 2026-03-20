@@ -35,14 +35,14 @@ export const PROPERTY_TYPES_MAPPING: Record<string, string[]> = {
  */
 export function getCategoryFromSlug(slug: string): string {
     const normalizedSlug = slug.toLowerCase().replace(/-/g, ' ').replace(/s$/, ''); // basic reversal
-    
+
     // Find exact match in our mapping lists
     const allCategories = Object.values(PROPERTY_TYPES_MAPPING).flat();
     const match = allCategories.find(cat => {
         const catSlug = cat.toLowerCase().replace(/\s+/g, '-').replace(/s$/, '');
         return catSlug === slug.toLowerCase().replace(/s$/, '');
     });
-    
+
     if (match) return match;
 
     // Fallback to title case
@@ -60,10 +60,11 @@ function mapListingToProperty(listing: any): Property {
 
     // Get the original category
     const category = listing.category || 'Apartment';
-    
+    console.log(category);
+
     // Determine propertyGroup and sync purpose
     let propertyGroup: 'Residential' | 'Commercial' = isCommercial ? 'Commercial' : 'Residential';
-    
+
     // Determine type from category
     let type = category; // Default to category name
 
@@ -84,13 +85,13 @@ function mapListingToProperty(listing: any): Property {
     const coreType = getCoreType(category);
 
     // Get primary image
-    const imageId = (listing.images && listing.images.length > 0) 
-        ? listing.images[0].url 
+    const imageId = (listing.images && listing.images.length > 0)
+        ? listing.images[0].url
         : 'property-1'; // fallback
 
     // Map gallery images
-    const galleryImageIds = listing.images 
-        ? listing.images.map((img: any) => img.url) 
+    const galleryImageIds = listing.images
+        ? listing.images.map((img: any) => img.url)
         : [];
 
     return {
@@ -131,7 +132,7 @@ export interface PaginatedProperties {
 export async function getProperties(params?: Record<string, string | undefined>): Promise<PaginatedProperties> {
     try {
         const queryParams = new URLSearchParams();
-        
+
         // Normalize 3-tier pillars
         const transactionType = params?.transactionType || params?.purpose || 'SALE';
         const propertyType = params?.propertyType || params?.group || 'RESIDENTIAL';
@@ -149,13 +150,13 @@ export async function getProperties(params?: Record<string, string | undefined>)
                 }
             }
         }
-        
+
         const queryString = queryParams.toString();
         const url = `${API_BASE_URL}/public/org/${ORG_SLUG}/listings${queryString ? `?${queryString}` : ''}`;
 
         const res = await fetch(url, {
             // Next.js caching optimization
-            next: { revalidate: 60 } 
+            next: { revalidate: 60 }
         } as any);
 
         if (!res.ok) {
@@ -164,7 +165,7 @@ export async function getProperties(params?: Record<string, string | undefined>)
         }
 
         const data = await res.json();
-        
+
         // Handle both older array format and new paginated object format
         let rawListings = [];
         let total = 0;
