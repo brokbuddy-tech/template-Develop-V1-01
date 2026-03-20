@@ -14,6 +14,7 @@ export type Property = {
   id: string;
   name: string;
   type: 'Apartment' | 'Villa' | 'Penthouse' | 'Townhouse' | 'Plot' | 'Studio' | 'Office' | 'Retail' | 'Industrial';
+  category: string;
   purpose: 'Buy' | 'Rent';
   status: 'Off-plan' | 'Ready';
   price: string;

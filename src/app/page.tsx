@@ -4,7 +4,7 @@ import { FeaturedProperties } from '@/components/home/featured-properties';
 import { HeroSection } from '@/components/home/hero-section';
 import { Testimonials } from '@/components/home/testimonials';
 import { TrustSignals } from '@/components/home/trust-signals';
-import { blogPosts } from '@/lib/data'; // keeping blogPosts if types need it, or just remove if unused
+import { properties as fallbackProperties, areaGuides as fallbackAreaGuides, testimonials as fallbackTestimonials, blogPosts as fallbackBlogs } from '@/lib/data';
 import { getProperties, getAreaGuides, getTestimonials, getBlogs } from '@/lib/api';
 import { CityIndex } from '@/components/home/city-index';
 import { FAQ } from '@/components/home/faq';
@@ -24,8 +24,12 @@ export default async function Home() {
     getBlogs()
   ]);
 
-  const featuredOffPlan = allProperties.filter(p => p.status === 'Off-plan').slice(0, 3);
-  const featuredReady = allProperties.filter(p => p.status === 'Ready').slice(0, 3);
+  const propertiesToUse = allProperties.length > 0 ? allProperties : fallbackProperties;
+  const featuredOffPlan = propertiesToUse.filter(p => p.status === 'Off-plan').slice(0, 3);
+  const featuredReady = propertiesToUse.filter(p => p.status === 'Ready').slice(0, 3);
+  const guidesToUse = dynamicAreaGuides.length > 0 ? dynamicAreaGuides : fallbackAreaGuides;
+  const testimonialsToUse = dynamicTestimonials.length > 0 ? dynamicTestimonials : fallbackTestimonials;
+  const blogsToUse = dynamicBlogs.length > 0 ? dynamicBlogs : fallbackBlogs;
 
   return (
     <div className="flex flex-col">
@@ -33,13 +37,13 @@ export default async function Home() {
       <TrustSignals />
       <CityIndex />
       <FeaturedProperties title="Premium Off-Plan Launches" properties={featuredOffPlan} />
-      <AreaGuides title="Explore Dubai's Prime Areas" guides={dynamicAreaGuides.length > 0 ? dynamicAreaGuides : []} />
+      <AreaGuides title="Explore Dubai's Prime Areas" guides={guidesToUse} />
       <FeaturedProperties title="Ready-to-Move Residences" properties={featuredReady} />
       <AreaGuidesDiscovery />
       <DevelopEcosystem />
-      <Testimonials testimonials={dynamicTestimonials.length > 0 ? dynamicTestimonials : []} />
+      <Testimonials testimonials={testimonialsToUse} />
       <FAQ />
-      <BlogSection blogs={dynamicBlogs.length > 0 ? dynamicBlogs : []} />
+      <BlogSection blogs={blogsToUse} />
     </div>
   );
 }

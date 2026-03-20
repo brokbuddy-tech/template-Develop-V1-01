@@ -2,7 +2,7 @@ import { Property } from './types';
 
 // Assuming the API is running locally on port 4000 as per backend configuration.
 // In a real production setup, this would be an environment variable.
-const API_BASE_URL = ((globalThis as any).process?.env?.NEXT_PUBLIC_API_URL) || 'http://localhost:4000/api';
+const API_BASE_URL = (((globalThis as any).process?.env?.NEXT_PUBLIC_API_URL) || 'http://localhost:4000') + '/api';
 const ORG_SLUG = 'skyline-realty';
 
 /**
@@ -41,13 +41,14 @@ function mapListingToProperty(listing: any): Property {
         id: listing.id,
         name: listing.title || 'Untitled Property',
         type,
+        category: listing.category || type,
         purpose,
-        status: listing.completionStatus?.toUpperCase() === 'OFF_PLAN' ? 'Off-plan' : 'Ready',
+        status: listing.readiness?.toUpperCase() === 'OFFPLAN' ? 'Off-plan' : 'Ready',
         price: `${listing.currency || 'AED'} ${listing.price?.toLocaleString() || 'POA'}`,
         priceNumeric: parseFloat(listing.price) || 0,
         bedrooms: parseInt(listing.bedrooms) || 0,
         bathrooms: parseInt(listing.bathrooms) || 0,
-        areaSqFt: parseFloat(listing.size) || parseFloat(listing.areaSqFt) || 0,
+        areaSqFt: parseFloat(listing.builtUpArea) || parseFloat(listing.size) || parseFloat(listing.areaSqFt) || 0,
         imageId,
         location: listing.location || listing.area || listing.emirate || 'Dubai',
         description: listing.description || '',

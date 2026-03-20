@@ -18,15 +18,15 @@ const Stat = ({ icon: Icon, value }: { icon: React.ElementType; value: React.Rea
 
 export function PropertyCard({ property }: { property: Property }) {
   const isMockImage = property.imageId.startsWith('property-');
-  const imageUrl = isMockImage 
-      ? PlaceHolderImages.find(p => p.id === property.imageId)?.imageUrl 
-      : property.imageId;
+  const imageUrl = isMockImage
+    ? PlaceHolderImages.find(p => p.id === property.imageId)?.imageUrl
+    : property.imageId;
 
   const isMockAgent = property.agent?.avatarId?.startsWith('author-');
-  const agentImageUrl = isMockAgent 
-      ? PlaceHolderImages.find(p => p.id === property.agent?.avatarId)?.imageUrl 
-      : property.agent?.avatarId;
-  
+  const agentImageUrl = isMockAgent
+    ? PlaceHolderImages.find(p => p.id === property.agent?.avatarId)?.imageUrl
+    : property.agent?.avatarId;
+
   const handleContactClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     e.preventDefault();
@@ -52,54 +52,54 @@ export function PropertyCard({ property }: { property: Property }) {
           </div>
           <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/60 to-transparent" />
         </div>
-        
-        <div className="p-4 flex-1 flex flex-col justify-between">
-            <div>
-                {/* Property Details */}
-                <h3 className="font-bold text-base leading-tight">
-                {property.bedrooms > 0 ? `${property.bedrooms} Bed ` : ''}{property.type} For {property.purpose} In {property.location}
-                </h3>
-                <div className="flex items-center gap-2 mt-2">
-                <MapPin className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-                <p className="text-xs text-muted-foreground truncate">{property.name}</p>
-                </div>
-                <div className="flex items-center gap-4 mt-3 border-t pt-3">
-                <Stat icon={BedDouble} value={property.bedrooms > 0 ? `${property.bedrooms} Beds` : 'Studio'} />
-                <Stat icon={Bath} value={`${property.bathrooms} Baths`} />
-                <Stat icon={Square} value={`${property.areaSqFt.toLocaleString()} sqft`} />
-                </div>
 
-                {/* Pricing Section */}
-                <div className="bg-muted/50 -mx-4 px-4 py-3 mt-4">
-                    <p className="text-xl font-bold text-foreground">{property.price}</p>
-                </div>
+        <div className="p-4 flex-1 flex flex-col justify-between">
+          <div>
+            {/* Property Details */}
+            <h3 className="font-bold text-base leading-tight">
+              {property.bedrooms > 0 ? `${property.bedrooms} Bed ` : ''}{property.type} For {property.purpose} In {property.location}
+            </h3>
+            <div className="flex items-center gap-2 mt-2">
+              <MapPin className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+              <p className="text-xs text-muted-foreground truncate">{property.name}</p>
             </div>
-  
-            {/* Agent & Lead Footer */}
-            {property.agent && (
-                <div className="pt-4 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                    {agentImageUrl && (
-                    <Avatar className="h-10 w-10">
-                        <AvatarImage src={agentImageUrl} alt={property.agent.name} />
-                        <AvatarFallback>{property.agent.name.charAt(0)}</AvatarFallback>
-                    </Avatar>
-                    )}
-                    <div>
-                    <p className="text-xs text-muted-foreground">Listed By</p>
-                    <p className="text-sm font-semibold text-foreground">{property.agent.name}</p>
-                    </div>
+            <div className="flex items-center gap-4 mt-3 border-t pt-3">
+              <Stat icon={BedDouble} value={property.bedrooms > 0 ? `${property.bedrooms} Beds` : 'Studio'} />
+              <Stat icon={Bath} value={`${property.bathrooms} Baths`} />
+              <Stat icon={Square} value={`${property.areaSqFt.toLocaleString()} sqft`} />
+            </div>
+
+            {/* Pricing Section */}
+            <div className="bg-muted/50 -mx-4 px-4 py-3 mt-4">
+              <p className="text-xl font-bold text-foreground">{property.price}</p>
+            </div>
+          </div>
+
+          {/* Agent & Lead Footer */}
+          {property.agent && (
+            <div className="pt-4 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                {agentImageUrl && (
+                  <Avatar className="h-10 w-10">
+                    <AvatarImage src={agentImageUrl} alt={property.agent.name} />
+                    <AvatarFallback>{property.agent.name.charAt(0)}</AvatarFallback>
+                  </Avatar>
+                )}
+                <div>
+                  <p className="text-xs text-muted-foreground">Listed By</p>
+                  <p className="text-sm font-semibold text-foreground">{property.agent.name}</p>
                 </div>
-                <div className="flex items-center gap-2">
-                    <Button variant="outline" size="icon" className="rounded-full h-9 w-9 border-muted-foreground/50" onClick={handleContactClick}>
-                    <Phone className="h-4 w-4 text-muted-foreground" />
-                    </Button>
-                    <Button variant="outline" size="icon" className="rounded-full h-9 w-9 border-muted-foreground/50 text-[#25D366] hover:bg-[#25D366]/20" onClick={handleContactClick}>
-                    <MessageCircle className="h-4 w-4" />
-                    </Button>
-                </div>
-                </div>
-            )}
+              </div>
+              <div className="flex items-center gap-2">
+                <Button variant="outline" size="icon" className="rounded-full h-9 w-9 border-muted-foreground/50" onClick={handleContactClick}>
+                  <Phone className="h-4 w-4 text-muted-foreground" />
+                </Button>
+                <Button variant="outline" size="icon" className="rounded-full h-9 w-9 border-muted-foreground/50 text-[#25D366] hover:bg-[#25D366]/20" onClick={handleContactClick}>
+                  <MessageCircle className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          )}
         </div>
       </Card>
     </Link>
