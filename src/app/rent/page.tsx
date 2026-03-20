@@ -8,10 +8,11 @@ import { getProperties } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 
 interface RentPageProps {
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-export default async function RentPage({ searchParams }: RentPageProps) {
+export default async function RentPage(props: RentPageProps) {
+  const searchParams = await props.searchParams;
   // Extract filters
   const q = typeof searchParams.q === 'string' ? searchParams.q : undefined;
   const minPrice = typeof searchParams.minPrice === 'string' ? searchParams.minPrice : undefined;

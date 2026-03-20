@@ -8,10 +8,11 @@ import { getProperties } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 
 interface BuyPageProps {
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-export default async function BuyPage({ searchParams }: BuyPageProps) {
+export default async function BuyPage(props: BuyPageProps) {
+  const searchParams = await props.searchParams;
   // Extract filters to pass to backend API
   const q = typeof searchParams.q === 'string' ? searchParams.q : undefined;
   const minPrice = typeof searchParams.minPrice === 'string' ? searchParams.minPrice : undefined;

@@ -8,10 +8,11 @@ import { getProperties } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 
 interface AllListingsPageProps {
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-export default async function AllListingsPage({ searchParams }: AllListingsPageProps) {
+export default async function AllListingsPage(props: AllListingsPageProps) {
+  const searchParams = await props.searchParams;
   const q = typeof searchParams.q === 'string' ? searchParams.q : undefined;
   const minPrice = typeof searchParams.minPrice === 'string' ? searchParams.minPrice : undefined;
   const maxPrice = typeof searchParams.maxPrice === 'string' ? searchParams.maxPrice : undefined;

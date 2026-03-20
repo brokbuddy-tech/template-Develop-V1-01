@@ -9,10 +9,11 @@ import { getProperties } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 
 interface OffPlanPageProps {
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-export default async function OffPlanPage({ searchParams }: OffPlanPageProps) {
+export default async function OffPlanPage(props: OffPlanPageProps) {
+  const searchParams = await props.searchParams;
   const q = typeof searchParams.q === 'string' ? searchParams.q : undefined;
   const minPrice = typeof searchParams.minPrice === 'string' ? searchParams.minPrice : undefined;
   const maxPrice = typeof searchParams.maxPrice === 'string' ? searchParams.maxPrice : undefined;
