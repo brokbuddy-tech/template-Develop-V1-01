@@ -8,9 +8,10 @@ export const NAV_LINKS: NavLink[] = [
     href: '/buy',
     label: 'Buy',
     children: [
-      { href: '/buy?types=Apartment', label: 'Apartments' },
-      { href: '/buy?types=Villa', label: 'Villas' },
-      { href: '/buy?types=Penthouse', label: 'Penthouses' },
+      { href: '/buy/apartments', label: 'Apartments' },
+      { href: '/buy/villas', label: 'Villas' },
+      { href: '/buy/townhouses', label: 'Townhouses' },
+      { href: '/buy/penthouses', label: 'Penthouses' },
     ],
   },
   {
@@ -21,8 +22,9 @@ export const NAV_LINKS: NavLink[] = [
     href: '/rent',
     label: 'Rent',
     children: [
-      { href: '/rent?types=Apartment', label: 'Apartments' },
-      { href: '/rent?types=Villa', label: 'Villas' },
+      { href: '/rent/apartments', label: 'Apartments' },
+      { href: '/rent/villas', label: 'Villas' },
+      { href: '/rent/townhouses', label: 'Townhouses' },
     ],
   },
   {

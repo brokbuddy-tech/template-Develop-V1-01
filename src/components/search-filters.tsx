@@ -81,27 +81,34 @@ export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
     useEffect(() => {
         const p = pathname.split('/')[1] || 'buy';
         
+        let newPropertyGroup: 'residential' | 'commercial' = 'residential';
+        let newPurpose = 'buy';
+
         if (p === 'commercial') {
-            setPropertyGroup('commercial');
-            setPurpose('buy'); // Default to buy within commercial if not specified
+            newPropertyGroup = 'commercial';
+            newPurpose = searchParams.get('purpose')?.toLowerCase() === 'rent' ? 'rent' : 'buy';
         } else if (p === 'off-plan') {
-            setPurpose('off-plan');
-            setPropertyGroup('residential');
+            newPurpose = 'off-plan';
         } else if (p === 'rent') {
-            setPurpose('rent');
-            setPropertyGroup('residential');
-        } else {
-            setPurpose('buy');
-            setPropertyGroup('residential');
-        }
-        
-        // Overwrite if explicit params exist
-        const urlGroup = searchParams.get('group');
-        if (urlGroup === 'commercial' || urlGroup === 'residential') {
-            setPropertyGroup(urlGroup);
+            newPurpose = 'rent';
         }
 
+        // Deep URL group check
+        const urlGroup = searchParams.get('group');
+        if (urlGroup === 'commercial' || urlGroup === 'residential') {
+            newPropertyGroup = urlGroup as any;
+        }
+
+        // If we switched pillars, reset interaction to avoid triggering "Live Search" on the NEW page 
+        // with OLD state that hasn't synced yet.
+        if (newPurpose !== purpose || newPropertyGroup !== propertyGroup) {
+            setHasInteracted(false);
+        }
+
+        setPurpose(newPurpose);
+        setPropertyGroup(newPropertyGroup);
         setPurposeModified(false);
+        
         setSearch(searchParams.get('q') || '');
         setMinPrice(searchParams.get('minPrice') || '');
         setMaxPrice(searchParams.get('maxPrice') || '');
@@ -182,9 +189,6 @@ export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
         if (minArea) params.set('minArea', minArea);
         if (maxArea) params.set('maxArea', maxArea);
         
-        // Property Group in params if not obvious from path
-        if (propertyGroup === 'commercial') params.set('group', 'commercial');
-
         // Property Group
         params.set('group', propertyGroup);
 
@@ -192,20 +196,17 @@ export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
         const transactionType = purpose === 'rent' ? 'RENT' : 'SALE';
         params.set('transactionType', transactionType);
 
-        // Core Categorical Routing Logic
-        let targetPath = purposeModified ? `/${purpose}` : (pathname === '/' ? `/${purpose}` : pathname);
+        // Core Categorical Routing Logic - Always derive from base pillars
+        let targetPath = propertyGroup === 'commercial' ? '/commercial' : `/${purpose}`;
+        if (purpose === 'buy' && propertyGroup === 'residential') targetPath = '/buy';
         
-        if (propertyGroup === 'commercial' && (pathname === '/' || purposeModified)) {
-            targetPath = '/commercial';
-        }
-
         if (selectedTypes.length > 0) {
-            params.set('category', selectedTypes.join(','));
             // If it's a major single category and purpose is buy/rent, use pretty URL
             if (selectedTypes.length === 1 && ['Apartment', 'Villa', 'Townhouse', 'Penthouse'].includes(selectedTypes[0]) && (purpose === 'buy' || purpose === 'rent') && propertyGroup === 'residential') {
                 const catSlug = selectedTypes[0].toLowerCase() + (selectedTypes[0].endsWith('s') ? '' : 's');
                 targetPath = `/${purpose}/${catSlug}`;
-                params.delete('category'); 
+            } else {
+                params.set('category', selectedTypes.join(','));
             }
         }
 
@@ -214,6 +215,8 @@ export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
         if (bathrooms) params.set('bathrooms', bathrooms);
 
         const queryString = params.toString();
+        // Use window.location only if we need to force a full re-initialization of context, 
+        // but router.push is better for performance.
         router.push(`${targetPath}${queryString ? `?${queryString}` : ''}`);
     };
 
