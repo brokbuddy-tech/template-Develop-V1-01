@@ -59,8 +59,7 @@ function mapListingToProperty(listing: any): Property {
     const isCommercial = listing.propertyType?.toUpperCase() === 'COMMERCIAL';
 
     // Get the original category
-    const category = listing.category || 'Apartment';
-    console.log(category);
+    const category = listing.category;
 
     // Determine propertyGroup and sync purpose
     let propertyGroup: 'Residential' | 'Commercial' = isCommercial ? 'Commercial' : 'Residential';
@@ -71,7 +70,7 @@ function mapListingToProperty(listing: any): Property {
     // Helper to determine core type for icons/filtering
     const getCoreType = (catName: string): string => {
         const cat = catName.toLowerCase();
-        if (cat.includes('villa') || cat.includes('mansion') || cat.includes('bungalow') || cat.includes('compound')) return 'Villa';
+        if (cat.includes('villa') || cat.includes('mansion') || cat.includes('bungalow') || cat.includes('compound') || cat.includes('building')) return 'Villa';
         if (cat.includes('townhouse')) return 'Townhouse';
         if (cat.includes('penthouse')) return 'Penthouse';
         if (cat.includes('plot') || cat.includes('land')) return 'Plot';
@@ -83,6 +82,9 @@ function mapListingToProperty(listing: any): Property {
     };
 
     const coreType = getCoreType(category);
+    
+    // Fallback logic for badge if we were using type
+    // but better to just use category in the UI for precision.
 
     // Get primary image
     const imageId = (listing.images && listing.images.length > 0)

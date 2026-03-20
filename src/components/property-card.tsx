@@ -48,7 +48,7 @@ export function PropertyCard({ property }: { property: Property }) {
             />
           )}
           <div className="absolute top-3 left-3 bg-background/80 text-foreground px-2 py-1 text-xs font-semibold rounded-md backdrop-blur-sm">
-            {property.type}
+            {property.category}
           </div>
           <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/60 to-transparent" />
         </div>
