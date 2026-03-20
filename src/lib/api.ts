@@ -131,9 +131,20 @@ export interface PaginatedProperties {
 export async function getProperties(params?: Record<string, string | undefined>): Promise<PaginatedProperties> {
     try {
         const queryParams = new URLSearchParams();
+        
+        // Normalize 3-tier pillars
+        const transactionType = params?.transactionType || params?.purpose || 'SALE';
+        const propertyType = params?.propertyType || params?.group || 'RESIDENTIAL';
+        const category = params?.category || params?.types || '';
+
+        queryParams.set('transactionType', transactionType.toUpperCase());
+        queryParams.set('propertyType', propertyType.toUpperCase());
+        if (category) queryParams.set('category', category);
+
+        // Add other filters
         if (params) {
             for (const [key, value] of Object.entries(params)) {
-                if (value !== undefined && value !== '') {
+                if (value !== undefined && value !== '' && !['transactionType', 'purpose', 'propertyType', 'group', 'category', 'types'].includes(key)) {
                     queryParams.append(key, value);
                 }
             }

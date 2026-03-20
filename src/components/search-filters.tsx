@@ -58,6 +58,7 @@ export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
     const [maxPrice, setMaxPrice] = useState('');
     const [minArea, setMinArea] = useState('');
     const [maxArea, setMaxArea] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState<string>('');
     const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
     const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
     const [bedrooms, setBedrooms] = useState<string>('');
@@ -107,8 +108,15 @@ export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
         setMinArea(searchParams.get('minArea') || '');
         setMaxArea(searchParams.get('maxArea') || '');
         
-        const types = searchParams.get('types');
-        setSelectedTypes(types ? types.split(',') : []);
+        const types = searchParams.get('types') || searchParams.get('category');
+        if (types) {
+            const typesArray = types.split(',');
+            setSelectedTypes(typesArray);
+            setSelectedCategory(typesArray.length === 1 ? typesArray[0] : 'MULTIPLE');
+        } else {
+            setSelectedTypes([]);
+            setSelectedCategory('');
+        }
         
         const ams = searchParams.get('amenities');
         setSelectedAmenities(ams ? ams.split(',') : []);
@@ -131,20 +139,33 @@ export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
         }, 500);
 
         return () => clearTimeout(timer);
-    }, [search, minPrice, maxPrice, minArea, maxArea, selectedTypes, selectedAmenities, bedrooms, bathrooms, purpose]);
+    }, [search, minPrice, maxPrice, minArea, maxArea, selectedCategory, selectedAmenities, bedrooms, bathrooms, purpose, propertyGroup]);
 
     const handlePurposeChange = (val: string) => {
         setPurpose(val);
         setPurposeModified(true);
         setHasInteracted(true);
+        // Reset category when purpose/group changes significantly if desired, 
+        // but for now we keep it and just filter the UI
     };
 
+    const handleCategoryChange = (val: string) => {
+        setHasInteracted(true);
+        if (val === 'ALL' || val === '') {
+            setSelectedCategory('');
+            setSelectedTypes([]);
+        } else {
+            setSelectedCategory(val);
+            setSelectedTypes([val]);
+        }
+    };
     const handleReset = () => {
         setSearch('');
         setMinPrice('');
         setMaxPrice('');
         setMinArea('');
         setMaxArea('');
+        setSelectedCategory('');
         setSelectedTypes([]);
         setSelectedAmenities([]);
         setBedrooms('');
@@ -164,22 +185,28 @@ export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
         // Property Group in params if not obvious from path
         if (propertyGroup === 'commercial') params.set('group', 'commercial');
 
-        // Categorical Routing Logic
-        let basePurpose = purpose;
-        if (purpose === 'off-plan') basePurpose = 'buy';
-        
+        // Property Group
+        params.set('group', propertyGroup);
+
+        // Transaction Type
+        const transactionType = purpose === 'rent' ? 'RENT' : 'SALE';
+        params.set('transactionType', transactionType);
+
+        // Core Categorical Routing Logic
         let targetPath = purposeModified ? `/${purpose}` : (pathname === '/' ? `/${purpose}` : pathname);
         
-        // If it's commercial, we use /commercial as base or /buy?group=commercial
         if (propertyGroup === 'commercial' && (pathname === '/' || purposeModified)) {
             targetPath = '/commercial';
         }
 
-        if (selectedTypes.length === 1 && (purpose === 'buy' || purpose === 'rent')) {
-            const cat = selectedTypes[0].toLowerCase().replace(/\s+/g, '-') + (selectedTypes[0].toLowerCase().endsWith('s') ? '' : 's');
-            targetPath = `/${purpose}/${cat}`;
-        } else if (selectedTypes.length > 0) {
-            params.set('types', selectedTypes.join(','));
+        if (selectedTypes.length > 0) {
+            params.set('category', selectedTypes.join(','));
+            // If it's a major single category and purpose is buy/rent, use pretty URL
+            if (selectedTypes.length === 1 && ['Apartment', 'Villa', 'Townhouse', 'Penthouse'].includes(selectedTypes[0]) && (purpose === 'buy' || purpose === 'rent') && propertyGroup === 'residential') {
+                const catSlug = selectedTypes[0].toLowerCase() + (selectedTypes[0].endsWith('s') ? '' : 's');
+                targetPath = `/${purpose}/${catSlug}`;
+                params.delete('category'); 
+            }
         }
 
         if (selectedAmenities.length > 0) params.set('amenities', selectedAmenities.join(','));
@@ -192,9 +219,11 @@ export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
 
     const toggleType = (type: string) => {
         setHasInteracted(true);
-        setSelectedTypes(prev => 
-            prev.includes(type) ? prev.filter(t => t !== type) : [...prev, type]
-        );
+        setSelectedTypes(prev => {
+            const next = prev.includes(type) ? prev.filter(t => t !== type) : [...prev, type];
+            setSelectedCategory(next.length === 1 ? next[0] : (next.length > 1 ? 'MULTIPLE' : ''));
+            return next;
+        });
     };
 
     const toggleAmenity = (amenity: string) => {
@@ -255,6 +284,32 @@ export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
                                     onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                                 />
                             </div>
+
+                            <Separator orientation="vertical" className="h-6 hidden sm:block" />
+
+                            {/* Category Select */}
+                            <Select 
+                                value={selectedCategory} 
+                                onValueChange={handleCategoryChange}
+                            >
+                                <SelectTrigger className="w-auto text-foreground md:w-[150px] font-bold focus:ring-0 border-0 focus:ring-offset-0 h-auto py-3 pl-4 pr-2 text-base">
+                                    <SelectValue placeholder="Category" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="ALL">All Categories</SelectItem>
+                                    {selectedCategory === 'MULTIPLE' && <SelectItem value="MULTIPLE">Multiple Selected</SelectItem>}
+                                    {propertyTypes
+                                        .filter(type => {
+                                            const key = `${propertyGroup === 'commercial' ? 'Commercial' : 'Residential'}_${purpose === 'rent' ? 'Rent' : 'Sell'}`;
+                                            const validTypes = PROPERTY_TYPES_MAPPING[key] || [];
+                                            return validTypes.includes(type);
+                                        })
+                                        .map(type => (
+                                            <SelectItem key={type} value={type}>{type}</SelectItem>
+                                        ))
+                                    }
+                                </SelectContent>
+                            </Select>
 
                             <Separator orientation="vertical" className="h-6 hidden sm:block" />
 

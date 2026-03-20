@@ -33,7 +33,7 @@ export default async function BuyPage(props: BuyPageProps) {
     maxPrice,
     minArea,
     maxArea,
-    category: types,
+    category: types || (typeof searchParams.category === 'string' ? searchParams.category : undefined),
     bedrooms,
     bathrooms
   });
@@ -48,10 +48,10 @@ export default async function BuyPage(props: BuyPageProps) {
         </div>
       </div>
       <div className="w-full px-4 sm:px-6 lg:px-8">
-        <ResultsHeader title="Properties for Sale in Dubai" resultsCount={saleProperties.length}>
+        <ResultsHeader title={`${group === 'COMMERCIAL' ? 'Commercial ' : 'Residential '}Properties for Sale`} resultsCount={saleProperties.length}>
           <h1 className="bg-muted inline-flex items-center gap-2 text-foreground font-bold text-base tracking-tight mb-4 p-3 rounded-lg">
               <Home className="h-4 w-4" />
-              <span>Properties for Sale</span>
+              <span>{types ? types : (group === 'COMMERCIAL' ? 'Commercial' : 'Properties')} for Sale</span>
           </h1>
         </ResultsHeader>
       </div>

@@ -48,7 +48,7 @@ export default async function OffPlanPage(props: OffPlanPageProps) {
         <ResultsHeader title="Off-Plan Properties in Dubai" resultsCount={offPlanProperties.length}>
           <h1 className="bg-muted inline-flex items-center gap-2 text-foreground font-bold text-base tracking-tight mb-4 p-3 rounded-lg">
             <ClipboardList className="h-4 w-4" />
-            <span>Off-Plan Properties</span>
+            <span>{types ? types : 'Off-Plan Properties'}</span>
           </h1>
         </ResultsHeader>
       </div>

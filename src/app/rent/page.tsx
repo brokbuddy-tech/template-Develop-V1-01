@@ -33,7 +33,7 @@ export default async function RentPage(props: RentPageProps) {
     maxPrice,
     minArea,
     maxArea,
-    category: types,
+    category: types || (typeof searchParams.category === 'string' ? searchParams.category : undefined),
     bedrooms,
     bathrooms
   });
@@ -48,10 +48,10 @@ export default async function RentPage(props: RentPageProps) {
         </div>
       </div>
       <div className="w-full px-4 sm:px-6 lg:px-8">
-        <ResultsHeader title="Properties for Rent in Dubai" resultsCount={rentProperties.length}>
+        <ResultsHeader title={`${group === 'COMMERCIAL' ? 'Commercial ' : 'Residential '}Properties for Rent`} resultsCount={rentProperties.length}>
           <h1 className="bg-muted inline-flex items-center gap-2 text-foreground font-bold text-base tracking-tight mb-4 p-3 rounded-lg">
             <Key className="h-4 w-4" />
-            <span>Properties for Rent</span>
+            <span>{types ? types : (group === 'COMMERCIAL' ? 'Commercial' : 'Properties')} for Rent</span>
           </h1>
         </ResultsHeader>
       </div>
