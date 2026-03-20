@@ -57,7 +57,7 @@ export function PropertyCard({ property }: { property: Property }) {
           <div>
             {/* Property Details */}
             <h3 className="font-bold text-base leading-tight">
-              {property.bedrooms > 0 ? `${property.bedrooms} Bed ` : ''}{property.type} For {property.purpose} In {property.location}
+              {property.bedrooms > 0 ? `${property.bedrooms} Bed ` : ''}{property.category} For {property.purpose} In {property.location}
             </h3>
             <div className="flex items-center gap-2 mt-2">
               <MapPin className="h-4 w-4 text-muted-foreground flex-shrink-0" />

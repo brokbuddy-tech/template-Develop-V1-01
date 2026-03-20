@@ -5,27 +5,58 @@ import { Property } from './types';
 const API_BASE_URL = (((globalThis as any).process?.env?.NEXT_PUBLIC_API_URL) || 'http://localhost:4000') + '/api';
 const ORG_SLUG = 'skyline-realty';
 
+export const PROPERTY_TYPES_MAPPING: Record<string, string[]> = {
+    Residential_Sell: [
+        'Apartment', 'Townhouse', 'Villa Compound', 'Land', 'Building', 'Villa', 'Penthouse',
+        'Hotel Apartment', 'Floor', 'Mansion', 'Studio', 'Duplex Apartment', 'Residential Building',
+        'Residential Floor', 'Bungalow', 'Full Floor', 'Half Floor', 'Compound'
+    ],
+    Residential_Rent: [
+        'Apartment', 'Townhouse', 'Villa Compound', 'Land', 'Building', 'Villa', 'Penthouse',
+        'Hotel Apartment', 'Residential Floor', 'Mansion', 'Residential Building', 'Whole building',
+        'Bungalow', 'Duplex', 'Bulk Rent unit'
+    ],
+    Commercial_Sell: [
+        'Office', 'Warehouse', 'Retail', 'Villa', 'Land', 'Building', 'Industrial Land', 'Showroom',
+        'Bungalow', 'Shop', 'Labour Camp', 'Bulk Unit', 'Floor', 'Mixed Use Land', 'Factory',
+        'Other Commercial', 'Commercial Floor', 'Commercial Building', 'Commercial Villa',
+        'Staff Accommodation', 'Business Center', 'Farm', 'Co-working Space'
+    ],
+    Commercial_Rent: [
+        'Office', 'Warehouse', 'Villa', 'Land', 'Building', 'Industrial Land', 'Showroom', 'Shop',
+        'Labour Camp', 'Bulk Unit', 'Floor', 'Factory', 'Mixed Use Land', 'Business Center',
+        'Co-Working space', 'Farm', 'Staff Accommodation', 'Commercial Floor', 'Commercial Villa',
+        'Half Floor', 'Full floor', 'Bungalow'
+    ],
+};
+
 /**
  * Maps a backend listing object to the frontend Property type.
  */
 function mapListingToProperty(listing: any): Property {
     // Determine purpose from transactionType
-    let purpose: 'Buy' | 'Rent' = 'Buy';
-    if (listing.transactionType?.toUpperCase() === 'RENT') {
-        purpose = 'Rent';
-    }
+    const isRent = listing.transactionType?.toUpperCase() === 'RENT';
+    const purpose: 'Buy' | 'Rent' = isRent ? 'Rent' : 'Buy';
+    const isCommercial = listing.propertyType?.toUpperCase() === 'COMMERCIAL';
 
-    // Determine type from propertyType
+    // Get the original category
+    const category = listing.category || 'Apartment';
+    
+    // Fallback classification logic
     let type: Property['type'] = 'Apartment';
-    const rawType = listing.propertyType?.toUpperCase() || '';
-    if (rawType.includes('VILLA')) type = 'Villa';
-    else if (rawType.includes('TOWNHOUSE')) type = 'Townhouse';
-    else if (rawType.includes('PENTHOUSE')) type = 'Penthouse';
-    else if (rawType.includes('PLOT')) type = 'Plot';
-    else if (rawType.includes('STUDIO')) type = 'Studio';
-    else if (rawType.includes('OFFICE')) type = 'Office';
-    else if (rawType.includes('RETAIL')) type = 'Retail';
-    else if (rawType.includes('INDUSTRIAL')) type = 'Industrial';
+    const normalizedCategory = category.trim();
+
+    // Mapping logic to core types for icons/filters
+    const cat = normalizedCategory.toLowerCase();
+    if (cat.includes('villa') || cat.includes('mansion') || cat.includes('bungalow') || cat.includes('compound')) type = 'Villa';
+    else if (cat.includes('townhouse')) type = 'Townhouse';
+    else if (cat.includes('penthouse')) type = 'Penthouse';
+    else if (cat.includes('plot') || cat.includes('land')) type = 'Plot';
+    else if (cat.includes('studio')) type = 'Studio';
+    else if (cat.includes('office') || cat.includes('business') || cat.includes('center')) type = 'Office';
+    else if (cat.includes('retail') || cat.includes('shop') || cat.includes('showroom')) type = 'Retail';
+    else if (cat.includes('industrial') || cat.includes('warehouse') || cat.includes('factory')) type = 'Industrial';
+    else if (cat.includes('apartment') || cat.includes('floor') || cat.includes('building')) type = 'Apartment';
 
     // Get primary image
     const imageId = (listing.images && listing.images.length > 0) 
@@ -41,7 +72,7 @@ function mapListingToProperty(listing: any): Property {
         id: listing.id,
         name: listing.title || 'Untitled Property',
         type,
-        category: listing.category || type,
+        category,
         purpose,
         status: listing.readiness?.toUpperCase() === 'OFFPLAN' ? 'Off-plan' : 'Ready',
         price: `${listing.currency || 'AED'} ${listing.price?.toLocaleString() || 'POA'}`,
