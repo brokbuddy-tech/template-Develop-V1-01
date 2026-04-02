@@ -2,7 +2,7 @@ import { Property } from './types';
 
 // Assuming the API is running locally on port 4000 as per backend configuration.
 // In a real production setup, this would be an environment variable.
-const API_BASE_URL = (((globalThis as any).process?.env?.NEXT_PUBLIC_API_URL) || 'http://localhost:4000') + '/api';
+const API_BASE_URL = (((globalThis as any).process?.env?.NEXT_PUBLIC_API_URL) || 'http://localhost:4000/api');
 const ORG_SLUG = 'skyline-realty';
 
 export const PROPERTY_TYPES_MAPPING: Record<string, string[]> = {
@@ -82,7 +82,7 @@ function mapListingToProperty(listing: any): Property {
     };
 
     const coreType = getCoreType(category);
-    
+
     // Fallback logic for badge if we were using type
     // but better to just use category in the UI for precision.
 
