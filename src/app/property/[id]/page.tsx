@@ -12,6 +12,7 @@ import { PropertyCard } from '@/components/property-card';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import Image from 'next/image';
 import { getPropertyById, getProperties } from '@/lib/api';
+import { LocationMap } from '@/components/location-map';
 
 function Stat({ icon: Icon, value, label }: { icon: React.ElementType, value: string | number, label: string }) {
     return (
@@ -138,6 +139,18 @@ export default async function PropertyDetailPage(props: { params: Promise<{ id: 
                         )}
 
                         <MortgageCalculator propertyPriceString={prop.price} />
+
+                        <Separator className="my-8" />
+
+                        <div>
+                            <h2 className="text-2xl font-bold mb-4">Location</h2>
+                            <LocationMap
+                                latitude={prop.latitude}
+                                longitude={prop.longitude}
+                                locationLabel={prop.location}
+                                addressLabel={prop.mapAddress}
+                            />
+                        </div>
 
                         <Separator className="my-8" />
 

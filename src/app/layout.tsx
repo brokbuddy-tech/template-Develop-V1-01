@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import React from 'react';
+import 'leaflet/dist/leaflet.css';
 import './globals.css';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';

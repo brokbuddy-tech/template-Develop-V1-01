@@ -25,6 +25,9 @@ export type Property = {
   areaSqFt: number;
   imageId: string;
   location: string;
+  mapAddress?: string;
+  latitude?: number | null;
+  longitude?: number | null;
   agent?: PropertyAgent;
   description: string;
   amenities: string[];

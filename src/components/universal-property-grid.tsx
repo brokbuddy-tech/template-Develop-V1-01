@@ -1,6 +1,7 @@
 'use client';
 
 import { useListingSearch, ListingSearchFilters } from '@/hooks/use-listing-search';
+import { mapListingToProperty } from '@/lib/api';
 import { PropertyCard } from '@/components/property-card';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -48,9 +49,11 @@ export function UniversalPropertyGrid({ initialPreset }: UniversalPropertyGridPr
     return (
         <div className="space-y-12">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {properties.map((property: any) => (
-                    <PropertyCard key={property.id} property={property} />
-                ))}
+                {properties.map((property: any) => {
+                    const normalizedProperty = mapListingToProperty(property);
+
+                    return <PropertyCard key={normalizedProperty.id} property={normalizedProperty} />;
+                })}
             </div>
 
             {total > (page * limit) && (

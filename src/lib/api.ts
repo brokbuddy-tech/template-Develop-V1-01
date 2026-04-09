@@ -3,7 +3,7 @@ import { Property } from './types';
 // Assuming the API is running locally on port 4000 as per backend configuration.
 // In a real production setup, this would be an environment variable.
 const API_BASE_URL = (((globalThis as any).process?.env?.NEXT_PUBLIC_API_URL) || 'http://localhost:4000/api');
-const ORG_SLUG = 'skyline-realty';
+export const ORG_SLUG = 'skyline-realty';
 
 export const PROPERTY_TYPES_MAPPING: Record<string, string[]> = {
     Residential_Sell: [
@@ -49,23 +49,66 @@ export function getCategoryFromSlug(slug: string): string {
     return slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ').replace(/s$/, '');
 }
 
+function readListingFields(listing: any): Record<string, unknown> {
+    return listing?.fields && typeof listing.fields === 'object'
+        ? listing.fields as Record<string, unknown>
+        : {};
+}
+
+function getStringValue(...values: unknown[]) {
+    for (const value of values) {
+        if (typeof value === 'string' && value.trim().length > 0) {
+            return value.trim();
+        }
+    }
+
+    return undefined;
+}
+
+function getNumberValue(...values: unknown[]) {
+    for (const value of values) {
+        if (typeof value === 'number' && Number.isFinite(value)) {
+            return value;
+        }
+
+        if (typeof value === 'string' && value.trim().length > 0) {
+            const parsed = Number(value);
+            if (Number.isFinite(parsed)) {
+                return parsed;
+            }
+        }
+    }
+
+    return undefined;
+}
+
+function getCoordinatePair(listing: any, fields: Record<string, unknown>) {
+    const latitude = getNumberValue(listing.latitude, listing.lat, fields.latitude, fields.lat);
+    const longitude = getNumberValue(listing.longitude, listing.lng, fields.longitude, fields.lng);
+
+    if (latitude === undefined || longitude === undefined) {
+        return { latitude: null, longitude: null };
+    }
+
+    return { latitude, longitude };
+}
+
 /**
  * Maps a backend listing object to the frontend Property type.
  */
-function mapListingToProperty(listing: any): Property {
+export function mapListingToProperty(listing: any): Property {
+    const fields = readListingFields(listing);
+
     // Determine purpose from transactionType
     const isRent = listing.transactionType?.toUpperCase() === 'RENT';
     const purpose: 'Buy' | 'Rent' = isRent ? 'Rent' : 'Buy';
     const isCommercial = listing.propertyType?.toUpperCase() === 'COMMERCIAL';
 
     // Get the original category
-    const category = listing.category;
+    const category = getStringValue(listing.category, fields.category, fields.type) || 'Property';
 
     // Determine propertyGroup and sync purpose
     let propertyGroup: 'Residential' | 'Commercial' = isCommercial ? 'Commercial' : 'Residential';
-
-    // Determine type from category
-    let type = category; // Default to category name
 
     // Helper to determine core type for icons/filtering
     const getCoreType = (catName: string): string => {
@@ -88,13 +131,53 @@ function mapListingToProperty(listing: any): Property {
 
     // Get primary image
     const imageId = (listing.images && listing.images.length > 0)
-        ? listing.images[0].url
+        ? (listing.images[0].url || listing.images[0].cdnUrl || listing.images[0].mediumUrl || listing.images[0].thumbnailUrl)
         : 'property-1'; // fallback
 
     // Map gallery images
     const galleryImageIds = listing.images
-        ? listing.images.map((img: any) => img.url)
+        ? listing.images
+            .map((img: any) => img.url || img.cdnUrl || img.mediumUrl || img.thumbnailUrl)
+            .filter(Boolean)
         : [];
+    const amenities = Array.isArray(listing.amenities)
+        ? listing.amenities
+        : Array.isArray(fields.amenities)
+            ? fields.amenities
+            : typeof listing.amenities === 'string'
+                ? listing.amenities.split(',')
+                : [];
+    const { latitude, longitude } = getCoordinatePair(listing, fields);
+    const location = getStringValue(
+        listing.location,
+        listing.area,
+        listing.emirate,
+        listing.subArea,
+        listing.address,
+        listing.streetAddress,
+        fields.location,
+        fields.area,
+        fields.community,
+        fields.subCommunity,
+        fields.city,
+    ) || 'Dubai';
+    const mapAddress = getStringValue(
+        listing.streetAddress,
+        listing.address,
+        fields.streetAddress,
+        fields.address,
+        fields.tower,
+        fields.towerOrBuilding,
+    );
+    const priceValue = getNumberValue(listing.price, fields.price) || 0;
+    const builtUpArea = getNumberValue(
+        listing.builtUpArea,
+        listing.size,
+        listing.areaSqFt,
+        fields.builtUpArea,
+        fields.size,
+        fields.areaSqFt,
+    ) || 0;
 
     return {
         id: listing.id,
@@ -104,15 +187,18 @@ function mapListingToProperty(listing: any): Property {
         propertyGroup,
         purpose,
         status: listing.readiness?.toUpperCase() === 'OFFPLAN' ? 'Off-plan' : 'Ready',
-        price: `${listing.currency || 'AED'} ${listing.price?.toLocaleString() || 'POA'}`,
-        priceNumeric: parseFloat(listing.price) || 0,
-        bedrooms: parseInt(listing.bedrooms) || 0,
-        bathrooms: parseInt(listing.bathrooms) || 0,
-        areaSqFt: parseFloat(listing.builtUpArea) || parseFloat(listing.size) || parseFloat(listing.areaSqFt) || 0,
+        price: `${listing.currency || 'AED'} ${priceValue.toLocaleString() || 'POA'}`,
+        priceNumeric: priceValue,
+        bedrooms: getNumberValue(listing.bedrooms, fields.bedrooms) || 0,
+        bathrooms: getNumberValue(listing.bathrooms, fields.bathrooms) || 0,
+        areaSqFt: builtUpArea,
         imageId,
-        location: listing.location || listing.area || listing.emirate || 'Dubai',
-        description: listing.description || '',
-        amenities: listing.amenities ? (Array.isArray(listing.amenities) ? listing.amenities : listing.amenities.split(',')) : [],
+        location,
+        mapAddress,
+        latitude,
+        longitude,
+        description: getStringValue(listing.description, fields.description) || '',
+        amenities: amenities.filter((item: unknown): item is string => typeof item === 'string' && item.trim().length > 0),
         galleryImageIds,
         agent: listing.broker ? {
             name: `${listing.broker.firstName} ${listing.broker.lastName}`,
@@ -278,4 +364,3 @@ export async function getSellerTestimonials(): Promise<any[]> {
         return [];
     }
 }
-
