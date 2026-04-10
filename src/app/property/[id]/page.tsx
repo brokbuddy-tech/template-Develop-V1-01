@@ -81,7 +81,11 @@ export default async function PropertyDetailPage(props: { params: Promise<{ id: 
     return (
         <div className="bg-background">
             <div className="w-full">
-                <PropertyGallery galleryImageIds={prop.galleryImageIds} />
+                <PropertyGallery
+                    propertyName={prop.name}
+                    galleryImages={prop.galleryImages}
+                    galleryImageIds={prop.galleryImageIds}
+                />
             </div>
             <div className="w-full px-4 sm:px-6 lg:px-8 py-8">
                 <div className="mb-4">

@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import Link from 'next/link';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -8,6 +7,7 @@ import { BedDouble, Bath, Square, MapPin, Phone, MessageCircle } from 'lucide-re
 import type { Property } from '@/lib/types';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { ProgressiveImage } from '@/components/progressive-image';
 
 const Stat = ({ icon: Icon, value }: { icon: React.ElementType; value: React.ReactNode }) => (
   <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
@@ -17,10 +17,7 @@ const Stat = ({ icon: Icon, value }: { icon: React.ElementType; value: React.Rea
 );
 
 export function PropertyCard({ property }: { property: Property }) {
-  const isMockImage = property.imageId.startsWith('property-');
-  const imageUrl = isMockImage
-    ? PlaceHolderImages.find(p => p.id === property.imageId)?.imageUrl
-    : property.imageId;
+  const imageSource = property.primaryImage || property.imageId;
 
   const isMockAgent = property.agent?.avatarId?.startsWith('author-');
   const agentImageUrl = isMockAgent
@@ -39,12 +36,13 @@ export function PropertyCard({ property }: { property: Property }) {
       <Card className="overflow-hidden h-full flex flex-col rounded-xl border-border/50 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
         {/* Media Header */}
         <div className="relative aspect-[16/9] w-full">
-          {imageUrl && (
-            <Image
-              src={imageUrl}
+          {imageSource && (
+            <ProgressiveImage
+              source={imageSource}
               alt={property.name}
               fill
-              className="object-cover transition-transform duration-300 group-hover:scale-105"
+              sizes="(max-width: 768px) 100vw, 33vw"
+              imageClassName="object-cover transition-transform duration-300 group-hover:scale-105"
             />
           )}
           <div className="absolute top-3 left-3 bg-background/80 text-foreground px-2 py-1 text-xs font-semibold rounded-md backdrop-blur-sm">

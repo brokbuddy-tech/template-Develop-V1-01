@@ -1,4 +1,4 @@
-import { Property } from './types';
+import type { Property, PropertyImageSource } from './types';
 
 // Assuming the API is running locally on port 4000 as per backend configuration.
 // In a real production setup, this would be an environment variable.
@@ -72,27 +72,44 @@ function isRenderableImage(image?: ListingImage | null): boolean {
     return true;
 }
 
-function normalizeImageUrl(image?: ListingImage | null): string | null {
+function normalizeImageUrl(image?: ListingImage | null): PropertyImageSource | null {
     if (!image || !isRenderableImage(image)) return null;
 
     const storageUrl = buildStorageImageUrl(image.gcsPath);
     const originalUrl = normalizeAssetUrl(image.url) || storageUrl;
     const isReady = image.status?.toUpperCase() === 'READY';
 
+    const thumbnailUrl =
+        normalizeAssetUrl(image.thumbnailUrl) ||
+        normalizeAssetUrl(image.mediumUrl) ||
+        normalizeAssetUrl(image.cdnUrl) ||
+        originalUrl;
     const preferredUrl = isReady
         ? normalizeAssetUrl(image.mediumUrl) ||
           normalizeAssetUrl(image.cdnUrl) ||
-          normalizeAssetUrl(image.thumbnailUrl) ||
+          thumbnailUrl ||
           originalUrl
         : originalUrl ||
           normalizeAssetUrl(image.mediumUrl) ||
           normalizeAssetUrl(image.thumbnailUrl) ||
           normalizeAssetUrl(image.cdnUrl);
+    const originalDisplayUrl = normalizeAssetUrl(image.cdnUrl) || originalUrl || preferredUrl;
+    const src = preferredUrl?.trim();
 
-    return preferredUrl?.trim() || null;
+    if (!src) return null;
+
+    return {
+        id: image.id || null,
+        src,
+        thumbnailSrc: thumbnailUrl?.trim() || src,
+        originalSrc: originalDisplayUrl?.trim() || src,
+        hint: 'property',
+        status: image.status || null,
+        unoptimized: true,
+    };
 }
 
-function normalizeImages(images?: ListingImage[] | null): string[] {
+function normalizeImages(images?: ListingImage[] | null): PropertyImageSource[] {
     if (!images?.length) return [];
     return [...images]
         .filter(isRenderableImage)
@@ -105,7 +122,7 @@ function normalizeImages(images?: ListingImage[] | null): string[] {
             return String(left.id || '').localeCompare(String(right.id || ''));
         })
         .map(normalizeImageUrl)
-        .filter((url): url is string => Boolean(url));
+        .filter((url): url is PropertyImageSource => Boolean(url));
 }
 
 export const PROPERTY_TYPES_MAPPING: Record<string, string[]> = {
@@ -234,8 +251,8 @@ export function mapListingToProperty(listing: any): Property {
 
     // Normalize all images using the robust pipeline
     const allImages = normalizeImages(listing.images);
-    const imageId = allImages.length > 0 ? allImages[0] : 'property-1';
-    const galleryImageIds = allImages;
+    const imageId = allImages.length > 0 ? allImages[0].src : 'property-1';
+    const galleryImageIds = allImages.map((image) => image.src);
     const amenities = Array.isArray(listing.amenities)
         ? listing.amenities
         : Array.isArray(fields.amenities)
@@ -289,6 +306,7 @@ export function mapListingToProperty(listing: any): Property {
         bathrooms: getNumberValue(listing.bathrooms, fields.bathrooms) || 0,
         areaSqFt: builtUpArea,
         imageId,
+        primaryImage: allImages[0] ?? null,
         location,
         mapAddress,
         latitude,
@@ -296,6 +314,7 @@ export function mapListingToProperty(listing: any): Property {
         description: getStringValue(listing.description, fields.description) || '',
         amenities: amenities.filter((item: unknown): item is string => typeof item === 'string' && item.trim().length > 0),
         galleryImageIds,
+        galleryImages: allImages,
         agent: listing.broker ? {
             name: `${listing.broker.firstName} ${listing.broker.lastName}`,
             avatarId: listing.broker.avatar || 'author-1',

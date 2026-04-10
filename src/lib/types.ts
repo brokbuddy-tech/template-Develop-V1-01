@@ -1,6 +1,20 @@
 
 import type { ImagePlaceholder } from './placeholder-images';
 
+export type PropertyImageSource = {
+  id?: string | null;
+  src: string;
+  thumbnailSrc?: string | null;
+  originalSrc?: string | null;
+  alt?: string;
+  hint?: string;
+  status?: string | null;
+  isPlaceholder?: boolean;
+  unoptimized?: boolean;
+};
+
+export type PropertyImage = string | PropertyImageSource;
+
 export type PropertyAgent = {
   name: string;
   avatarId: string;
@@ -24,6 +38,7 @@ export type Property = {
   bathrooms: number;
   areaSqFt: number;
   imageId: string;
+  primaryImage?: PropertyImage | null;
   location: string;
   mapAddress?: string;
   latitude?: number | null;
@@ -32,6 +47,7 @@ export type Property = {
   description: string;
   amenities: string[];
   galleryImageIds: string[];
+  galleryImages?: PropertyImage[];
 };
 
 export type Area = {
