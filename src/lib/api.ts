@@ -302,13 +302,19 @@ export async function getPropertyById(id: string): Promise<Property | null> {
 
 export async function getOrgConfig(): Promise<{ categories: string[], amenities: string[] }> {
     try {
-        const res = await fetch(`${API_BASE_URL}/public/org/${ORG_SLUG}/config`, {
-            next: { revalidate: 3600 } // Revalidate config every hour
-        } as any);
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000);
+        const fetchOptions: RequestInit = { signal: controller.signal };
+        // next.revalidate is only valid on the server side
+        if (typeof window === 'undefined') {
+            (fetchOptions as any).next = { revalidate: 3600 };
+        }
+        const res = await fetch(`${API_BASE_URL}/public/org/${ORG_SLUG}/config`, fetchOptions);
+        clearTimeout(timeoutId);
         if (!res.ok) return { categories: [], amenities: [] };
         return await res.json();
     } catch (error) {
-        console.error('Error fetching org config:', error);
+        // Silently return defaults — the API may be unreachable from the browser
         return { categories: [], amenities: [] };
     }
 }
