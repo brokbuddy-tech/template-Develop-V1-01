@@ -5,6 +5,109 @@ import { Property } from './types';
 const API_BASE_URL = (((globalThis as any).process?.env?.NEXT_PUBLIC_API_URL) || 'http://localhost:4000/api');
 export const ORG_SLUG = 'skyline-realty';
 
+/** Timeout-safe wrapper around fetch. Returns the Response – never throws. */
+async function safeFetch(url: string, extraOpts?: RequestInit & { next?: any }, timeoutMs = 8000): Promise<Response> {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    const opts: RequestInit = { ...extraOpts, signal: controller.signal };
+    // next.revalidate is only valid on the server side
+    if (typeof window !== 'undefined') {
+        delete (opts as any).next;
+    }
+    try {
+        const res = await fetch(url, opts);
+        return res;
+    } catch (err) {
+        // Return a synthetic 503 when the API is unreachable so callers see
+        // res.ok === false instead of an unhandled throw that triggers the
+        // Next.js dev error overlay.
+        console.warn(`[API] Unreachable: ${url} – ${(err as Error).message}`);
+        return new Response(null, { status: 503, statusText: 'Service Unavailable' });
+    } finally {
+        clearTimeout(timer);
+    }
+}
+
+// ── Image normalization (ported from Skyline template) ─────────────────────
+
+type ListingImage = {
+    id?: string | null;
+    url?: string | null;
+    cdnUrl?: string | null;
+    mediumUrl?: string | null;
+    thumbnailUrl?: string | null;
+    gcsPath?: string | null;
+    format?: string | null;
+    category?: string | null;
+    order?: number | null;
+    status?: string | null;
+    isHero?: boolean | null;
+};
+
+function buildStorageImageUrl(gcsPath?: string | null): string | null {
+    if (!gcsPath) return null;
+    return `https://storage.googleapis.com/brokbuddy-listing-images/${gcsPath.replace(/^\/+/, '')}`;
+}
+
+function normalizeAssetUrl(value?: string | null): string | null {
+    const normalized = value?.trim();
+    if (!normalized) return null;
+    // Already absolute URL — return as-is
+    if (!normalized.startsWith('/')) return normalized;
+    // Relative URL — prefix with API origin so Next.js Image can resolve it
+    const apiOrigin = API_BASE_URL.replace(/\/api$/i, '');
+    try {
+        return new URL(normalized, apiOrigin).toString();
+    } catch {
+        return normalized;
+    }
+}
+
+function isRenderableImage(image?: ListingImage | null): boolean {
+    if (!image) return false;
+    const format = (image.format || '').toLowerCase();
+    const category = (image.category || '').toUpperCase();
+    if (category === 'TITLE_DEED') return false;
+    if (format === 'application/pdf' || format.endsWith('pdf')) return false;
+    return true;
+}
+
+function normalizeImageUrl(image?: ListingImage | null): string | null {
+    if (!image || !isRenderableImage(image)) return null;
+
+    const storageUrl = buildStorageImageUrl(image.gcsPath);
+    const originalUrl = normalizeAssetUrl(image.url) || storageUrl;
+    const isReady = image.status?.toUpperCase() === 'READY';
+
+    const preferredUrl = isReady
+        ? normalizeAssetUrl(image.mediumUrl) ||
+          normalizeAssetUrl(image.cdnUrl) ||
+          normalizeAssetUrl(image.thumbnailUrl) ||
+          originalUrl
+        : originalUrl ||
+          normalizeAssetUrl(image.mediumUrl) ||
+          normalizeAssetUrl(image.thumbnailUrl) ||
+          normalizeAssetUrl(image.cdnUrl);
+
+    return preferredUrl?.trim() || null;
+}
+
+function normalizeImages(images?: ListingImage[] | null): string[] {
+    if (!images?.length) return [];
+    return [...images]
+        .filter(isRenderableImage)
+        .sort((left, right) => {
+            const heroDelta = Number(Boolean(right.isHero)) - Number(Boolean(left.isHero));
+            if (heroDelta !== 0) return heroDelta;
+            const orderDelta =
+                (left.order ?? Number.MAX_SAFE_INTEGER) - (right.order ?? Number.MAX_SAFE_INTEGER);
+            if (orderDelta !== 0) return orderDelta;
+            return String(left.id || '').localeCompare(String(right.id || ''));
+        })
+        .map(normalizeImageUrl)
+        .filter((url): url is string => Boolean(url));
+}
+
 export const PROPERTY_TYPES_MAPPING: Record<string, string[]> = {
     Residential_Sell: [
         'Apartment', 'Townhouse', 'Villa Compound', 'Land', 'Building', 'Villa', 'Penthouse',
@@ -129,17 +232,10 @@ export function mapListingToProperty(listing: any): Property {
     // Fallback logic for badge if we were using type
     // but better to just use category in the UI for precision.
 
-    // Get primary image
-    const imageId = (listing.images && listing.images.length > 0)
-        ? (listing.images[0].url || listing.images[0].cdnUrl || listing.images[0].mediumUrl || listing.images[0].thumbnailUrl)
-        : 'property-1'; // fallback
-
-    // Map gallery images
-    const galleryImageIds = listing.images
-        ? listing.images
-            .map((img: any) => img.url || img.cdnUrl || img.mediumUrl || img.thumbnailUrl)
-            .filter(Boolean)
-        : [];
+    // Normalize all images using the robust pipeline
+    const allImages = normalizeImages(listing.images);
+    const imageId = allImages.length > 0 ? allImages[0] : 'property-1';
+    const galleryImageIds = allImages;
     const amenities = Array.isArray(listing.amenities)
         ? listing.amenities
         : Array.isArray(fields.amenities)
@@ -242,8 +338,7 @@ export async function getProperties(params?: Record<string, string | undefined>)
         const queryString = queryParams.toString();
         const url = `${API_BASE_URL}/public/org/${ORG_SLUG}/listings${queryString ? `?${queryString}` : ''}`;
 
-        const res = await fetch(url, {
-            // Next.js caching optimization
+        const res = await safeFetch(url, {
             next: { revalidate: 60 }
         } as any);
 
@@ -284,7 +379,7 @@ export async function getProperties(params?: Record<string, string | undefined>)
 
 export async function getPropertyById(id: string): Promise<Property | null> {
     try {
-        const res = await fetch(`${API_BASE_URL}/public/listing/${id}`, {
+        const res = await safeFetch(`${API_BASE_URL}/public/listing/${id}`, {
             next: { revalidate: 60 }
         } as any);
 
@@ -302,15 +397,9 @@ export async function getPropertyById(id: string): Promise<Property | null> {
 
 export async function getOrgConfig(): Promise<{ categories: string[], amenities: string[] }> {
     try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 5000);
-        const fetchOptions: RequestInit = { signal: controller.signal };
-        // next.revalidate is only valid on the server side
-        if (typeof window === 'undefined') {
-            (fetchOptions as any).next = { revalidate: 3600 };
-        }
-        const res = await fetch(`${API_BASE_URL}/public/org/${ORG_SLUG}/config`, fetchOptions);
-        clearTimeout(timeoutId);
+        const res = await safeFetch(`${API_BASE_URL}/public/org/${ORG_SLUG}/config`, {
+            next: { revalidate: 3600 }
+        } as any, 5000);
         if (!res.ok) return { categories: [], amenities: [] };
         return await res.json();
     } catch (error) {
@@ -321,7 +410,7 @@ export async function getOrgConfig(): Promise<{ categories: string[], amenities:
 
 export async function getAreaGuides(): Promise<any[]> {
     try {
-        const res = await fetch(`${API_BASE_URL}/public/org/${ORG_SLUG}/area-guides`, {
+        const res = await safeFetch(`${API_BASE_URL}/public/org/${ORG_SLUG}/area-guides`, {
             next: { revalidate: 3600 }
         } as any);
         if (!res.ok) return [];
@@ -334,7 +423,7 @@ export async function getAreaGuides(): Promise<any[]> {
 
 export async function getTestimonials(): Promise<any[]> {
     try {
-        const res = await fetch(`${API_BASE_URL}/public/org/${ORG_SLUG}/testimonials`, {
+        const res = await safeFetch(`${API_BASE_URL}/public/org/${ORG_SLUG}/testimonials`, {
             next: { revalidate: 3600 }
         } as any);
         if (!res.ok) return [];
@@ -347,7 +436,7 @@ export async function getTestimonials(): Promise<any[]> {
 
 export async function getBlogs(): Promise<any[]> {
     try {
-        const res = await fetch(`${API_BASE_URL}/public/org/${ORG_SLUG}/blogs`, {
+        const res = await safeFetch(`${API_BASE_URL}/public/org/${ORG_SLUG}/blogs`, {
             next: { revalidate: 3600 }
         } as any);
         if (!res.ok) return [];
@@ -360,7 +449,7 @@ export async function getBlogs(): Promise<any[]> {
 
 export async function getSellerTestimonials(): Promise<any[]> {
     try {
-        const res = await fetch(`${API_BASE_URL}/public/org/${ORG_SLUG}/seller-testimonials`, {
+        const res = await safeFetch(`${API_BASE_URL}/public/org/${ORG_SLUG}/seller-testimonials`, {
             next: { revalidate: 3600 }
         } as any);
         if (!res.ok) return [];
