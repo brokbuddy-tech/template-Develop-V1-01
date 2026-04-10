@@ -1,4 +1,3 @@
-
 import type { ImagePlaceholder } from './placeholder-images';
 
 export type PropertyImageSource = {
@@ -15,9 +14,17 @@ export type PropertyImageSource = {
 
 export type PropertyImage = string | PropertyImageSource;
 
+export type PropertyMedia = {
+  url: string;
+  thumbnailUrl: string | null;
+  mediumUrl: string | null;
+  cdnUrl: string | null;
+};
+
 export type PropertyAgent = {
   name: string;
   avatarId: string;
+  avatarUrl?: string | null;
   title?: string;
   company?: string;
   orn?: string;
@@ -27,6 +34,7 @@ export type PropertyAgent = {
 export type Property = {
   id: string;
   name: string;
+  title?: string;
   type: string; // Dynamic based on category
   category: string;
   propertyGroup?: 'Residential' | 'Commercial';
@@ -37,6 +45,8 @@ export type Property = {
   bedrooms: number;
   bathrooms: number;
   areaSqFt: number;
+  builtUpArea?: number;
+  size?: number;
   imageId: string;
   primaryImage?: PropertyImage | null;
   location: string;
@@ -48,6 +58,7 @@ export type Property = {
   amenities: string[];
   galleryImageIds: string[];
   galleryImages?: PropertyImage[];
+  media?: PropertyMedia[];
 };
 
 export type Area = {
