@@ -51,9 +51,9 @@ function AgentContactCard({ agent }: { agent: any }) {
                 {agent.title && <p className="text-muted-foreground text-sm">{agent.title}</p>}
                 {agent.company && <p className="font-semibold mt-2">{agent.company}</p>}
                 {agent.orn && <p className="text-muted-foreground text-sm">ORN: {agent.orn}</p>}
-                
+
                 <Button variant="default" className="w-full mt-4">Contact</Button>
-                
+
                 {agent.propertyCount > 0 && (
                     <Link href="#" className="text-sm text-muted-foreground mt-2 block hover:underline">
                         {agent.propertyCount} properties more
@@ -77,10 +77,10 @@ export default async function PropertyDetailPage(props: { params: Promise<{ id: 
 
     const { properties: allProperties } = await getProperties();
     const relatedProperties = allProperties.filter(p => p.type === prop.type && p.id !== prop.id).slice(0, 6);
-    
+
     return (
         <div className="bg-background">
-            <div className="w-full">
+            <div className="w-full px-4 sm:px-6 lg:px-8 py-8">
                 <PropertyGallery
                     propertyName={prop.name}
                     galleryImages={prop.galleryImages}
@@ -95,7 +95,7 @@ export default async function PropertyDetailPage(props: { params: Promise<{ id: 
                 <div className="mb-4">
                     <p className="inline-block bg-muted/50 p-3 rounded-lg text-3xl font-bold text-primary">{prop.price}</p>
                 </div>
-                
+
                 <div className="mb-8">
                     <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">{prop.name}</h1>
                     <div className="flex items-center gap-2 mt-2 text-muted-foreground">
@@ -103,7 +103,7 @@ export default async function PropertyDetailPage(props: { params: Promise<{ id: 
                         <span>{prop.location}</span>
                     </div>
                 </div>
-                
+
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
                     <div className="lg:col-span-2">
                         <div>
@@ -117,18 +117,18 @@ export default async function PropertyDetailPage(props: { params: Promise<{ id: 
                         </div>
 
                         <Separator className="my-8" />
-                        
+
                         <div>
-                           <h2 className="text-2xl font-bold mb-4">Description</h2>
-                           <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">{prop.description}</p>
+                            <h2 className="text-2xl font-bold mb-4">Description</h2>
+                            <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">{prop.description}</p>
                         </div>
-                        
+
                         <Separator className="my-8" />
 
                         {prop.amenities && prop.amenities.length > 0 && (
                             <>
                                 <div>
-                                <h2 className="text-2xl font-bold mb-4">Amenities</h2>
+                                    <h2 className="text-2xl font-bold mb-4">Amenities</h2>
                                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                                         {prop.amenities.map(amenity => (
                                             <div key={amenity} className="flex items-center gap-2">
@@ -182,7 +182,7 @@ export default async function PropertyDetailPage(props: { params: Promise<{ id: 
 
                     <div className="lg:col-span-1">
                         <div className="sticky top-24 space-y-4">
-                           <AgentContactCard agent={prop.agent} />
+                            <AgentContactCard agent={prop.agent} />
                         </div>
                     </div>
                 </div>
@@ -201,11 +201,11 @@ export default async function PropertyDetailPage(props: { params: Promise<{ id: 
                             >
                                 <CarouselContent>
                                     {relatedProperties.map((p) => (
-                                    <CarouselItem key={p.id} className="md:basis-1/2 lg:basis-1/3">
-                                        <div className="p-1 h-full">
-                                        <PropertyCard property={p} />
-                                        </div>
-                                    </CarouselItem>
+                                        <CarouselItem key={p.id} className="md:basis-1/2 lg:basis-1/3">
+                                            <div className="p-1 h-full">
+                                                <PropertyCard property={p} />
+                                            </div>
+                                        </CarouselItem>
                                     ))}
                                 </CarouselContent>
                                 <CarouselPrevious className="ml-12" />

@@ -37,55 +37,54 @@ export function PropertyGallery({ galleryImages, galleryImageIds = [], propertyN
     }
 
     return (
-        <div>
-            <div className="relative aspect-video w-full overflow-hidden group">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 h-[400px]">
+            {/* LEFT - Main Image */}
+            <div className="relative md:col-span-2 h-full rounded-xl overflow-hidden">
                 <ProgressiveImage
-                    source={mainImage}
-                    alt={`${propertyName} image ${safeIndex + 1}`}
+                    source={images[0]}
+                    alt={`${propertyName} main image`}
                     fill
                     priority
                     sizes="100vw"
                     imageClassName="object-cover"
                 />
-                {images.length > 1 && (
-                    <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-between px-4">
-                        <button type="button" onClick={handlePrev} className="bg-white/50 hover:bg-white text-black rounded-full p-2" aria-label="Previous image">
-                            <ChevronLeft className="h-6 w-6" />
-                        </button>
-                        <button type="button" onClick={handleNext} className="bg-white/50 hover:bg-white text-black rounded-full p-2" aria-label="Next image">
-                            <ChevronRight className="h-6 w-6" />
-                        </button>
-                    </div>
-                )}
             </div>
-            {images.length > 1 && (
-                <div className="w-full px-4 sm:px-6 lg:px-8 mt-4">
-                    <div className="grid grid-cols-5 gap-2">
-                        {images.map((image, idx) => (
-                            <button
-                                key={idx}
-                                type="button"
-                                className={cn(
-                                    "relative aspect-video w-full overflow-hidden rounded-md cursor-pointer ring-2 ring-transparent hover:ring-primary transition-all",
-                                    safeIndex === idx && "ring-primary ring-offset-2"
-                                )}
-                                onClick={() => setMainImageIndex(idx)}
-                                aria-label={`Show image ${idx + 1}`}
-                                aria-pressed={safeIndex === idx}
-                            >
-                                <ProgressiveImage
-                                    source={image}
-                                    alt={`${propertyName} thumbnail ${idx + 1}`}
-                                    fill
-                                    sizes="20vw"
-                                    imageClassName="object-cover"
-                                />
-                                {safeIndex !== idx && <div className="absolute inset-0 bg-black/40 hover:bg-black/20 transition-colors" />}
-                            </button>
-                        ))}
-                    </div>
+
+            {/* RIGHT - Two Images */}
+            <div className="flex flex-col gap-3 h-full">
+                {/* Top Image */}
+                <div className="relative h-1/2 rounded-xl overflow-hidden">
+                    {images[1] && (
+                        <ProgressiveImage
+                            source={images[1]}
+                            alt={`${propertyName} image 2`}
+                            fill
+                            sizes="50vw"
+                            imageClassName="object-cover"
+                        />
+                    )}
                 </div>
-            )}
+
+                {/* Bottom Image */}
+                <div className="relative h-1/2 rounded-xl overflow-hidden">
+                    {images[2] && (
+                        <ProgressiveImage
+                            source={images[2]}
+                            alt={`${propertyName} image 3`}
+                            fill
+                            sizes="50vw"
+                            imageClassName="object-cover"
+                        />
+                    )}
+
+                    {/* Optional overlay count */}
+                    {images.length > 3 && (
+                        <div className="absolute bottom-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded">
+                            +{images.length - 3}
+                        </div>
+                    )}
+                </div>
+            </div>
         </div>
-    )
+    );
 }
