@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { cn } from '@/lib/utils';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import type { PropertyImage } from '@/lib/types';
@@ -106,13 +107,13 @@ export function PropertyGallery({ galleryImages, galleryImageIds = [], propertyN
                     )}
                 </div>
             </div>
-            {isOpen && (
-                <div className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center">
+            {isOpen && typeof document !== 'undefined' && createPortal(
+                <div className="fixed inset-0 z-[9999] bg-black/95 flex items-center justify-center">
 
                     {/* Close Button */}
                     <button
                         onClick={() => setIsOpen(false)}
-                        className="absolute top-6 left-6 text-white text-sm bg-black/50 px-4 py-2 rounded-lg"
+                        className="absolute top-6 left-6 text-white text-sm bg-black/50 px-4 py-2 rounded-lg z-50 hover:bg-black/70 transition-colors"
                     >
                         ← Back to gallery
                     </button>
@@ -153,7 +154,8 @@ export function PropertyGallery({ galleryImages, galleryImageIds = [], propertyN
                     <div className="absolute bottom-6 right-6 text-white text-sm bg-black/50 px-3 py-1 rounded">
                         {safeIndex + 1} / {images.length}
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
         </div>
     );
