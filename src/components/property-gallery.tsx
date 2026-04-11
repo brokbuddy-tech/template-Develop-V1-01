@@ -15,7 +15,7 @@ interface PropertyGalleryProps {
 export function PropertyGallery({ galleryImages, galleryImageIds = [], propertyName = 'Property' }: PropertyGalleryProps) {
     const [mainImageIndex, setMainImageIndex] = useState(0);
     const images = (galleryImages && galleryImages.length > 0 ? galleryImages : galleryImageIds).filter(Boolean);
-
+    const [isOpen, setIsOpen] = useState(false);
     useEffect(() => {
         if (mainImageIndex <= images.length - 1) return;
         setMainImageIndex(0);
@@ -35,11 +35,22 @@ export function PropertyGallery({ galleryImages, galleryImageIds = [], propertyN
     const handlePrev = () => {
         setMainImageIndex((prev) => (prev - 1 + images.length) % images.length);
     }
-
+    useEffect(() => {
+        const handleKey = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') setIsOpen(false);
+        };
+        window.addEventListener('keydown', handleKey);
+        return () => window.removeEventListener('keydown', handleKey);
+    }, []);
     return (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 h-[400px]">
             {/* LEFT - Main Image */}
-            <div className="relative md:col-span-2 h-full rounded-xl overflow-hidden">
+            <div className="relative md:col-span-2 h-full rounded-xl overflow-hidden"
+                onClick={() => {
+                    setMainImageIndex(0);
+                    setIsOpen(true);
+                }}
+            >
                 <ProgressiveImage
                     source={images[0]}
                     alt={`${propertyName} main image`}
@@ -53,7 +64,12 @@ export function PropertyGallery({ galleryImages, galleryImageIds = [], propertyN
             {/* RIGHT - Two Images */}
             <div className="flex flex-col gap-3 h-full">
                 {/* Top Image */}
-                <div className="relative h-1/2 rounded-xl overflow-hidden">
+                <div className="relative h-1/2 rounded-xl overflow-hidden"
+                    onClick={() => {
+                        setMainImageIndex(1);
+                        setIsOpen(true);
+                    }}
+                >
                     {images[1] && (
                         <ProgressiveImage
                             source={images[1]}
@@ -66,7 +82,12 @@ export function PropertyGallery({ galleryImages, galleryImageIds = [], propertyN
                 </div>
 
                 {/* Bottom Image */}
-                <div className="relative h-1/2 rounded-xl overflow-hidden">
+                <div className="relative h-1/2 rounded-xl overflow-hidden"
+                    onClick={() => {
+                        setMainImageIndex(2);
+                        setIsOpen(true);
+                    }}
+                >
                     {images[2] && (
                         <ProgressiveImage
                             source={images[2]}
@@ -85,6 +106,55 @@ export function PropertyGallery({ galleryImages, galleryImageIds = [], propertyN
                     )}
                 </div>
             </div>
+            {isOpen && (
+                <div className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center">
+
+                    {/* Close Button */}
+                    <button
+                        onClick={() => setIsOpen(false)}
+                        className="absolute top-6 left-6 text-white text-sm bg-black/50 px-4 py-2 rounded-lg"
+                    >
+                        ← Back to gallery
+                    </button>
+
+                    {/* Content Wrapper */}
+                    <div className="relative w-full h-full flex items-center justify-center">
+
+                        {/* Image Container */}
+                        <div className="relative w-[90%] max-w-4xl h-[70vh]">
+                            <ProgressiveImage
+                                source={images[safeIndex]}
+                                alt={`${propertyName} image ${safeIndex + 1}`}
+                                fill
+                                sizes="100vw"
+                                imageClassName="object-contain"
+                            />
+                        </div>
+
+                    </div>
+
+                    {/* Left Arrow */}
+                    <button
+                        onClick={handlePrev}
+                        className="absolute left-6 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/40 text-white p-3 rounded-full"
+                    >
+                        <ChevronLeft className="h-6 w-6" />
+                    </button>
+
+                    {/* Right Arrow */}
+                    <button
+                        onClick={handleNext}
+                        className="absolute right-6 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/40 text-white p-3 rounded-full"
+                    >
+                        <ChevronRight className="h-6 w-6" />
+                    </button>
+
+                    {/* Image Counter */}
+                    <div className="absolute bottom-6 right-6 text-white text-sm bg-black/50 px-3 py-1 rounded">
+                        {safeIndex + 1} / {images.length}
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
