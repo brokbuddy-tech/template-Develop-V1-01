@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useState } from 'react';
 import { SearchProvider } from '@/context/search-context';
@@ -16,9 +17,11 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <SearchProvider>
-        {children}
-      </SearchProvider>
+      <Suspense fallback={null}>
+        <SearchProvider>
+          {children}
+        </SearchProvider>
+      </Suspense>
     </QueryClientProvider>
   );
 }

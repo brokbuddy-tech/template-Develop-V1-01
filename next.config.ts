@@ -12,7 +12,7 @@ const apiBaseUrl = normalizeApiBaseUrl(process.env.NEXT_PUBLIC_API_URL || 'http:
 const apiOrigin = apiBaseUrl.replace(/\/api$/i, '');
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  serverExternalPackages: ['genkit', 'express', '@genkit-ai/google-genai', 'require-in-the-middle'],
   typescript: {
     ignoreBuildErrors: true,
   },
