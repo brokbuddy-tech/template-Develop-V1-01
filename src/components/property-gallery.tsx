@@ -57,7 +57,7 @@ export function PropertyGallery({ galleryImages, galleryImageIds = [], propertyN
                     alt={`${propertyName} main image`}
                     fill
                     priority
-                    sizes="100vw"
+                    sizes="(max-width: 768px) 100vw, 66vw"
                     imageClassName="object-cover"
                 />
             </div>
@@ -76,7 +76,7 @@ export function PropertyGallery({ galleryImages, galleryImageIds = [], propertyN
                             source={images[1]}
                             alt={`${propertyName} image 2`}
                             fill
-                            sizes="50vw"
+                            sizes="(max-width: 768px) 50vw, 33vw"
                             imageClassName="object-cover"
                         />
                     )}
@@ -94,7 +94,7 @@ export function PropertyGallery({ galleryImages, galleryImageIds = [], propertyN
                             source={images[2]}
                             alt={`${propertyName} image 3`}
                             fill
-                            sizes="50vw"
+                            sizes="(max-width: 768px) 50vw, 33vw"
                             imageClassName="object-cover"
                         />
                     )}
