@@ -17,9 +17,15 @@ export function PropertyGallery({ galleryImages, galleryImageIds = [], propertyN
     const [mainImageIndex, setMainImageIndex] = useState(0);
     const images = (galleryImages && galleryImages.length > 0 ? galleryImages : galleryImageIds).filter(Boolean);
     const [isOpen, setIsOpen] = useState(false);
+    const [visitedIndices, setVisitedIndices] = useState<Set<number>>(new Set([0]));
+    
     useEffect(() => {
-        if (mainImageIndex <= images.length - 1) return;
+        if (mainImageIndex <= images.length - 1) {
+            setVisitedIndices(prev => new Set(prev).add(mainImageIndex));
+            return;
+        }
         setMainImageIndex(0);
+        setVisitedIndices(prev => new Set(prev).add(0));
     }, [images.length, mainImageIndex]);
 
     if (images.length === 0) {
@@ -123,13 +129,27 @@ export function PropertyGallery({ galleryImages, galleryImageIds = [], propertyN
 
                         {/* Image Container */}
                         <div className="relative w-[90%] max-w-4xl h-[70vh]">
-                            <ProgressiveImage
-                                source={images[safeIndex]}
-                                alt={`${propertyName} image ${safeIndex + 1}`}
-                                fill
-                                sizes="100vw"
-                                imageClassName="object-contain"
-                            />
+                            {images.map((image, i) => {
+                                const isVisited = visitedIndices.has(i) || i === safeIndex;
+                                const isActive = i === safeIndex;
+
+                                if (!isVisited) return null;
+
+                                return (
+                                    <div 
+                                        key={i}
+                                        className={`absolute inset-0 w-full h-full transition-opacity duration-300 ${isActive ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'}`}
+                                    >
+                                        <ProgressiveImage
+                                            source={image}
+                                            alt={`${propertyName} image ${i + 1}`}
+                                            fill
+                                            sizes="100vw"
+                                            imageClassName="object-contain"
+                                        />
+                                    </div>
+                                );
+                            })}
                         </div>
 
                     </div>
