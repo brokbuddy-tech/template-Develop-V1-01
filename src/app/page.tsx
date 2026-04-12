@@ -4,7 +4,6 @@ import { FeaturedProperties } from '@/components/home/featured-properties';
 import { HeroSection } from '@/components/home/hero-section';
 import { Testimonials } from '@/components/home/testimonials';
 import { TrustSignals } from '@/components/home/trust-signals';
-import { properties as fallbackProperties, areaGuides as fallbackAreaGuides, testimonials as fallbackTestimonials, blogPosts as fallbackBlogs } from '@/lib/data';
 import { getProperties, getAreaGuides, getTestimonials, getBlogs } from '@/lib/api';
 import { CityIndex } from '@/components/home/city-index';
 import { FAQ } from '@/components/home/faq';
@@ -24,12 +23,12 @@ export default async function Home() {
     getBlogs()
   ]);
 
-  const propertiesToUse = allProperties.length > 0 ? allProperties : fallbackProperties;
+  const propertiesToUse = allProperties.length > 0 ? allProperties : [];
   const featuredOffPlan = propertiesToUse.filter(p => p.status === 'Off-plan').slice(0, 3);
   const featuredReady = propertiesToUse.filter(p => p.status === 'Ready').slice(0, 3);
-  const guidesToUse = dynamicAreaGuides.length > 0 ? dynamicAreaGuides : fallbackAreaGuides;
-  const testimonialsToUse = dynamicTestimonials.length > 0 ? dynamicTestimonials : fallbackTestimonials;
-  const blogsToUse = dynamicBlogs.length > 0 ? dynamicBlogs : fallbackBlogs;
+  const guidesToUse = dynamicAreaGuides.length > 0 ? dynamicAreaGuides : [];
+  const testimonialsToUse = dynamicTestimonials.length > 0 ? dynamicTestimonials : [];
+  const blogsToUse = dynamicBlogs.length > 0 ? dynamicBlogs : [];
 
   return (
     <div className="flex flex-col">
