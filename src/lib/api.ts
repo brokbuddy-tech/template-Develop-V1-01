@@ -4,6 +4,12 @@ import type {
   PropertyImageSource 
 } from './types';
 
+const publicEnv = {
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
+    NEXT_PUBLIC_ORG_SLUG: process.env.NEXT_PUBLIC_ORG_SLUG,
+    NEXT_PUBLIC_TEMPLATE_HEX_CODE: process.env.NEXT_PUBLIC_TEMPLATE_HEX_CODE,
+} as const;
+
 function normalizeApiBaseUrl(value: string) {
     const normalized = value.trim().replace(/\/+$/, '');
     if (!normalized) return '';
@@ -13,11 +19,11 @@ function normalizeApiBaseUrl(value: string) {
 }
 
 const API_BASE_URL = normalizeApiBaseUrl(
-    (((globalThis as any).process?.env?.NEXT_PUBLIC_API_URL) || 'http://localhost:4000')
+    publicEnv.NEXT_PUBLIC_API_URL || 'http://localhost:4000'
 );
 
-function getRequiredPublicEnv(name: string) {
-    const value = (((globalThis as any).process?.env?.[name]) || '') as string;
+function getRequiredPublicEnv(name: keyof typeof publicEnv) {
+    const value = publicEnv[name] || '';
     const normalized = value.trim();
     if (!normalized) {
         throw new Error(`Missing required public env variable: ${name}`);
