@@ -215,6 +215,28 @@ function getNumberValue(...values: unknown[]) {
     return undefined;
 }
 
+function normalizeListingDescription(description?: string) {
+    const plainText = (description || '')
+        .replace(/<\s*br\s*\/?>/gi, '\n')
+        .replace(/<\/\s*(div|p|section|article|h[1-6])\s*>/gi, '\n\n')
+        .replace(/<\/\s*li\s*>/gi, '\n')
+        .replace(/<\s*li\b[^>]*>/gi, '- ')
+        .replace(/<[^>]+>/g, ' ')
+        .replace(/&nbsp;/gi, ' ')
+        .replace(/&amp;/gi, '&')
+        .replace(/&quot;/gi, '"')
+        .replace(/&#39;|&apos;/gi, "'")
+        .replace(/&lt;/gi, '<')
+        .replace(/&gt;/gi, '>')
+        .replace(/\r/g, '')
+        .replace(/[ \t]+\n/g, '\n')
+        .replace(/\n{3,}/g, '\n\n')
+        .replace(/[ \t]{2,}/g, ' ')
+        .trim();
+
+    return plainText || 'Property details coming soon.';
+}
+
 /**
  * Maps a backend listing object to the frontend Property type.
  */
@@ -296,7 +318,7 @@ export function mapListingToProperty(listing: any): Property {
         mapAddress: getStringValue(listing.streetAddress, listing.address),
         latitude: getNumberValue(listing.latitude, fields.latitude) || null,
         longitude: getNumberValue(listing.longitude, fields.longitude) || null,
-        description: listing.description || '',
+        description: normalizeListingDescription(listing.description),
         amenities: Array.isArray(listing.amenities) ? listing.amenities : [],
         galleryImageIds: media.map(m => m.url),
         galleryImages: media.map((m, i) => ({
