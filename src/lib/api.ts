@@ -7,7 +7,6 @@ import type {
 const publicEnv = {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
     NEXT_PUBLIC_ORG_SLUG: process.env.NEXT_PUBLIC_ORG_SLUG,
-    NEXT_PUBLIC_TEMPLATE_HEX_CODE: process.env.NEXT_PUBLIC_TEMPLATE_HEX_CODE,
 } as const;
 
 function normalizeApiBaseUrl(value: string) {
@@ -32,14 +31,33 @@ function getRequiredPublicEnv(name: keyof typeof publicEnv) {
 }
 
 export const ORG_SLUG = getRequiredPublicEnv('NEXT_PUBLIC_ORG_SLUG');
-const TEMPLATE_HEX_CODE = getRequiredPublicEnv('NEXT_PUBLIC_TEMPLATE_HEX_CODE').toLowerCase();
+const PUBLIC_TEMPLATE_PROXY_BASE_PATH = '/api/public-template';
 
 export function getPublicTemplateUrl(path = '') {
     const normalizedPath = path ? (path.startsWith('/') ? path : `/${path}`) : '';
-    const publicTemplatePath = ['public', 'templates', ORG_SLUG, TEMPLATE_HEX_CODE]
+    return `${PUBLIC_TEMPLATE_PROXY_BASE_PATH}${normalizedPath}`;
+}
+
+function getRequiredServerTemplateHexCode() {
+    const value = (process.env.TEMPLATE_HEX_CODE || '').trim();
+    if (!value) {
+        throw new Error('Missing required server env variable: TEMPLATE_HEX_CODE');
+    }
+    return value.toLowerCase();
+}
+
+function getUpstreamPublicTemplateUrl(path = '') {
+    const normalizedPath = path ? (path.startsWith('/') ? path : `/${path}`) : '';
+    const publicTemplatePath = ['public', 'templates', ORG_SLUG, getRequiredServerTemplateHexCode()]
         .filter(Boolean)
         .join('/');
     return `${API_BASE_URL}/${publicTemplatePath}${normalizedPath}`;
+}
+
+function getTemplateFetchUrl(path = '') {
+    return typeof window === 'undefined'
+        ? getUpstreamPublicTemplateUrl(path)
+        : getPublicTemplateUrl(path);
 }
 
 /** Timeout-safe wrapper around fetch. Returns the Response – never throws. */
@@ -237,6 +255,31 @@ function normalizeListingDescription(description?: string) {
     return plainText || 'Property details coming soon.';
 }
 
+function mapListingAgent(listing: any) {
+    const publicAgent = listing?.agent;
+    const legacyBroker = listing?.broker;
+    const agentName = getStringValue(
+        publicAgent?.name,
+        legacyBroker?.brokerProfile?.displayName,
+        [legacyBroker?.firstName, legacyBroker?.lastName].filter(Boolean).join(' ')
+    );
+
+    if (!agentName) {
+        return undefined;
+    }
+
+    const avatar = getStringValue(publicAgent?.avatarUrl, publicAgent?.avatar, legacyBroker?.avatar) || 'author-1';
+
+    return {
+        name: agentName,
+        avatarId: avatar,
+        avatarUrl: normalizeAssetUrl(avatar),
+        title: getStringValue(publicAgent?.title, publicAgent?.tagline, legacyBroker?.brokerProfile?.tagline) || 'Property Consultant',
+        company: getStringValue(publicAgent?.company, listing?.organizationName, listing?.organization?.name) || 'Skyline Realty',
+        orn: getStringValue(publicAgent?.licenseNumber, publicAgent?.orn, legacyBroker?.licenseNumber) || '12345',
+    };
+}
+
 /**
  * Maps a backend listing object to the frontend Property type.
  */
@@ -329,14 +372,7 @@ export function mapListingToProperty(listing: any): Property {
             unoptimized: true
         })),
         media,
-        agent: listing.broker ? {
-            name: `${listing.broker.firstName} ${listing.broker.lastName}`,
-            avatarId: listing.broker.avatar || 'author-1',
-            avatarUrl: normalizeAssetUrl(listing.broker.avatar),
-            title: listing.broker.brokerProfile?.tagline || 'Property Consultant',
-            company: 'Skyline Realty',
-            orn: '12345'
-        } : undefined
+        agent: mapListingAgent(listing),
     };
 }
 
@@ -359,7 +395,7 @@ type PublicTemplateSiteSnapshot = {
 };
 
 async function getTemplateSiteSnapshot(): Promise<PublicTemplateSiteSnapshot | null> {
-    const res = await safeFetch(getPublicTemplateUrl(), { next: { revalidate: 3600 } } as any, 5000);
+    const res = await safeFetch(getTemplateFetchUrl(), { next: { revalidate: 3600 } } as any, 5000);
     if (!res.ok) return null;
     return await res.json();
 }
@@ -374,7 +410,7 @@ export async function getProperties(params?: Record<string, string | undefined>)
         }
 
         const queryString = queryParams.toString();
-        const url = `${getPublicTemplateUrl('/listings')}${queryString ? `?${queryString}` : ''}`;
+        const url = `${getTemplateFetchUrl('/listings')}${queryString ? `?${queryString}` : ''}`;
         const res = await safeFetch(url, { next: { revalidate: 300 } } as any);
 
         if (!res.ok) return { properties: [], total: 0, page: 1, totalPages: 1 };
@@ -396,7 +432,7 @@ export async function getProperties(params?: Record<string, string | undefined>)
 }
 
 export async function getPropertyById(id: string): Promise<Property | null> {
-    const res = await safeFetch(getPublicTemplateUrl(`/listings/${id}`), { next: { revalidate: 300 } } as any);
+    const res = await safeFetch(getTemplateFetchUrl(`/listings/${id}`), { next: { revalidate: 300 } } as any);
     if (!res.ok) return null;
     const listing = await res.json();
     return mapListingToProperty(listing);

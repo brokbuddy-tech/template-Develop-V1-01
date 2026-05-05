@@ -1,0 +1,12 @@
+   ▲ Next.js 15.5.9 (Turbopack)
+   - Local:        http://localhost:9012
+   - Network:      http://192.168.1.5:9012
+   - Environments: .env
+
+ ✓ Starting...
+Creating turbopack project {
+  dir: 'F:\\BrokBuddy\\brokbuddy\\templates\\UAE\\template-Develop-V1-01',
+  testMode: true
+}
+ ✓ Compiled middleware in 446ms
+ ✓ Ready in 3.2s
