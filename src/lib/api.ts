@@ -146,6 +146,7 @@ function normalizeAssetUrl(value?: string | null): string | null {
     if (!normalized) return null;
     
     if (/^https?:\/\//i.test(normalized)) return normalized;
+    if (normalized.startsWith(PUBLIC_TEMPLATE_PROXY_BASE_PATH)) return normalized;
 
     const path = normalized.startsWith('/') ? normalized : `/${normalized}`;
     const apiOrigin = API_BASE_URL.replace(/\/api$/i, '');
