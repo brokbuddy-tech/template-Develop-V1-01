@@ -6,11 +6,10 @@ import { ResultsHeader } from "@/components/results-header";
 import { Separator } from "@/components/ui/separator";
 import { SearchPageLayout } from "@/components/search-page-layout";
 import { PropertyMapExplorer } from "@/components/property-map-explorer";
-import { ORG_SLUG } from "@/lib/api";
 
 export default function MapPage() {
   return (
-    <SearchPageLayout initialFilters={{ orgSlug: ORG_SLUG, limit: 100 }}>
+    <SearchPageLayout initialFilters={{ limit: 100 }}>
       <div>
         <div className="bg-background border-b">
           <div className="w-full px-4 sm:px-6 lg:px-8 py-4">

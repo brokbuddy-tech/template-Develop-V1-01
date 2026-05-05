@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { getPublicTemplateUrl } from '@/lib/api';
 import { useSearchContext } from '@/context/search-context';
 
 export interface ListingSearchFilters {
@@ -63,17 +64,13 @@ export interface ListingSearchFilters {
 
   // Search
   q?: string;
-  orgSlug?: string;
 }
 
 interface UseListingSearchOptions {
   defaults?: ListingSearchFilters;
-  orgSlug?: string;
 }
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api';
-
-export function useListingSearch({ defaults = {}, orgSlug }: UseListingSearchOptions = {}) {
+export function useListingSearch({ defaults = {} }: UseListingSearchOptions = {}) {
   const { filters, updateFilter, setFilters, resetFilters } = useSearchContext();
   const [debouncedFilters, setDebouncedFilters] = useState<ListingSearchFilters>(filters);
 
@@ -102,7 +99,7 @@ export function useListingSearch({ defaults = {}, orgSlug }: UseListingSearchOpt
       }
     });
 
-    const response = await fetch(`${API_BASE_URL}/listings/search?${params.toString()}`);
+    const response = await fetch(`${getPublicTemplateUrl('/listings')}?${params.toString()}`);
     if (!response.ok) {
       throw new Error('Network response was not ok');
     }
@@ -115,8 +112,13 @@ export function useListingSearch({ defaults = {}, orgSlug }: UseListingSearchOpt
   });
 
   return {
-    listings: data?.data || [],
-    meta: data?.meta || { total: 0, page: 1, limit: 20, totalPages: 0 },
+    listings: data?.listings || [],
+    meta: {
+      total: data?.total || 0,
+      page: data?.page || 1,
+      limit: filters.limit || defaults.limit || 20,
+      totalPages: data?.totalPages || 0,
+    },
     isLoading,
     isFetching,
     error,

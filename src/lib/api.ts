@@ -4,9 +4,37 @@ import type {
   PropertyImageSource 
 } from './types';
 
-// Assuming the API is running locally on port 4000 as per backend configuration.
-const API_BASE_URL = (((globalThis as any).process?.env?.NEXT_PUBLIC_API_URL) || 'http://localhost:4000/api');
-export const ORG_SLUG = 'skyline-realty';
+function normalizeApiBaseUrl(value: string) {
+    const normalized = value.trim().replace(/\/+$/, '');
+    if (!normalized) return '';
+    if (/\/api$/i.test(normalized)) return normalized;
+    if (/\/api\/public$/i.test(normalized)) return normalized.replace(/\/public$/i, '');
+    return `${normalized}/api`;
+}
+
+const API_BASE_URL = normalizeApiBaseUrl(
+    (((globalThis as any).process?.env?.NEXT_PUBLIC_API_URL) || 'http://localhost:4000')
+);
+
+function getRequiredPublicEnv(name: string) {
+    const value = (((globalThis as any).process?.env?.[name]) || '') as string;
+    const normalized = value.trim();
+    if (!normalized) {
+        throw new Error(`Missing required public env variable: ${name}`);
+    }
+    return normalized;
+}
+
+export const ORG_SLUG = getRequiredPublicEnv('NEXT_PUBLIC_ORG_SLUG');
+const TEMPLATE_HEX_CODE = getRequiredPublicEnv('NEXT_PUBLIC_TEMPLATE_HEX_CODE').toLowerCase();
+
+export function getPublicTemplateUrl(path = '') {
+    const normalizedPath = path ? (path.startsWith('/') ? path : `/${path}`) : '';
+    const publicTemplatePath = ['public', 'templates', ORG_SLUG, TEMPLATE_HEX_CODE]
+        .filter(Boolean)
+        .join('/');
+    return `${API_BASE_URL}/${publicTemplatePath}${normalizedPath}`;
+}
 
 /** Timeout-safe wrapper around fetch. Returns the Response – never throws. */
 async function safeFetch(url: string, extraOpts?: RequestInit & { next?: any }, timeoutMs = 8000): Promise<Response> {
@@ -83,7 +111,7 @@ function getPublicListingMediaUrl(
   // Force API proxy as CDN and direct GCS URLs are currently returning 403
   // due to unauthenticated bucket permissions.
   if (image.id) {
-    return `/api/public/images/${image.id}/view?variant=${variant}`;
+    return getPublicTemplateUrl(`/images/${image.id}/view?variant=${variant}`);
   }
 
   return image.url || null;
@@ -293,6 +321,21 @@ export interface PaginatedProperties {
     totalPages: number;
 }
 
+type PublicTemplateSiteSnapshot = {
+    categories?: string[];
+    amenities?: string[];
+    areaGuides?: any[];
+    testimonials?: any[];
+    sellerTestimonials?: any[];
+    blogs?: any[];
+};
+
+async function getTemplateSiteSnapshot(): Promise<PublicTemplateSiteSnapshot | null> {
+    const res = await safeFetch(getPublicTemplateUrl(), { next: { revalidate: 3600 } } as any, 5000);
+    if (!res.ok) return null;
+    return await res.json();
+}
+
 export async function getProperties(params?: Record<string, string | undefined>): Promise<PaginatedProperties> {
     try {
         const queryParams = new URLSearchParams();
@@ -303,7 +346,7 @@ export async function getProperties(params?: Record<string, string | undefined>)
         }
 
         const queryString = queryParams.toString();
-        const url = `${API_BASE_URL}/public/org/${ORG_SLUG}/listings${queryString ? `?${queryString}` : ''}`;
+        const url = `${getPublicTemplateUrl('/listings')}${queryString ? `?${queryString}` : ''}`;
         const res = await safeFetch(url, { next: { revalidate: 300 } } as any);
 
         if (!res.ok) return { properties: [], total: 0, page: 1, totalPages: 1 };
@@ -325,34 +368,36 @@ export async function getProperties(params?: Record<string, string | undefined>)
 }
 
 export async function getPropertyById(id: string): Promise<Property | null> {
-    const res = await safeFetch(`${API_BASE_URL}/public/listing/${id}`, { next: { revalidate: 300 } } as any);
+    const res = await safeFetch(getPublicTemplateUrl(`/listings/${id}`), { next: { revalidate: 300 } } as any);
     if (!res.ok) return null;
     const listing = await res.json();
     return mapListingToProperty(listing);
 }
 
 export async function getOrgConfig(): Promise<{ categories: string[], amenities: string[] }> {
-    const res = await safeFetch(`${API_BASE_URL}/public/org/${ORG_SLUG}/config`, { next: { revalidate: 3600 } } as any, 5000);
-    if (!res.ok) return { categories: [], amenities: [] };
-    return await res.json();
+    const snapshot = await getTemplateSiteSnapshot();
+    return {
+        categories: snapshot?.categories || [],
+        amenities: snapshot?.amenities || [],
+    };
 }
 
 export async function getAreaGuides(): Promise<any[]> {
-    const res = await safeFetch(`${API_BASE_URL}/public/org/${ORG_SLUG}/area-guides`, { next: { revalidate: 3600 } } as any);
-    return res.ok ? await res.json() : [];
+    const snapshot = await getTemplateSiteSnapshot();
+    return snapshot?.areaGuides || [];
 }
 
 export async function getTestimonials(): Promise<any[]> {
-    const res = await safeFetch(`${API_BASE_URL}/public/org/${ORG_SLUG}/testimonials`, { next: { revalidate: 3600 } } as any);
-    return res.ok ? await res.json() : [];
+    const snapshot = await getTemplateSiteSnapshot();
+    return snapshot?.testimonials || [];
 }
 
 export async function getBlogs(): Promise<any[]> {
-    const res = await safeFetch(`${API_BASE_URL}/public/org/${ORG_SLUG}/blogs`, { next: { revalidate: 3600 } } as any);
-    return res.ok ? await res.json() : [];
+    const snapshot = await getTemplateSiteSnapshot();
+    return snapshot?.blogs || [];
 }
 
 export async function getSellerTestimonials(): Promise<any[]> {
-    const res = await safeFetch(`${API_BASE_URL}/public/org/${ORG_SLUG}/seller-testimonials`, { next: { revalidate: 3600 } } as any);
-    return res.ok ? await res.json() : [];
+    const snapshot = await getTemplateSiteSnapshot();
+    return snapshot?.sellerTestimonials || [];
 }
