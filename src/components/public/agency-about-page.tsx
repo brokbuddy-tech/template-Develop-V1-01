@@ -13,7 +13,15 @@ function getDisplayName(siteConfig: SiteConfig | null) {
 }
 
 function getAgentImage(seed: string, avatar?: string | null) {
-  return avatar || `https://picsum.photos/seed/${encodeURIComponent(seed)}/800/1000`;
+  if (avatar) return avatar;
+  const initials = seed
+    .split(/[\s-]+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part.charAt(0).toUpperCase())
+    .join("") || "AG";
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f4f6f8"/><stop offset="1" stop-color="#d5dde6"/></linearGradient></defs><rect width="800" height="1000" fill="url(#g)"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#526273" font-family="Arial, sans-serif" font-size="240" font-weight="700">${initials}</text></svg>`;
+  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
 }
 
 export function DevelopAboutPageContent() {
@@ -74,7 +82,7 @@ export function DevelopAboutPageContent() {
             { title: "Organization Profile", body: aboutCompany },
             {
               title: "Public Data Flow",
-              body: "The public URL uses the organization slug for branding and SEO, while all organization, agent, and listing APIs continue to resolve the stable organization hex code internally.",
+              body: "Public pages stay on root-based routes, while organization, agent, listing, logo, and profile media requests are resolved server-side through the public template proxy contract.",
             },
           ].map((card) => (
             <div key={card.title} className="bg-card/80 backdrop-blur-sm border border-border rounded-[10px] p-6">

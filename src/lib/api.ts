@@ -8,6 +8,7 @@ import {
     PUBLIC_API_BASE_URLS,
     PUBLIC_TEMPLATE_PROXY_BASE_PATH,
     getClientTemplateFetchUrl,
+    normalizePublicTemplateAssetUrl,
     shouldRetryApiRequest,
 } from './api-base';
 import { getDefaultAgencySlug, getEffectiveAgencySlug } from './agency-routing';
@@ -103,11 +104,12 @@ function getPublicListingMediaUrl(
 function normalizeAssetUrl(value?: string | null): string | null {
     const normalized = value?.trim();
     if (!normalized) return null;
-    
-    if (/^https?:\/\//i.test(normalized)) return normalized;
-    if (normalized.startsWith(PUBLIC_TEMPLATE_PROXY_BASE_PATH)) return normalized;
 
-    const path = normalized.startsWith('/') ? normalized : `/${normalized}`;
+    const normalizedProxyPath = normalizePublicTemplateAssetUrl(normalized) || normalized;
+    if (/^https?:\/\//i.test(normalizedProxyPath)) return normalizedProxyPath;
+    if (normalizedProxyPath.startsWith(PUBLIC_TEMPLATE_PROXY_BASE_PATH)) return normalizedProxyPath;
+
+    const path = normalizedProxyPath.startsWith('/') ? normalizedProxyPath : `/${normalizedProxyPath}`;
     const apiOrigin = API_BASE_URL.replace(/\/api$/i, '');
 
     try {
@@ -315,16 +317,11 @@ async function fetchTemplateResponse(
     }
 
     if (typeof window !== 'undefined') {
-        const proxyResponse = await safeFetch(
+        return safeFetch(
             getClientTemplateFetchUrl(path, resolvedAgencySlug),
             options as RequestInit & { next?: any },
             timeout,
         );
-        if (proxyResponse.ok) {
-            return proxyResponse;
-        }
-
-        return fetchDirectTemplateResponse(resolvedAgencySlug, path, options, timeout);
     }
 
     return fetchDirectTemplateResponse(resolvedAgencySlug, path, options, timeout);

@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import {
@@ -39,9 +40,29 @@ const DevelopLogo = () => (
     </svg>
 );
 
-const Logo = ({ brandName, agencySlug }: { brandName: string; agencySlug?: string | null }) => (
+const Logo = ({
+  brandName,
+  agencySlug,
+  logoUrl,
+}: {
+  brandName: string;
+  agencySlug?: string | null;
+  logoUrl?: string | null;
+}) => (
   <Link href={prefixAgencyPath('/', agencySlug)} className="flex items-center gap-2">
-    <DevelopLogo />
+    {logoUrl ? (
+      <span className="relative h-9 w-9 overflow-hidden rounded-md border border-border bg-card">
+        <Image
+          src={logoUrl}
+          alt={`${brandName} logo`}
+          fill
+          className="object-contain p-1"
+          sizes="36px"
+        />
+      </span>
+    ) : (
+      <DevelopLogo />
+    )}
     <span className="text-xl font-bold tracking-wide uppercase text-foreground">
       {brandName}
     </span>
@@ -117,9 +138,11 @@ const DesktopNav = ({ agencySlug }: { agencySlug?: string | null }) => (
 const MobileNav = ({
   agencySlug,
   brandName,
+  logoUrl,
 }: {
   agencySlug?: string | null;
   brandName: string;
+  logoUrl?: string | null;
 }) => (
   <Sheet>
     <SheetTrigger asChild>
@@ -130,7 +153,7 @@ const MobileNav = ({
     </SheetTrigger>
     <SheetContent side="left" className="w-full max-w-sm flex flex-col p-0">
       <div className="p-6 pb-0">
-        <Logo brandName={brandName} agencySlug={agencySlug} />
+        <Logo brandName={brandName} agencySlug={agencySlug} logoUrl={logoUrl} />
       </div>
       <ScrollArea className="flex-1 my-4">
         <Accordion type="multiple" className="w-full px-6">
@@ -209,6 +232,7 @@ export function Header() {
   const pathname = usePathname();
   const agencySlug = resolveAgencySlugFromPathname(pathname);
   const [brandName, setBrandName] = React.useState(SITE_NAME);
+  const [brandLogo, setBrandLogo] = React.useState<string | null>(null);
 
   React.useEffect(() => {
     let active = true;
@@ -217,6 +241,7 @@ export function Header() {
       const siteConfig = await getSiteConfig(agencySlug);
       if (!active) return;
       setBrandName(siteConfig.branding?.displayName || siteConfig.organization.name || SITE_NAME);
+      setBrandLogo(siteConfig.profile?.logo || null);
     }
 
     void loadSiteConfig();
@@ -229,7 +254,7 @@ export function Header() {
     <header className="sticky top-0 z-50 w-full shadow-sm bg-background border-b">
       <div className="w-full px-4 sm:px-6 lg:px-8 flex h-16 items-center">
         <div className="flex items-center gap-6 lg:w-1/4">
-          <Logo brandName={brandName} agencySlug={agencySlug} />
+          <Logo brandName={brandName} agencySlug={agencySlug} logoUrl={brandLogo} />
         </div>
         <div className="flex-1 flex justify-center">
           <DesktopNav agencySlug={agencySlug} />
@@ -241,7 +266,7 @@ export function Header() {
           <Button asChild className="hidden sm:inline-flex px-5 py-2 h-auto font-semibold text-sm bg-primary text-primary-foreground hover:bg-primary/90 transition-opacity rounded-none">
             <Link href={prefixAgencyPath('/contact', agencySlug)}>Contact Us</Link>
           </Button>
-          <MobileNav agencySlug={agencySlug} brandName={brandName} />
+          <MobileNav agencySlug={agencySlug} brandName={brandName} logoUrl={brandLogo} />
         </div>
       </div>
     </header>

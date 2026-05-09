@@ -30,7 +30,11 @@ function Stat({ icon: Icon, value, label }: { icon: React.ElementType, value: st
 function AgentContactCard({ agent }: { agent: any }) {
     if (!agent) return null;
     const isMockAvatar = agent.avatarId && agent.avatarId.startsWith('author-');
-    const agentImageUrl = isMockAvatar ? PlaceHolderImages.find(p => p.id === agent.avatarId)?.imageUrl : agent.avatarId;
+    const agentImageUrl = agent.avatarUrl || (
+        isMockAvatar
+            ? PlaceHolderImages.find(p => p.id === agent.avatarId)?.imageUrl
+            : agent.avatarId
+    );
 
     return (
         <Card className="overflow-hidden">

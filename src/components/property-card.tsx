@@ -20,9 +20,11 @@ export function PropertyCard({ property }: { property: Property }) {
   const imageSource = property.primaryImage || property.imageId;
 
   const isMockAgent = property.agent?.avatarId?.startsWith('author-');
-  const agentImageUrl = isMockAgent
-    ? PlaceHolderImages.find(p => p.id === property.agent?.avatarId)?.imageUrl
-    : property.agent?.avatarId;
+  const agentImageUrl = property.agent?.avatarUrl || (
+    isMockAgent
+      ? PlaceHolderImages.find(p => p.id === property.agent?.avatarId)?.imageUrl
+      : property.agent?.avatarId
+  );
 
   const handleContactClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();

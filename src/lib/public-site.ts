@@ -1,6 +1,12 @@
 import type { Property } from './types';
 import { getDefaultAgencySlug, getEffectiveAgencySlug } from './agency-routing';
-import { PUBLIC_API_BASE_URLS, getClientTemplateFetchUrl, shouldRetryApiRequest } from './api-base';
+import {
+  PUBLIC_API_BASE_URLS,
+  PUBLIC_TEMPLATE_PROXY_BASE_PATH,
+  getClientTemplateFetchUrl,
+  normalizePublicTemplateAssetUrl,
+  shouldRetryApiRequest,
+} from './api-base';
 import { mapListingToProperty } from './api';
 
 export type SiteAgent = {
@@ -12,7 +18,9 @@ export type SiteAgent = {
   phone?: string | null;
   whatsapp?: string | null;
   avatar?: string | null;
+  avatarUrl?: string | null;
   coverImage?: string | null;
+  coverImageUrl?: string | null;
   slug?: string | null;
   tagline?: string | null;
   bio?: string | null;
@@ -148,6 +156,64 @@ async function safeFetch(url: string, options?: RequestInit, timeout = 10000) {
   }
 }
 
+function normalizePublicImageUrl(value?: string | null) {
+  const normalized = value?.trim();
+  if (!normalized) return null;
+
+  const normalizedProxyPath = normalizePublicTemplateAssetUrl(normalized) || normalized;
+  if (/^https?:\/\//i.test(normalizedProxyPath)) return normalizedProxyPath;
+  if (normalizedProxyPath.startsWith(PUBLIC_TEMPLATE_PROXY_BASE_PATH)) return normalizedProxyPath;
+  return normalizedProxyPath.startsWith('/') ? normalizedProxyPath : `/${normalizedProxyPath}`;
+}
+
+function normalizeOrganization(
+  organization: SiteConfig['organization'] | undefined,
+  fallbackSlug: string,
+): SiteConfig['organization'] {
+  return {
+    ...organization,
+    name: organization?.name || 'Agency Website',
+    slug: organization?.slug || fallbackSlug,
+  };
+}
+
+function normalizeSiteProfile(profile?: SiteProfile | null): SiteProfile | null {
+  if (!profile) return null;
+  return {
+    ...profile,
+    logo: normalizePublicImageUrl(profile.logo) ?? profile.logo ?? null,
+  };
+}
+
+function normalizeSiteBranding(
+  branding: SiteConfig['branding'],
+  organizationName: string,
+): SiteConfig['branding'] {
+  if (!branding) return null;
+  return {
+    ...branding,
+    displayName: organizationName || branding.displayName || null,
+    coverImage: normalizePublicImageUrl(branding.coverImage) ?? branding.coverImage ?? null,
+  };
+}
+
+function normalizeSiteAgent<T extends SiteAgent | null | undefined>(agent: T): T {
+  if (!agent) return agent;
+  return {
+    ...agent,
+    avatar: normalizePublicImageUrl(agent.avatarUrl ?? agent.avatar) ?? agent.avatarUrl ?? agent.avatar ?? null,
+    avatarUrl: normalizePublicImageUrl(agent.avatarUrl ?? agent.avatar) ?? agent.avatarUrl ?? agent.avatar ?? null,
+    coverImage: normalizePublicImageUrl(agent.coverImageUrl ?? agent.coverImage) ?? agent.coverImageUrl ?? agent.coverImage ?? null,
+    coverImageUrl: normalizePublicImageUrl(agent.coverImageUrl ?? agent.coverImage) ?? agent.coverImageUrl ?? agent.coverImage ?? null,
+  } as T;
+}
+
+function normalizeSiteAgents(agents: unknown[]): SiteAgent[] {
+  return agents
+    .map((agent) => normalizeSiteAgent(agent as SiteAgent | null))
+    .filter((agent): agent is SiteAgent => Boolean(agent));
+}
+
 async function resolveAgencyContext(agencySlug?: string | null) {
   const resolvedAgencySlug = getEffectiveAgencySlug(agencySlug);
   if (!resolvedAgencySlug) return null;
@@ -201,12 +267,7 @@ async function fetchTemplateResponse(path = '', options?: RequestInit, agencySlu
   }
 
   if (typeof window !== 'undefined') {
-    const proxyResponse = await safeFetch(getClientTemplateFetchUrl(path, resolvedAgencySlug), options);
-    if (proxyResponse.ok) {
-      return proxyResponse;
-    }
-
-    return fetchDirectTemplateResponse(resolvedAgencySlug, path, options);
+    return safeFetch(getClientTemplateFetchUrl(path, resolvedAgencySlug), options);
   }
 
   return fetchDirectTemplateResponse(resolvedAgencySlug, path, options);
@@ -221,11 +282,12 @@ export async function getSiteConfig(agencySlug?: string | null): Promise<SiteCon
   }
 
   const data = await response.json();
+  const organization = normalizeOrganization(data.organization, fallbackSlug);
   return {
-    organization: data.organization || { name: 'Agency Website', slug: fallbackSlug },
-    profile: data.profile || null,
-    branding: data.branding || null,
-    leadAgent: data.leadAgent || null,
+    organization,
+    profile: normalizeSiteProfile(data.profile || null),
+    branding: normalizeSiteBranding(data.branding || null, organization.name),
+    leadAgent: normalizeSiteAgent(data.leadAgent || null),
     stats: data.stats || undefined,
   };
 }
@@ -240,8 +302,8 @@ export async function getAgents(agencySlug?: string | null) {
 
   const data = await response.json();
   return {
-    organization: data.organization || fallback.organization,
-    agents: Array.isArray(data.agents) ? data.agents as SiteAgent[] : [],
+    organization: normalizeOrganization(data.organization || fallback.organization, fallback.organization.slug),
+    agents: Array.isArray(data.agents) ? normalizeSiteAgents(data.agents) : [],
   };
 }
 
@@ -250,10 +312,11 @@ export async function getAgentProfile(agentSlug: string, agencySlug?: string | n
   if (!response.ok) return null;
 
   const data = await response.json();
+  const fallbackSlug = getEffectiveAgencySlug(agencySlug) || getDefaultAgencySlug() || 'organization';
   return {
-    organization: data.organization,
-    profile: data.profile || null,
-    agent: data.agent as SiteAgent | null,
+    organization: normalizeOrganization(data.organization, fallbackSlug),
+    profile: normalizeSiteProfile(data.profile || null),
+    agent: normalizeSiteAgent(data.agent as SiteAgent | null),
     stats: data.stats || { activeListings: 0, soldListings: 0, rentedListings: 0 },
     activeListings: Array.isArray(data.activeListings)
       ? data.activeListings.map((listing: any) => mapListingToProperty(listing, agencySlug))

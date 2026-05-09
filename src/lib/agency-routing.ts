@@ -19,8 +19,12 @@ const RESERVED_ROOT_SEGMENTS = new Set([
   'find-an-agent',
   'for-developers',
   'insights',
+  'images',
   'instant-valuation',
+  'inquiry',
   'invest',
+  'listings',
+  'logo',
   'map',
   'off-plan',
   'portals',
@@ -77,25 +81,20 @@ export function getEffectiveAgencySlug(explicitAgencySlug?: string | null) {
 
 export function prefixAgencyPath(path: string, agencySlug?: string | null) {
   const resolvedAgencySlug = getEffectiveAgencySlug(agencySlug);
-  if (!resolvedAgencySlug) return path;
-  if (!path) return `/${resolvedAgencySlug}`;
+  if (!path) return '/';
   if (/^https?:\/\//i.test(path) || path.startsWith('mailto:') || path.startsWith('tel:')) {
     return path;
   }
 
   const [pathname, search = ''] = path.split('?');
   const normalizedPathname = pathname.startsWith('/') ? pathname : `/${pathname}`;
+  const rootPathname =
+    resolvedAgencySlug && (
+      normalizedPathname === `/${resolvedAgencySlug}`
+      || normalizedPathname.startsWith(`/${resolvedAgencySlug}/`)
+    )
+      ? (normalizedPathname.slice(resolvedAgencySlug.length + 1) || '/')
+      : normalizedPathname;
 
-  if (
-    normalizedPathname === `/${resolvedAgencySlug}`
-    || normalizedPathname.startsWith(`/${resolvedAgencySlug}/`)
-  ) {
-    return path;
-  }
-
-  const prefixedPathname = normalizedPathname === '/'
-    ? `/${resolvedAgencySlug}`
-    : `/${resolvedAgencySlug}${normalizedPathname}`;
-
-  return search ? `${prefixedPathname}?${search}` : prefixedPathname;
+  return search ? `${rootPathname}?${search}` : rootPathname;
 }

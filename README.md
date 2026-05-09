@@ -6,11 +6,12 @@ Required env vars:
 
 - `NEXT_PUBLIC_API_URL`
 - `NEXT_PUBLIC_ORG_SLUG`
-- `TEMPLATE_HEX_CODE`
 
 Deployment contract:
 
-- Data loads from `/api/public/templates/:slug/:templateHexCode`
+- Canonical public routes stay root-based, for example `/about`, `/agents/:agentSlug`, and `/property/:id`
+- Browser data and asset requests flow through `/api/public-template-proxy/*`
+- The organization slug and template hex code are resolved server-side and never exposed in browser fetch URLs
 - Browser requests use the `/api/public-template` rewrite defined in `next.config.ts`
 
 Checks before deploy:

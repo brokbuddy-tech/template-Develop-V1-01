@@ -46,17 +46,7 @@ export function middleware(request: NextRequest) {
     return response;
   }
 
-  const agencySlug = normalizeAgencySlug(request.cookies.get(AGENCY_SLUG_COOKIE)?.value);
-  if (!agencySlug) {
-    return NextResponse.next();
-  }
-
-  const redirectUrl = request.nextUrl.clone();
-  redirectUrl.pathname = pathname === '/'
-    ? `/${agencySlug}`
-    : `/${agencySlug}${pathname}`;
-
-  return NextResponse.redirect(redirectUrl);
+  return NextResponse.next();
 }
 
 export const config = {
