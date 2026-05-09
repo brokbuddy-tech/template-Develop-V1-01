@@ -16,7 +16,7 @@ function BlogCard({ blog }: { blog: Blog }) {
   return (
     <div className="border rounded-xl overflow-hidden hover:shadow-lg transition-shadow bg-card flex flex-col text-left">
       {blogImage && (
-        <Link href={`/blog/${blog.id}`} className="relative h-48 w-full block">
+        <Link href={`/content-hub/${blog.id}`} className="relative h-48 w-full block">
           <Image
             src={blogImage.imageUrl}
             alt={blog.title}
@@ -29,13 +29,13 @@ function BlogCard({ blog }: { blog: Blog }) {
       <div className="p-5 flex flex-col flex-1">
         <p className="text-primary text-xs font-semibold mb-2">{blog.readTime}</p>
         <h3 className="font-bold text-sm mb-2 line-clamp-3">
-          <Link href={`/blog/${blog.id}`} className="hover:underline">{blog.title}</Link>
+          <Link href={`/content-hub/${blog.id}`} className="hover:underline">{blog.title}</Link>
         </h3>
         <p className="text-muted-foreground text-xs line-clamp-2 mb-4">{blog.excerpt}</p>
 
         <div className="mt-auto">
             <Button asChild size="sm" className="bg-primary text-primary-foreground text-xs px-4 py-2 rounded w-fit hover:bg-primary/90 h-auto">
-                 <Link href={`/blog/${blog.id}`}>Read More</Link>
+                 <Link href={`/content-hub/${blog.id}`}>Read More</Link>
             </Button>
         </div>
 

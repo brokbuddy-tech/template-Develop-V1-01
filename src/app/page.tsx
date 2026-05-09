@@ -9,18 +9,20 @@ import { CityIndex } from '@/components/home/city-index';
 import { FAQ } from '@/components/home/faq';
 import { BlogSection } from '@/components/home/blog-section';
 import { AreaGuidesDiscovery } from '@/components/home/area-guides-discovery';
+import { getRequestAgencySlug } from '@/lib/server-agency';
 
 export default async function Home() {
+  const agencySlug = await getRequestAgencySlug();
   const [
     { properties: allProperties },
     dynamicAreaGuides,
     dynamicTestimonials,
     dynamicBlogs
   ] = await Promise.all([
-    getProperties(),
-    getAreaGuides(),
-    getTestimonials(),
-    getBlogs()
+    getProperties(undefined, agencySlug),
+    getAreaGuides(agencySlug),
+    getTestimonials(agencySlug),
+    getBlogs(agencySlug)
   ]);
 
   const propertiesToUse = allProperties.length > 0 ? allProperties : [];

@@ -1,25 +1,64 @@
-import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
+import {
+  AGENCY_SLUG_COOKIE,
+  isAgencySlugSegment,
+  normalizeAgencySlug,
+} from './src/lib/agency-routing';
+
+function shouldBypassPathname(pathname: string) {
+  return pathname.startsWith('/_next')
+    || pathname.startsWith('/api')
+    || pathname === '/favicon.ico'
+    || pathname === '/robots.txt'
+    || pathname === '/sitemap.xml'
+    || /\.[^/]+$/.test(pathname);
+}
 
 export function middleware(request: NextRequest) {
-  const hasAccess = request.cookies.get('vip_access')?.value;
+  const { pathname } = request.nextUrl;
 
-  if (!hasAccess || hasAccess !== 'true') {
-    // Allow access to the login page itself
-    if (request.nextUrl.pathname === '/vip-portal/login') {
-      return NextResponse.next();
-    }
-    return NextResponse.redirect(new URL('/vip-portal/login', request.url));
+  if (shouldBypassPathname(pathname)) {
+    return NextResponse.next();
   }
 
-  // If user is authenticated and tries to access login page, redirect to VIP portal
-  if (request.nextUrl.pathname === '/vip-portal/login') {
-    return NextResponse.redirect(new URL('/vip-portal', request.url));
+  const segments = pathname.split('/').filter(Boolean);
+  const firstSegment = segments[0];
+
+  if (isAgencySlugSegment(firstSegment)) {
+    const rewriteUrl = request.nextUrl.clone();
+    rewriteUrl.pathname = segments.length > 1 ? `/${segments.slice(1).join('/')}` : '/';
+
+    const requestHeaders = new Headers(request.headers);
+    requestHeaders.set('x-agency-slug', firstSegment);
+
+    const response = NextResponse.rewrite(rewriteUrl, {
+      request: {
+        headers: requestHeaders,
+      },
+    });
+
+    response.cookies.set(AGENCY_SLUG_COOKIE, firstSegment, {
+      path: '/',
+      sameSite: 'lax',
+    });
+
+    return response;
   }
-  
-  return NextResponse.next();
+
+  const agencySlug = normalizeAgencySlug(request.cookies.get(AGENCY_SLUG_COOKIE)?.value);
+  if (!agencySlug) {
+    return NextResponse.next();
+  }
+
+  const redirectUrl = request.nextUrl.clone();
+  redirectUrl.pathname = pathname === '/'
+    ? `/${agencySlug}`
+    : `/${agencySlug}${pathname}`;
+
+  return NextResponse.redirect(redirectUrl);
 }
 
 export const config = {
-  matcher: '/vip-portal/:path*',
+  matcher: ['/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml).*)'],
 };

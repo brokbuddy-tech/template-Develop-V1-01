@@ -49,6 +49,10 @@ export const NAV_LINKS: NavLink[] = [
     label: 'About Us',
   },
   {
+    href: '/agents',
+    label: 'Agents',
+  },
+  {
     href: '/careers',
     label: 'Careers',
   },
@@ -72,6 +76,7 @@ export const FOOTER_LINKS: Record<string, NavLink[]> = {
   ],
   'Company': [
     { href: '/about', label: 'About Us' },
+    { href: '/agents', label: 'Agents' },
     { href: '/content-hub', label: 'Content Hub' },
     { href: '/careers', label: 'Careers' },
     { href: '/contact', label: 'Contact' },

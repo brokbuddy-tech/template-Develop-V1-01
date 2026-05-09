@@ -10,6 +10,7 @@ import { Testimonials } from '@/components/home/testimonials';
 import { AwardsSection } from '@/components/awards-section';
 import { FAQ } from '@/components/home/faq';
 import { BlogSection } from '@/components/home/blog-section';
+import { DevelopAboutPageContent } from '@/components/public/agency-about-page';
 
 const teamMembers: Agent[] = [
   {
@@ -82,7 +83,9 @@ const otherTeamMembers: Agent[] = [
 
 
 export default function AboutPage() {
-  const aboutBgImage = PlaceHolderImages.find(p => p.id === 'about-us-background');
+  return <DevelopAboutPageContent />;
+
+  const aboutBgImage = PlaceHolderImages.find(p => p.id === 'about-us-background') || PlaceHolderImages[0];
 
   return (
     <div className="relative">

@@ -14,6 +14,7 @@ import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { DevelopContactPageContent } from '@/components/public/agency-contact-page';
 
 const FormSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters.'),
@@ -23,6 +24,8 @@ const FormSchema = z.object({
 });
 
 export default function ContactPage() {
+  return <DevelopContactPageContent />;
+
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -35,7 +38,7 @@ export default function ContactPage() {
     },
   });
 
-  const contactBgImage = PlaceHolderImages.find(p => p.id === 'contact-background');
+  const contactBgImage = PlaceHolderImages.find(p => p.id === 'contact-background') || PlaceHolderImages[0];
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     setIsLoading(true);

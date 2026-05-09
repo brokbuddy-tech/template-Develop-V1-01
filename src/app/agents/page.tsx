@@ -2,8 +2,11 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
+import { DevelopAgentsPageContent } from "@/components/public/agency-agents-page";
 
 export default function AgentsPage() {
+  return <DevelopAgentsPageContent />;
+
   return (
     <div className="w-full px-4 sm:px-6 lg:px-8 py-12">
       <h1 className="text-4xl font-bold tracking-tight mb-4">Find an Agent</h1>

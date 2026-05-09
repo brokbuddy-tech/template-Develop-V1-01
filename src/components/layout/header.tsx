@@ -27,7 +27,9 @@ import { Menu, Settings, ChevronDown } from 'lucide-react';
 import { NAV_LINKS, SITE_NAME } from '@/lib/constants';
 import { ScrollArea } from '../ui/scroll-area';
 import type { NavLink } from '@/lib/types';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { getSiteConfig } from '@/lib/public-site';
+import { prefixAgencyPath, resolveAgencySlugFromPathname } from '@/lib/agency-routing';
 
 const DevelopLogo = () => (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -37,29 +39,36 @@ const DevelopLogo = () => (
     </svg>
 );
 
-const Logo = () => (
-  <Link href="/" className="flex items-center gap-2">
+const Logo = ({ brandName, agencySlug }: { brandName: string; agencySlug?: string | null }) => (
+  <Link href={prefixAgencyPath('/', agencySlug)} className="flex items-center gap-2">
     <DevelopLogo />
     <span className="text-xl font-bold tracking-wide uppercase text-foreground">
-      {SITE_NAME}
+      {brandName}
     </span>
   </Link>
 );
 
-const HoverDropdownMenu = ({ link }: { link: NavLink }) => {
+const HoverDropdownMenu = ({
+  link,
+  agencySlug,
+}: {
+  link: NavLink;
+  agencySlug?: string | null;
+}) => {
   const [open, setOpen] = React.useState(false);
   const router = useRouter();
+  const linkHref = prefixAgencyPath(link.href, agencySlug);
 
   const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    router.push(link.href);
+    router.push(linkHref);
   };
   
   if (!link.children) {
     return (
       <Button asChild variant="ghost" className="font-semibold text-sm">
         <Link
-          href={link.href}
+          href={linkHref}
           className="text-muted-foreground transition-colors hover:text-foreground p-2"
         >
           {link.label}
@@ -91,7 +100,7 @@ const HoverDropdownMenu = ({ link }: { link: NavLink }) => {
       >
         {link.children.map((child) => (
           <DropdownMenuItem key={child.href} asChild>
-            <Link href={child.href}>{child.label}</Link>
+            <Link href={prefixAgencyPath(child.href, agencySlug)}>{child.label}</Link>
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>
@@ -99,13 +108,19 @@ const HoverDropdownMenu = ({ link }: { link: NavLink }) => {
   );
 };
 
-const DesktopNav = () => (
+const DesktopNav = ({ agencySlug }: { agencySlug?: string | null }) => (
   <nav className="hidden lg:flex items-center gap-2 text-sm font-semibold">
-    {NAV_LINKS.map((link) => <HoverDropdownMenu key={link.label} link={link} />)}
+    {NAV_LINKS.map((link) => <HoverDropdownMenu key={link.label} link={link} agencySlug={agencySlug} />)}
   </nav>
 );
 
-const MobileNav = () => (
+const MobileNav = ({
+  agencySlug,
+  brandName,
+}: {
+  agencySlug?: string | null;
+  brandName: string;
+}) => (
   <Sheet>
     <SheetTrigger asChild>
       <Button variant="outline" size="icon" className="lg:hidden">
@@ -115,7 +130,7 @@ const MobileNav = () => (
     </SheetTrigger>
     <SheetContent side="left" className="w-full max-w-sm flex flex-col p-0">
       <div className="p-6 pb-0">
-        <Logo />
+        <Logo brandName={brandName} agencySlug={agencySlug} />
       </div>
       <ScrollArea className="flex-1 my-4">
         <Accordion type="multiple" className="w-full px-6">
@@ -124,7 +139,7 @@ const MobileNav = () => (
               <AccordionItem value={link.label} key={link.label} className="border-b-0">
                 <AccordionTrigger className="py-3 text-lg font-medium text-muted-foreground hover:no-underline hover:text-foreground">
                   <SheetClose asChild>
-                    <Link href={link.href}>{link.label}</Link>
+                    <Link href={prefixAgencyPath(link.href, agencySlug)}>{link.label}</Link>
                   </SheetClose>
                 </AccordionTrigger>
                 <AccordionContent>
@@ -132,7 +147,7 @@ const MobileNav = () => (
                     {link.children.map((child) => (
                       <SheetClose asChild key={child.href}>
                         <Link
-                          href={child.href}
+                          href={prefixAgencyPath(child.href, agencySlug)}
                           className="text-base font-medium text-muted-foreground transition-colors hover:text-foreground"
                         >
                           {child.label}
@@ -145,7 +160,7 @@ const MobileNav = () => (
             ) : (
               <SheetClose asChild key={link.href}>
                 <Link
-                  href={link.href}
+                  href={prefixAgencyPath(link.href, agencySlug)}
                   className="flex items-center py-3 text-lg font-medium text-muted-foreground transition-colors hover:text-foreground border-b mx-6"
                 >
                   {link.label}
@@ -157,7 +172,7 @@ const MobileNav = () => (
       </ScrollArea>
       <div className="mt-auto p-4 border-t space-y-4">
         <Button asChild className="w-full font-semibold bg-primary text-primary-foreground hover:bg-primary/90 transition-opacity">
-            <Link href="/contact">Contact Us</Link>
+            <Link href={prefixAgencyPath('/contact', agencySlug)}>Contact Us</Link>
         </Button>
         <div className="flex items-center justify-center gap-4">
             <UtilitySwitcher />
@@ -191,23 +206,42 @@ const UtilitySwitcher = () => (
 );
 
 export function Header() {
+  const pathname = usePathname();
+  const agencySlug = resolveAgencySlugFromPathname(pathname);
+  const [brandName, setBrandName] = React.useState(SITE_NAME);
+
+  React.useEffect(() => {
+    let active = true;
+
+    async function loadSiteConfig() {
+      const siteConfig = await getSiteConfig(agencySlug);
+      if (!active) return;
+      setBrandName(siteConfig.branding?.displayName || siteConfig.organization.name || SITE_NAME);
+    }
+
+    void loadSiteConfig();
+    return () => {
+      active = false;
+    };
+  }, [agencySlug]);
+
   return (
     <header className="sticky top-0 z-50 w-full shadow-sm bg-background border-b">
       <div className="w-full px-4 sm:px-6 lg:px-8 flex h-16 items-center">
         <div className="flex items-center gap-6 lg:w-1/4">
-          <Logo />
+          <Logo brandName={brandName} agencySlug={agencySlug} />
         </div>
         <div className="flex-1 flex justify-center">
-          <DesktopNav />
+          <DesktopNav agencySlug={agencySlug} />
         </div>
         <div className="flex items-center justify-end gap-2 md:gap-4 lg:w-1/4">
           <div className="hidden lg:flex items-center gap-2">
             <UtilitySwitcher />
           </div>
           <Button asChild className="hidden sm:inline-flex px-5 py-2 h-auto font-semibold text-sm bg-primary text-primary-foreground hover:bg-primary/90 transition-opacity rounded-none">
-            <Link href="/contact">Contact Us</Link>
+            <Link href={prefixAgencyPath('/contact', agencySlug)}>Contact Us</Link>
           </Button>
-          <MobileNav />
+          <MobileNav agencySlug={agencySlug} brandName={brandName} />
         </div>
       </div>
     </header>

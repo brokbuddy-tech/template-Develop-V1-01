@@ -13,6 +13,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import Image from 'next/image';
 import { getPropertyById, getProperties } from '@/lib/api';
 import { LocationMap } from '@/components/location-map';
+import { getRequestAgencySlug } from '@/lib/server-agency';
 
 function Stat({ icon: Icon, value, label }: { icon: React.ElementType, value: string | number, label: string }) {
     return (
@@ -67,7 +68,8 @@ function AgentContactCard({ agent }: { agent: any }) {
 // Ensure params is correctly treated as a promise in Next.js 15
 export default async function PropertyDetailPage(props: { params: Promise<{ id: string }> }) {
     const params = await props.params;
-    const property = await getPropertyById(params.id);
+    const agencySlug = await getRequestAgencySlug();
+    const property = await getPropertyById(params.id, agencySlug);
 
     if (!property) {
         notFound();
@@ -75,7 +77,7 @@ export default async function PropertyDetailPage(props: { params: Promise<{ id: 
 
     const prop = property as NonNullable<typeof property>;
 
-    const { properties: allProperties } = await getProperties();
+    const { properties: allProperties } = await getProperties(undefined, agencySlug);
     const relatedProperties = allProperties.filter(p => p.type === prop.type && p.id !== prop.id).slice(0, 6);
 
     return (

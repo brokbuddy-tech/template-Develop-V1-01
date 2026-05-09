@@ -19,7 +19,7 @@ export function AreaGuides({ title, guides }: AreaGuidesProps) {
           {guides.map((guide) => {
             const guideImage = guide.imageId ? (guide.imageId.startsWith('http') ? { imageUrl: guide.imageId, id: 'api', imageHint: '' } : PlaceHolderImages.find(p => p.id === guide.imageId)) : null;
             return (
-              <Link href={`/areas/${guide.id}`} key={guide.id} className="group">
+              <Link href={`/area-guides/${guide.id}`} key={guide.id} className="group">
                 <Card className="overflow-hidden relative h-64 border-0">
                   {guideImage ? (
                     <Image
