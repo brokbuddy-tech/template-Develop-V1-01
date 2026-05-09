@@ -170,16 +170,11 @@ async function resolveAgencyContext(agencySlug?: string | null) {
   return null;
 }
 
-async function fetchTemplateResponse(path = '', options?: RequestInit, agencySlug?: string | null) {
-  const resolvedAgencySlug = getEffectiveAgencySlug(agencySlug) || getDefaultAgencySlug();
-  if (!resolvedAgencySlug) {
-    return new Response(null, { status: 404, statusText: 'Agency Not Found' });
-  }
-
-  if (typeof window !== 'undefined') {
-    return safeFetch(getClientTemplateFetchUrl(path, resolvedAgencySlug), options);
-  }
-
+async function fetchDirectTemplateResponse(
+  resolvedAgencySlug: string,
+  path = '',
+  options?: RequestInit,
+) {
   const resolvedContext = await resolveAgencyContext(resolvedAgencySlug);
   const hexCode = resolvedContext?.organization?.hexCode;
   if (!hexCode) {
@@ -197,6 +192,24 @@ async function fetchTemplateResponse(path = '', options?: RequestInit, agencySlu
   }
 
   return lastResponse || new Response(null, { status: 502, statusText: 'Service Unavailable' });
+}
+
+async function fetchTemplateResponse(path = '', options?: RequestInit, agencySlug?: string | null) {
+  const resolvedAgencySlug = getEffectiveAgencySlug(agencySlug) || getDefaultAgencySlug();
+  if (!resolvedAgencySlug) {
+    return new Response(null, { status: 404, statusText: 'Agency Not Found' });
+  }
+
+  if (typeof window !== 'undefined') {
+    const proxyResponse = await safeFetch(getClientTemplateFetchUrl(path, resolvedAgencySlug), options);
+    if (proxyResponse.ok) {
+      return proxyResponse;
+    }
+
+    return fetchDirectTemplateResponse(resolvedAgencySlug, path, options);
+  }
+
+  return fetchDirectTemplateResponse(resolvedAgencySlug, path, options);
 }
 
 export async function getSiteConfig(agencySlug?: string | null): Promise<SiteConfig> {
