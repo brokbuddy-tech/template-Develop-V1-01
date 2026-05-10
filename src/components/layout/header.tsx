@@ -29,7 +29,7 @@ import { NAV_LINKS, SITE_NAME } from '@/lib/constants';
 import { ScrollArea } from '../ui/scroll-area';
 import type { NavLink } from '@/lib/types';
 import { usePathname, useRouter } from 'next/navigation';
-import { getSiteConfig, type SiteConfig } from '@/lib/public-site';
+import { getSiteConfig, hasMeaningfulSiteConfig, type SiteConfig } from '@/lib/public-site';
 import { prefixAgencyPath, resolveAgencySlugFromPathname } from '@/lib/agency-routing';
 
 const DevelopLogo = () => (
@@ -248,6 +248,7 @@ export function Header({ initialSiteConfig }: { initialSiteConfig?: SiteConfig |
       try {
         const siteConfig = await getSiteConfig(agencySlug);
         if (!active) return;
+        if (!hasMeaningfulSiteConfig(siteConfig)) return;
         setBrandName(siteConfig.branding?.displayName || siteConfig.organization.name || SITE_NAME);
         setBrandLogo(siteConfig.profile?.logo || null);
       } catch {

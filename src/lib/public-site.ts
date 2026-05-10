@@ -198,6 +198,24 @@ function normalizeSiteBranding(
   };
 }
 
+export function hasMeaningfulSiteConfig(siteConfig?: SiteConfig | null) {
+  if (!siteConfig) return false;
+
+  if (siteConfig.profile?.logo) return true;
+  if (siteConfig.profile?.aboutCompany?.trim()) return true;
+  if (siteConfig.profile?.officeAddress?.trim()) return true;
+  if (siteConfig.profile?.contact?.officialEmail) return true;
+  if (siteConfig.profile?.contact?.primaryPhone) return true;
+  if (siteConfig.branding?.displayName?.trim()) return true;
+  if (siteConfig.branding?.bio?.trim()) return true;
+  if (siteConfig.branding?.publicEmail) return true;
+  if (siteConfig.branding?.publicPhone) return true;
+  if (siteConfig.branding?.whatsapp) return true;
+  if (siteConfig.leadAgent?.name) return true;
+
+  return Boolean(siteConfig.organization?.name && siteConfig.organization.name !== 'Agency Website');
+}
+
 function normalizeSiteAgent<T extends SiteAgent | null | undefined>(agent: T): T {
   if (!agent) return agent;
   return {

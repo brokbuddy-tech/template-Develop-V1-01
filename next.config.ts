@@ -64,7 +64,7 @@ const agencySlugRewrites = [
   },
 ];
 
-const apiBaseUrl = normalizeApiBaseUrl(process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000');
+const apiBaseUrl = normalizeApiBaseUrl(process.env.NEXT_PUBLIC_API_URL || 'https://brokbuddy-api.onrender.com');
 const apiOrigin = apiBaseUrl.replace(/\/api$/i, '');
 const nextConfig: NextConfig = {
   compress: true,

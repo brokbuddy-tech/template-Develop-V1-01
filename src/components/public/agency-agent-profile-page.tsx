@@ -38,11 +38,22 @@ function getPropertyImage(listing: any) {
   return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
 }
 
-export function DevelopAgentProfilePageContent({ agentSlug }: { agentSlug: string }) {
+export function DevelopAgentProfilePageContent({
+  agentSlug,
+  initialProfile = null,
+}: {
+  agentSlug: string;
+  initialProfile?: Awaited<ReturnType<typeof getAgentProfile>> | null;
+}) {
   const pathname = usePathname();
   const agencySlug = resolveAgencySlugFromPathname(pathname);
-  const [loading, setLoading] = useState(true);
-  const [profile, setProfile] = useState<Awaited<ReturnType<typeof getAgentProfile>> | null>(null);
+  const [loading, setLoading] = useState(!initialProfile);
+  const [profile, setProfile] = useState<Awaited<ReturnType<typeof getAgentProfile>> | null>(initialProfile);
+
+  useEffect(() => {
+    setProfile((current) => initialProfile ?? current ?? null);
+    setLoading(false);
+  }, [initialProfile]);
 
   useEffect(() => {
     let active = true;
@@ -51,7 +62,7 @@ export function DevelopAgentProfilePageContent({ agentSlug }: { agentSlug: strin
       setLoading(true);
       const nextProfile = await getAgentProfile(agentSlug, agencySlug);
       if (!active) return;
-      setProfile(nextProfile);
+      setProfile((current) => nextProfile?.agent ? nextProfile : current);
       setLoading(false);
     }
 
