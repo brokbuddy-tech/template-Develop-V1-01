@@ -1,4 +1,3 @@
-import { notFound } from 'next/navigation';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { BedDouble, Bath, Square, MapPin, Phone, MessageCircle, Building, Check, Mail } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -76,7 +75,19 @@ export default async function PropertyDetailPage(props: { params: Promise<{ id: 
     const property = await getPropertyById(params.id, agencySlug);
 
     if (!property) {
-        notFound();
+        return (
+            <div className="w-full px-4 sm:px-6 lg:px-8 py-20 text-center">
+                <h1 className="text-3xl font-bold">Listing unavailable</h1>
+                <p className="mt-3 text-muted-foreground">
+                    This property could not be loaded from the live public feed.
+                </p>
+                <div className="mt-6">
+                    <Link href="/buy" className="text-primary hover:underline">
+                        Back to listings
+                    </Link>
+                </div>
+            </div>
+        );
     }
 
     const prop = property as NonNullable<typeof property>;

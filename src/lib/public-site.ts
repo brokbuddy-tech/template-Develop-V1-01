@@ -8,7 +8,7 @@ import {
   normalizePublicTemplateAssetUrl,
   shouldRetryApiRequest,
 } from './api-base';
-import { mapListingToProperty } from './api';
+import { getProperties, mapListingToProperty } from './api';
 
 export type SiteAgent = {
   id?: string;
@@ -178,11 +178,34 @@ function normalizeOrganization(
   };
 }
 
-function normalizeSiteProfile(profile?: SiteProfile | null): SiteProfile | null {
+function normalizeLogoUrl(value?: string | null, agencySlug?: string | null) {
+  const normalized = value?.trim();
+  if (!normalized) return null;
+  if (!/^view(?:\?|$)/i.test(normalized)) return null;
+  return getClientTemplateFetchUrl(`/logo/${normalized}`, agencySlug);
+}
+
+function normalizeProfileAssetUrl(
+  value: string | null | undefined,
+  assetId: string | null | undefined,
+  kind: 'avatar' | 'cover',
+  agencySlug?: string | null,
+) {
+  const normalized = value?.trim();
+  if (!normalized || !assetId) return null;
+  if (!/^view(?:\?|$)/i.test(normalized)) return null;
+  return getClientTemplateFetchUrl(`/profile-assets/${assetId}/${kind}/${normalized}`, agencySlug);
+}
+
+function normalizeSiteProfile(profile?: SiteProfile | null, agencySlug?: string | null): SiteProfile | null {
   if (!profile) return null;
   return {
     ...profile,
-    logo: normalizePublicImageUrl(profile.logo) ?? profile.logo ?? null,
+    logo:
+      normalizePublicImageUrl(profile.logo)
+      ?? normalizeLogoUrl(profile.logo, agencySlug)
+      ?? profile.logo
+      ?? null,
   };
 }
 
@@ -216,21 +239,111 @@ export function hasMeaningfulSiteConfig(siteConfig?: SiteConfig | null) {
   return Boolean(siteConfig.organization?.name && siteConfig.organization.name !== 'Agency Website');
 }
 
-function normalizeSiteAgent<T extends SiteAgent | null | undefined>(agent: T): T {
+function normalizeSiteAgent<T extends SiteAgent | null | undefined>(agent: T, agencySlug?: string | null): T {
   if (!agent) return agent;
+  const avatarAssetId = (agent as any).avatarId as string | undefined;
+  const coverAssetId = (agent as any).coverImageId as string | undefined;
   return {
     ...agent,
-    avatar: normalizePublicImageUrl(agent.avatarUrl ?? agent.avatar) ?? agent.avatarUrl ?? agent.avatar ?? null,
-    avatarUrl: normalizePublicImageUrl(agent.avatarUrl ?? agent.avatar) ?? agent.avatarUrl ?? agent.avatar ?? null,
-    coverImage: normalizePublicImageUrl(agent.coverImageUrl ?? agent.coverImage) ?? agent.coverImageUrl ?? agent.coverImage ?? null,
-    coverImageUrl: normalizePublicImageUrl(agent.coverImageUrl ?? agent.coverImage) ?? agent.coverImageUrl ?? agent.coverImage ?? null,
+    avatar:
+      normalizePublicImageUrl(agent.avatarUrl ?? agent.avatar)
+      ?? normalizeProfileAssetUrl(agent.avatarUrl ?? agent.avatar, avatarAssetId, 'avatar', agencySlug)
+      ?? agent.avatarUrl
+      ?? agent.avatar
+      ?? null,
+    avatarUrl:
+      normalizePublicImageUrl(agent.avatarUrl ?? agent.avatar)
+      ?? normalizeProfileAssetUrl(agent.avatarUrl ?? agent.avatar, avatarAssetId, 'avatar', agencySlug)
+      ?? agent.avatarUrl
+      ?? agent.avatar
+      ?? null,
+    coverImage:
+      normalizePublicImageUrl(agent.coverImageUrl ?? agent.coverImage)
+      ?? normalizeProfileAssetUrl(agent.coverImageUrl ?? agent.coverImage, coverAssetId, 'cover', agencySlug)
+      ?? agent.coverImageUrl
+      ?? agent.coverImage
+      ?? null,
+    coverImageUrl:
+      normalizePublicImageUrl(agent.coverImageUrl ?? agent.coverImage)
+      ?? normalizeProfileAssetUrl(agent.coverImageUrl ?? agent.coverImage, coverAssetId, 'cover', agencySlug)
+      ?? agent.coverImageUrl
+      ?? agent.coverImage
+      ?? null,
   } as T;
 }
 
-function normalizeSiteAgents(agents: unknown[]): SiteAgent[] {
+function normalizeSiteAgents(agents: unknown[], agencySlug?: string | null): SiteAgent[] {
   return agents
-    .map((agent) => normalizeSiteAgent(agent as SiteAgent | null))
+    .map((agent) => normalizeSiteAgent(agent as SiteAgent | null, agencySlug))
     .filter((agent): agent is SiteAgent => Boolean(agent));
+}
+
+function normalizeComparableIdentifier(value?: string | null) {
+  const normalized = value?.trim().toLowerCase();
+  if (!normalized) return null;
+
+  return normalized.replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+}
+
+function doesAgentMatchSlug(agentSlug: string, agent?: SiteAgent | null) {
+  const normalizedAgentSlug = normalizeComparableIdentifier(agentSlug);
+  if (!normalizedAgentSlug || !agent) return false;
+
+  return [agent.slug, agent.id, agent.name].some(
+    (value) => normalizeComparableIdentifier(value) === normalizedAgentSlug,
+  );
+}
+
+function listingBelongsToAgent(listing: any, agentSlug: string, agent?: SiteAgent | null) {
+  const normalizedAgentSlug = normalizeComparableIdentifier(agentSlug);
+  const normalizedAgentName = normalizeComparableIdentifier(agent?.name);
+  const candidates = [
+    listing?.agent?.slug,
+    listing?.agent?.name,
+    listing?.agentName,
+    listing?.agent,
+    listing?.broker?.brokerProfile?.slug,
+    listing?.broker?.brokerProfile?.displayName,
+    [listing?.broker?.firstName, listing?.broker?.lastName].filter(Boolean).join(' '),
+  ];
+
+  return candidates.some((value) => {
+    const normalizedValue = normalizeComparableIdentifier(typeof value === 'string' ? value : null);
+    return Boolean(
+      normalizedValue
+      && (
+        normalizedValue === normalizedAgentSlug
+        || (normalizedAgentName && normalizedValue === normalizedAgentName)
+      ),
+    );
+  });
+}
+
+async function buildFallbackAgentProfile(agentSlug: string, agencySlug?: string | null) {
+  const fallbackSlug = getEffectiveAgencySlug(agencySlug) || getDefaultAgencySlug() || 'organization';
+  const roster = await getAgents(agencySlug);
+  const matchedAgent = roster.agents.find((agent) => doesAgentMatchSlug(agentSlug, agent));
+
+  if (!matchedAgent) {
+    return null;
+  }
+
+  const listingsResponse = await getProperties({ limit: '200' }, agencySlug);
+  const activeListings = listingsResponse.properties.filter((listing) => listingBelongsToAgent(listing, agentSlug, matchedAgent));
+
+  return {
+    organization: normalizeOrganization(roster.organization, fallbackSlug),
+    profile: null,
+    agent: normalizeSiteAgent(matchedAgent, roster.organization.slug || fallbackSlug),
+    stats: {
+      activeListings: activeListings.length,
+      soldListings: 0,
+      rentedListings: 0,
+    },
+    activeListings,
+    soldListings: [] as Property[],
+    rentedListings: [] as Property[],
+  };
 }
 
 function getConfiguredAgencyContext(agencySlug?: string | null): ResolvedAgencyContext | null {
@@ -326,9 +439,9 @@ export async function getSiteConfig(agencySlug?: string | null): Promise<SiteCon
   const organization = normalizeOrganization(data.organization, fallbackSlug);
   return {
     organization,
-    profile: normalizeSiteProfile(data.profile || null),
+    profile: normalizeSiteProfile(data.profile || null, organization.slug),
     branding: normalizeSiteBranding(data.branding || null, organization.name),
-    leadAgent: normalizeSiteAgent(data.leadAgent || null),
+    leadAgent: normalizeSiteAgent(data.leadAgent || null, organization.slug),
     stats: data.stats || undefined,
   };
 }
@@ -342,22 +455,32 @@ export async function getAgents(agencySlug?: string | null) {
   }
 
   const data = await response.json();
+  const organization = normalizeOrganization(data.organization || fallback.organization, fallback.organization.slug);
   return {
-    organization: normalizeOrganization(data.organization || fallback.organization, fallback.organization.slug),
-    agents: Array.isArray(data.agents) ? normalizeSiteAgents(data.agents) : [],
+    organization,
+    agents: Array.isArray(data.agents) ? normalizeSiteAgents(data.agents, organization.slug) : [],
   };
 }
 
 export async function getAgentProfile(agentSlug: string, agencySlug?: string | null) {
   const response = await fetchTemplateResponse(`/agents/${agentSlug}`, { next: { revalidate: 300 } } as RequestInit, agencySlug);
-  if (!response.ok) return null;
+  if (!response.ok) {
+    return buildFallbackAgentProfile(agentSlug, agencySlug);
+  }
 
   const data = await response.json();
   const fallbackSlug = getEffectiveAgencySlug(agencySlug) || getDefaultAgencySlug() || 'organization';
+  const organization = normalizeOrganization(data.organization, fallbackSlug);
+  const normalizedAgent = normalizeSiteAgent(data.agent as SiteAgent | null, organization.slug);
+
+  if (!normalizedAgent) {
+    return buildFallbackAgentProfile(agentSlug, agencySlug);
+  }
+
   return {
-    organization: normalizeOrganization(data.organization, fallbackSlug),
-    profile: normalizeSiteProfile(data.profile || null),
-    agent: normalizeSiteAgent(data.agent as SiteAgent | null),
+    organization,
+    profile: normalizeSiteProfile(data.profile || null, organization.slug),
+    agent: normalizedAgent,
     stats: data.stats || { activeListings: 0, soldListings: 0, rentedListings: 0 },
     activeListings: Array.isArray(data.activeListings)
       ? data.activeListings.map((listing: any) => mapListingToProperty(listing, agencySlug))

@@ -99,12 +99,18 @@ function getPublicListingMediaUrl(
     return getPublicTemplateUrl(`/images/${image.id}/view?variant=${variant}`, agencySlug);
   }
 
-  return image.url || null;
+  return rewriteCdnToGcs(image.cdnUrl) || buildStorageImageUrl(image.gcsPath) || image.url || null;
+}
+
+function isRelativeTemplateViewPath(value?: string | null) {
+    const normalized = value?.trim();
+    return Boolean(normalized && /^view(?:\?|$)/i.test(normalized));
 }
 
 function normalizeAssetUrl(value?: string | null): string | null {
     const normalized = value?.trim();
     if (!normalized) return null;
+    if (isRelativeTemplateViewPath(normalized)) return null;
 
     const normalizedProxyPath = normalizePublicTemplateAssetUrl(normalized) || normalized;
     if (/^https?:\/\//i.test(normalizedProxyPath)) return normalizedProxyPath;
@@ -557,9 +563,13 @@ export async function getProperties(
 
 export async function getPropertyById(id: string, agencySlug?: string | null): Promise<Property | null> {
     const res = await fetchTemplateResponse(`/listings/${id}`, { next: { revalidate: 300 } } as any, 8000, agencySlug);
-    if (!res.ok) return null;
-    const listing = await res.json();
-    return mapListingToProperty(listing, agencySlug);
+    if (res.ok) {
+        const listing = await res.json();
+        return mapListingToProperty(listing, agencySlug);
+    }
+
+    const fallbackResults = await getProperties({ limit: '200' }, agencySlug);
+    return fallbackResults.properties.find((property) => property.id === id) || null;
 }
 
 export async function getOrgConfig(agencySlug?: string | null): Promise<{ categories: string[], amenities: string[] }> {

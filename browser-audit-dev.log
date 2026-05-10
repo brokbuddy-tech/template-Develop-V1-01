@@ -1,0 +1,56 @@
+   ▲ Next.js 15.5.9 (Turbopack)
+   - Local:        http://localhost:9102
+   - Network:      http://192.168.1.5:9102
+   - Environments: .env
+
+ ✓ Starting...
+Creating turbopack project {
+  dir: 'F:\\BrokBuddy\\brokbuddy\\templates\\UAE\\template-Develop-V1-01',
+  testMode: true
+}
+ ○ Compiling middleware ...
+ ✓ Compiled middleware in 922ms
+ ✓ Ready in 5s
+ ○ Compiling / ...
+ ✓ Compiled / in 22.6s
+Image with src "/api/public-template-proxy/skyline-realty/logo/view?v=logos%2Fcmm0c75t80000jjkvkw2dp6oc%2Fcompressed%2F1778043757804_czt6du7t.webp" is using a query string which is not configured in images.localPatterns. This config will be required starting in Next.js 16.
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-localpatterns
+ GET / 200 in 3580ms
+ GET / 200 in 3732ms
+ GET / 200 in 1960ms
+ GET / 200 in 2175ms
+ ⚠ Cross origin request detected from 127.0.0.1 to /_next/* resource. In a future major version of Next.js, you will need to explicitly configure "allowedDevOrigins" in next.config to allow this.
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+ ○ Compiling /_not-found/page ...
+ GET /favicon.ico?favicon.7ed73651.ico 200 in 4411ms
+ ✓ Compiled /_not-found/page in 4.8s
+ GET /api/public-template-proxy/skyline-realty/logo/view?v=logos%2Fcmm0c75t80000jjkvkw2dp6oc%2Fcompressed%2F1778043757804_czt6du7t.webp 404 in 6534ms
+ GET /api/public-template-proxy/skyline-realty/images/cmo4lkcd0000ern0neykh2cdh/view?variant=medium 404 in 6295ms
+ GET /api/public-template-proxy/skyline-realty/profile-assets/cmm0c766z0002jjkvs7k5qvql/avatar/view?variant=medium 404 in 6507ms
+ GET /api/public-template-proxy/skyline-realty/images/cmnvawuj1000910fpgfiire91/view?variant=medium 404 in 6535ms
+ GET /api/public-template-proxy/skyline-realty 404 in 6676ms
+ GET /api/public-template-proxy/listings?page=1&limit=12&sort=newest 404 in 2739ms
+ GET /api/public-template-proxy/listings?page=1&limit=12&sort=newest 404 in 422ms
+ GET /api/public-template-proxy/listings?page=1&limit=12&sort=newest 404 in 463ms
+ GET /api/public-template-proxy/listings?page=1&limit=12&sort=newest 404 in 428ms
+ ○ Compiling /agents ...
+ ✓ Compiled /agents in 1332ms
+Image with src "/api/public-template-proxy/skyline-realty/profile-assets/cmm0c766z0002jjkvs7k5qvql/avatar/view?variant=medium" is using a query string which is not configured in images.localPatterns. This config will be required starting in Next.js 16.
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-localpatterns
+ GET /agents 200 in 2155ms
+ GET /favicon.ico?favicon.7ed73651.ico 200 in 514ms
+ GET /api/public-template-proxy/skyline-realty/logo/view?v=logos%2Fcmm0c75t80000jjkvkw2dp6oc%2Fcompressed%2F1778043757804_czt6du7t.webp 404 in 939ms
+ GET /api/public-template-proxy/skyline-realty/profile-assets/cmm0c766z0002jjkvs7k5qvql/avatar/view?variant=medium 404 in 1006ms
+ GET /api/public-template-proxy/skyline-realty 404 in 1640ms
+ GET /api/public-template-proxy/skyline-realty/agents 404 in 1632ms
+ GET /api/public-template-proxy/skyline-realty 404 in 489ms
+ GET /api/public-template-proxy/skyline-realty 404 in 515ms
+ GET /property/cmo4lk28n000arn0neveqgoag 404 in 554ms
+ GET /favicon.ico?favicon.7ed73651.ico 200 in 387ms
+ GET /api/public-template-proxy/skyline-realty/logo/view?v=logos%2Fcmm0c75t80000jjkvkw2dp6oc%2Fcompressed%2F1778043757804_czt6du7t.webp 404 in 582ms
+ GET /api/public-template-proxy/skyline-realty 404 in 815ms
+ GET /agents/owner-skyline-4221 404 in 503ms
+ GET /favicon.ico?favicon.7ed73651.ico 200 in 410ms
+ GET /api/public-template-proxy/skyline-realty/logo/view?v=logos%2Fcmm0c75t80000jjkvkw2dp6oc%2Fcompressed%2F1778043757804_czt6du7t.webp 404 in 531ms
+ GET /api/public-template-proxy/skyline-realty 404 in 797ms
+^C
