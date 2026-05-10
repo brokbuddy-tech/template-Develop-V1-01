@@ -3,6 +3,7 @@ import { getDefaultAgencySlug, getEffectiveAgencySlug } from './agency-routing';
 import {
   PUBLIC_API_BASE_URLS,
   PUBLIC_TEMPLATE_PROXY_BASE_PATH,
+  getConfiguredTemplateHexCode,
   getClientTemplateFetchUrl,
   normalizePublicTemplateAssetUrl,
   shouldRetryApiRequest,
@@ -214,9 +215,31 @@ function normalizeSiteAgents(agents: unknown[]): SiteAgent[] {
     .filter((agent): agent is SiteAgent => Boolean(agent));
 }
 
+function getConfiguredAgencyContext(agencySlug?: string | null): ResolvedAgencyContext | null {
+  const resolvedAgencySlug = getEffectiveAgencySlug(agencySlug);
+  const defaultAgencySlug = getDefaultAgencySlug();
+  const configuredHexCode = getConfiguredTemplateHexCode();
+
+  if (!resolvedAgencySlug || !defaultAgencySlug || !configuredHexCode || resolvedAgencySlug !== defaultAgencySlug) {
+    return null;
+  }
+
+  return {
+    organization: {
+      slug: resolvedAgencySlug,
+      hexCode: configuredHexCode,
+    },
+  };
+}
+
 async function resolveAgencyContext(agencySlug?: string | null) {
   const resolvedAgencySlug = getEffectiveAgencySlug(agencySlug);
   if (!resolvedAgencySlug) return null;
+
+  const configuredContext = getConfiguredAgencyContext(resolvedAgencySlug);
+  if (configuredContext) {
+    return configuredContext;
+  }
 
   for (const publicApiBaseUrl of PUBLIC_API_BASE_URLS) {
     try {
