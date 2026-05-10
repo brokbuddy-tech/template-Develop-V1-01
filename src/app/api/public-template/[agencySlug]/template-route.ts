@@ -1,53 +1,11 @@
-import { NextRequest } from 'next/server';
 import {
   PUBLIC_API_BASE_URLS,
   getConfiguredTemplateHexCode,
   shouldRetryApiRequest,
 } from '@/lib/api-base';
-import {
-  AGENCY_SLUG_COOKIE,
-  getDefaultAgencySlug,
-  isAgencySlugSegment,
-  normalizeAgencySlug,
-  resolveAgencySlugFromPathname,
-} from '@/lib/agency-routing';
+import { getDefaultAgencySlug } from '@/lib/agency-routing';
 
 export const dynamic = 'force-dynamic';
-
-type RouteContext = {
-  params: Promise<{
-    path?: string[];
-  }>;
-};
-
-function getPathnameLikeValue(value?: string | null) {
-  const normalizedValue = value?.trim();
-  if (!normalizedValue) return null;
-  if (normalizedValue.startsWith('/')) return normalizedValue;
-
-  try {
-    return new URL(normalizedValue).pathname;
-  } catch {
-    return normalizedValue;
-  }
-}
-
-function resolveAgencySlugFromRequest(request: NextRequest, routeAgencySlug?: string) {
-  if (routeAgencySlug) return routeAgencySlug;
-
-  const headerSlug = normalizeAgencySlug(request.headers.get('x-agency-slug'));
-  if (headerSlug) return headerSlug;
-
-  const cookieSlug = normalizeAgencySlug(request.cookies.get(AGENCY_SLUG_COOKIE)?.value);
-  if (cookieSlug) return cookieSlug;
-
-  const refererSlug = resolveAgencySlugFromPathname(
-    getPathnameLikeValue(request.headers.get('referer')),
-  );
-  if (refererSlug) return refererSlug;
-
-  return getDefaultAgencySlug() || undefined;
-}
 
 function appendHexToSearch(search: string, hexCode: string) {
   const params = new URLSearchParams(search.startsWith('?') ? search.slice(1) : search);
@@ -91,12 +49,16 @@ function buildUpstreamUrl(
 
   if (pathSegments[0] === 'images' && pathSegments[1]) {
     const trailing = pathSegments.slice(2).map(encodeURIComponent).join('/');
-    return new URL(`${publicApiBaseUrl}/templates/${encodeURIComponent(agencySlug)}/${encodeURIComponent(hexCode)}/images/${encodeURIComponent(pathSegments[1])}/${trailing}${search}`);
+    return new URL(
+      `${publicApiBaseUrl}/templates/${encodeURIComponent(agencySlug)}/${encodeURIComponent(hexCode)}/images/${encodeURIComponent(pathSegments[1])}/${trailing}${search}`,
+    );
   }
 
   if (pathSegments[0] === 'profile-assets' && pathSegments[1] && pathSegments[2]) {
     const trailing = pathSegments.slice(3).map(encodeURIComponent).join('/');
-    return new URL(`${publicApiBaseUrl}/templates/${encodeURIComponent(agencySlug)}/${encodeURIComponent(hexCode)}/profile-assets/${encodeURIComponent(pathSegments[1])}/${encodeURIComponent(pathSegments[2])}/${trailing}${search}`);
+    return new URL(
+      `${publicApiBaseUrl}/templates/${encodeURIComponent(agencySlug)}/${encodeURIComponent(hexCode)}/profile-assets/${encodeURIComponent(pathSegments[1])}/${encodeURIComponent(pathSegments[2])}/${trailing}${search}`,
+    );
   }
 
   const joinedPath = pathSegments.map(encodeURIComponent).join('/');
@@ -146,7 +108,11 @@ async function resolveAgencyContext(agencySlug: string) {
         continue;
       }
 
-      const data = await response.json() as { organization?: { hexCode?: string } };
+      const data = await response.json() as {
+        organization?: {
+          hexCode?: string;
+        };
+      };
       if (data.organization?.hexCode) {
         return data;
       }
@@ -167,18 +133,10 @@ function sanitizeProxyResponseHeaders(headers: Headers) {
   return responseHeaders;
 }
 
-async function proxyRequest(request: NextRequest, context: RouteContext) {
-  const { path = [] } = await context.params;
-  const routeAgencySlug = isAgencySlugSegment(path[0]) ? normalizeAgencySlug(path[0]) || undefined : undefined;
-  const agencySlug = resolveAgencySlugFromRequest(request, routeAgencySlug);
-  const upstreamPath = routeAgencySlug ? path.slice(1) : path;
-
-  if (!agencySlug) {
-    return Response.json({ message: 'Agency not found.' }, { status: 404 });
-  }
-
+export async function proxyTemplateRequest(request: Request, agencySlug: string, pathSegments: string[] = []): Promise<Response> {
   const agencyContext = await resolveAgencyContext(agencySlug);
   const hexCode = agencyContext?.organization?.hexCode;
+
   if (!hexCode) {
     return Response.json({ message: 'Agency not found.' }, { status: 404 });
   }
@@ -194,7 +152,7 @@ async function proxyRequest(request: NextRequest, context: RouteContext) {
   let lastError: Error | null = null;
 
   for (const [index, publicApiBaseUrl] of PUBLIC_API_BASE_URLS.entries()) {
-    const upstreamUrl = buildUpstreamUrl(publicApiBaseUrl, agencySlug, hexCode, upstreamPath, search);
+    const upstreamUrl = buildUpstreamUrl(publicApiBaseUrl, agencySlug, hexCode, pathSegments, search);
 
     try {
       const upstreamResponse = await fetchWithTimeout(upstreamUrl, {
@@ -224,31 +182,9 @@ async function proxyRequest(request: NextRequest, context: RouteContext) {
   }
 
   return Response.json(
-    { message: lastError?.message || 'Unable to reach any configured backend.' },
+    {
+      message: lastError?.message || 'Unable to reach any configured backend.',
+    },
     { status: 502 },
   );
-}
-
-export async function GET(request: NextRequest, context: RouteContext) {
-  return proxyRequest(request, context);
-}
-
-export async function POST(request: NextRequest, context: RouteContext) {
-  return proxyRequest(request, context);
-}
-
-export async function PUT(request: NextRequest, context: RouteContext) {
-  return proxyRequest(request, context);
-}
-
-export async function PATCH(request: NextRequest, context: RouteContext) {
-  return proxyRequest(request, context);
-}
-
-export async function DELETE(request: NextRequest, context: RouteContext) {
-  return proxyRequest(request, context);
-}
-
-export async function OPTIONS(request: NextRequest, context: RouteContext) {
-  return proxyRequest(request, context);
 }

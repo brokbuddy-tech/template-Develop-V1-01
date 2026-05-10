@@ -1,0 +1,18 @@
+   ▲ Next.js 15.5.9
+   - Local:        http://localhost:9102
+   - Network:      http://192.168.1.5:9102
+   - Environments: .env
+
+ ✓ Starting...
+ ✓ Ready in 2.7s
+ ○ Compiling / ...
+ ✓ Compiled / in 11.4s (1244 modules)
+ GET / 200 in 4859ms
+ ✓ Compiled in 1045ms (485 modules)
+Image with src "/api/public-template-proxy/skyline-realty/logo/view?v=logos%2Fcmm0c75t80000jjkvkw2dp6oc%2Fcompressed%2F1778043757804_czt6du7t.webp" is using a query string which is not configured in images.localPatterns. This config will be required starting in Next.js 16.
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-localpatterns
+ GET / 200 in 3269ms
+ ○ Compiling /api/public-template-proxy/[...path] ...
+ ✓ Compiled /api/public-template-proxy/[...path] in 960ms (1222 modules)
+ GET /api/public-template-proxy/skyline-realty 200 in 3496ms
+[?25h

@@ -11,7 +11,7 @@ import { PropertyCard } from '@/components/property-card';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import Image from 'next/image';
 import { getPropertyById, getProperties } from '@/lib/api';
-import { LocationMap } from '@/components/location-map';
+import { LocationMapShell } from '@/components/location-map-shell';
 import { getRequestAgencySlug } from '@/lib/server-agency';
 
 function Stat({ icon: Icon, value, label }: { icon: React.ElementType, value: string | number, label: string }) {
@@ -165,7 +165,7 @@ export default async function PropertyDetailPage(props: { params: Promise<{ id: 
 
                         <div>
                             <h2 className="text-2xl font-bold mb-4">Location</h2>
-                            <LocationMap
+                            <LocationMapShell
                                 latitude={prop.latitude}
                                 longitude={prop.longitude}
                                 locationLabel={prop.location}

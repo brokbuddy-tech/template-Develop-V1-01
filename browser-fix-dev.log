@@ -1,0 +1,200 @@
+   ▲ Next.js 15.5.9 (Turbopack)
+   - Local:        http://localhost:9102
+   - Network:      http://192.168.1.5:9102
+   - Environments: .env
+
+ ✓ Starting...
+Creating turbopack project {
+  dir: 'F:\\BrokBuddy\\brokbuddy\\templates\\UAE\\template-Develop-V1-01',
+  testMode: true
+}
+ ○ Compiling middleware ...
+ ✓ Compiled middleware in 823ms
+ ✓ Ready in 4.1s
+ ○ Compiling /api/public-template-proxy/[...path] ...
+ ✓ Compiled /api/public-template-proxy/[...path] in 7.3s
+ GET /api/public-template-proxy/skyline-realty 200 in 11377ms
+ ○ Compiling / ...
+ ✓ Compiled / in 7.4s
+Image with src "/api/public-template-proxy/skyline-realty/logo/view?v=logos%2Fcmm0c75t80000jjkvkw2dp6oc%2Fcompressed%2F1778043757804_czt6du7t.webp" is using a query string which is not configured in images.localPatterns. This config will be required starting in Next.js 16.
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-localpatterns
+ ⚠ Cross origin request detected from 127.0.0.1 to /_next/* resource. In a future major version of Next.js, you will need to explicitly configure "allowedDevOrigins" in next.config to allow this.
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+ GET / 200 in 14846ms
+ ○ Compiling /favicon.ico ...
+ ✓ Compiled /favicon.ico in 1117ms
+ GET /favicon.ico?favicon.7ed73651.ico 200 in 1571ms
+ GET /api/public-template-proxy/skyline-realty/logo/view?v=logos%2Fcmm0c75t80000jjkvkw2dp6oc%2Fcompressed%2F1778043757804_czt6du7t.webp 200 in 2050ms
+ GET /api/public-template-proxy/skyline-realty 200 in 3025ms
+ GET /api/public-template-proxy/skyline-realty/profile-assets/cmm0c766z0002jjkvs7k5qvql/avatar/view?variant=medium 200 in 3436ms
+ GET /api/public-template-proxy/skyline-realty/images/cmnvawuj1000910fpgfiire91/view?variant=medium 200 in 4198ms
+ GET /api/public-template-proxy/listings?page=1&limit=12&sort=newest 200 in 3422ms
+ GET /api/public-template-proxy/skyline-realty 200 in 1673ms
+ GET /api/public-template-proxy/skyline-realty/images/cmo4lkcd0000ern0neykh2cdh/view?variant=medium 200 in 4942ms
+ ○ Compiling /agents ...
+ ✓ Compiled /agents in 1034ms
+Image with src "/api/public-template-proxy/skyline-realty/profile-assets/cmm0c766z0002jjkvs7k5qvql/avatar/view?variant=medium" is using a query string which is not configured in images.localPatterns. This config will be required starting in Next.js 16.
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-localpatterns
+ GET /agents 200 in 4885ms
+ GET /favicon.ico?favicon.7ed73651.ico 200 in 421ms
+ GET /api/public-template-proxy/skyline-realty/agents 200 in 1694ms
+ GET /api/public-template-proxy/skyline-realty 200 in 3577ms
+ GET /api/public-template-proxy/skyline-realty 200 in 1906ms
+ GET /api/public-template-proxy/skyline-realty 200 in 1656ms
+ ○ Compiling /property/[id] ...
+ ✓ Compiled /property/[id] in 1779ms
+ ⨯ ReferenceError: window is not defined
+    at __TURBOPACK__module__evaluation__ (src\components\location-map.tsx:4:1)
+  2 |
+  3 | import { useEffect, useMemo } from 'react';
+> 4 | import L, { type LatLngExpression } from 'leaflet';
+    | ^
+  5 | import Link from 'next/link';
+  6 | import { MapContainer, Marker, Popup, TileLayer, ZoomControl, useMap } from 'react-leaflet';
+  7 | {
+  digest: '399350876'
+}
+ GET /property/cmo4lk28n000arn0neveqgoag 200 in 6138ms
+ GET /api/public-template-proxy/skyline-realty/images/cmo4lkm1w000irn0nrm8uuj37/view?variant=medium 200 in 2870ms
+ GET /api/public-template-proxy/skyline-realty 200 in 2889ms
+ GET /api/public-template-proxy/skyline-realty/images/cmo4lklga000grn0nchizjpcr/view?variant=medium 200 in 3505ms
+ GET /api/public-template-proxy/skyline-realty/images/cmo4lkm1w000irn0nrm8uuj37/view?variant=thumbnail 200 in 3382ms
+ GET /api/public-template-proxy/skyline-realty/images/cmo4lkcd0000ern0neykh2cdh/view?variant=thumbnail 200 in 4235ms
+ GET /api/public-template-proxy/skyline-realty/images/cmo4lklga000grn0nchizjpcr/view?variant=thumbnail 200 in 3938ms
+ GET /favicon.ico?favicon.7ed73651.ico 200 in 487ms
+ ○ Compiling /agents/[agentSlug] ...
+ ✓ Compiled /agents/[agentSlug] in 854ms
+Image with src "/api/public-template-proxy/skyline-realty/images/cmo4lkcd0000ern0neykh2cdh/view?variant=medium" is using a query string which is not configured in images.localPatterns. This config will be required starting in Next.js 16.
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-localpatterns
+Image with src "/api/public-template-proxy/skyline-realty/images/cmnvawuj1000910fpgfiire91/view?variant=medium" is using a query string which is not configured in images.localPatterns. This config will be required starting in Next.js 16.
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-localpatterns
+ GET /agents/owner-skyline-4221 200 in 3832ms
+ GET /favicon.ico?favicon.7ed73651.ico 200 in 420ms
+ GET /api/public-template-proxy/skyline-realty/agents/owner-skyline-4221 200 in 2497ms
+ GET /api/public-template-proxy/skyline-realty 200 in 2793ms
+ GET /api/public-template-proxy/images/cmnvawuj1000910fpgfiire91/view?variant=medium 200 in 2330ms
+ GET /api/public-template-proxy/images/cmo4lkcd0000ern0neykh2cdh/view?variant=medium 200 in 3289ms
+ GET / 200 in 2548ms
+ GET /favicon.ico?favicon.7ed73651.ico 200 in 1462ms
+ GET /api/public-template-proxy/skyline-realty/logo/view?v=logos%2Fcmm0c75t80000jjkvkw2dp6oc%2Fcompressed%2F1778043757804_czt6du7t.webp 200 in 2170ms
+ GET /api/public-template-proxy/skyline-realty/profile-assets/cmm0c766z0002jjkvs7k5qvql/avatar/view?variant=medium 200 in 2662ms
+ GET /api/public-template-proxy/skyline-realty 200 in 3071ms
+ GET /api/public-template-proxy/skyline-realty/images/cmnvawuj1000910fpgfiire91/view?variant=medium 200 in 3828ms
+ GET /api/public-template-proxy/listings?page=1&limit=12&sort=newest 200 in 3024ms
+ GET /api/public-template-proxy/skyline-realty/images/cmo4lkcd0000ern0neykh2cdh/view?variant=medium 200 in 3992ms
+ GET /api/public-template-proxy/skyline-realty 200 in 2501ms
+ GET /agents 200 in 721ms
+ GET /favicon.ico?favicon.7ed73651.ico 200 in 1315ms
+ GET /api/public-template-proxy/skyline-realty 200 in 2891ms
+ GET /api/public-template-proxy/skyline-realty/agents 200 in 2897ms
+ GET /api/public-template-proxy/skyline-realty 200 in 1795ms
+ GET /api/public-template-proxy/skyline-realty 200 in 1519ms
+ ⨯ ReferenceError: window is not defined
+    at __TURBOPACK__module__evaluation__ (src\components\location-map.tsx:4:1)
+  2 |
+  3 | import { useEffect, useMemo } from 'react';
+> 4 | import L, { type LatLngExpression } from 'leaflet';
+    | ^
+  5 | import Link from 'next/link';
+  6 | import { MapContainer, Marker, Popup, TileLayer, ZoomControl, useMap } from 'react-leaflet';
+  7 | {
+  digest: '399350876'
+}
+ GET /property/cmo4lk28n000arn0neveqgoag 200 in 4793ms
+ GET /api/public-template-proxy/skyline-realty 200 in 2148ms
+ GET /api/public-template-proxy/skyline-realty/images/cmo4lkcd0000ern0neykh2cdh/view?variant=thumbnail 502 in 16540ms
+ GET /api/public-template-proxy/skyline-realty/images/cmo4lkm1w000irn0nrm8uuj37/view?variant=medium 502 in 15130ms
+ GET /api/public-template-proxy/skyline-realty/images/cmo4lklga000grn0nchizjpcr/view?variant=medium 502 in 15141ms
+ GET /api/public-template-proxy/skyline-realty/images/cmo4lklga000grn0nchizjpcr/view?variant=thumbnail 502 in 15020ms
+ GET /api/public-template-proxy/skyline-realty/images/cmo4lkm1w000irn0nrm8uuj37/view?variant=thumbnail 502 in 15024ms
+ GET /favicon.ico?favicon.7ed73651.ico 200 in 393ms
+ GET /agents/owner-skyline-4221 200 in 637ms
+ GET /favicon.ico?favicon.7ed73651.ico 200 in 404ms
+ GET /api/public-template-proxy/skyline-realty 200 in 1737ms
+ GET /api/public-template-proxy/skyline-realty/agents/owner-skyline-4221 200 in 2393ms
+ GET /api/public-template-proxy/images/cmnvawuj1000910fpgfiire91/view?variant=medium 200 in 2026ms
+ GET /api/public-template-proxy/images/cmo4lkcd0000ern0neykh2cdh/view?variant=medium 200 in 2474ms
+ GET /api/public-template-proxy/skyline-realty/images/cmo4lkm1w000irn0nrm8uuj37/view?variant=medium 200 in 2864ms
+Image with src "/api/public-template-proxy/skyline-realty/logo/view?v=logos%2Fcmm0c75t80000jjkvkw2dp6oc%2Fcompressed%2F1778043757804_czt6du7t.webp" is using a query string which is not configured in images.localPatterns. This config will be required starting in Next.js 16.
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-localpatterns
+ GET / 200 in 3974ms
+ GET /favicon.ico?favicon.7ed73651.ico 200 in 982ms
+ GET /api/public-template-proxy/skyline-realty/logo/view?v=logos%2Fcmm0c75t80000jjkvkw2dp6oc%2Fcompressed%2F1778043757804_czt6du7t.webp 200 in 1628ms
+ GET /api/public-template-proxy/skyline-realty 200 in 2756ms
+ GET /api/public-template-proxy/skyline-realty/profile-assets/cmm0c766z0002jjkvs7k5qvql/avatar/view?variant=medium 200 in 3563ms
+ GET /api/public-template-proxy/skyline-realty 200 in 1500ms
+ GET /api/public-template-proxy/listings?page=1&limit=12&sort=newest 200 in 4185ms
+ GET /agents 200 in 669ms
+ GET /favicon.ico?favicon.7ed73651.ico 200 in 418ms
+ GET /api/public-template-proxy/skyline-realty/agents 200 in 1745ms
+ GET /api/public-template-proxy/skyline-realty 200 in 1819ms
+ GET /api/public-template-proxy/skyline-realty 200 in 1107ms
+ GET /api/public-template-proxy/skyline-realty 200 in 1092ms
+Image with src "/api/public-template-proxy/skyline-realty/logo/view?v=logos%2Fcmm0c75t80000jjkvkw2dp6oc%2Fcompressed%2F1778043757804_czt6du7t.webp" is using a query string which is not configured in images.localPatterns. This config will be required starting in Next.js 16.
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-localpatterns
+Image with src "/api/public-template-proxy/skyline-realty/profile-assets/cmm0c766z0002jjkvs7k5qvql/avatar/view?variant=medium" is using a query string which is not configured in images.localPatterns. This config will be required starting in Next.js 16.
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-localpatterns
+ ⨯ ReferenceError: window is not defined
+    at __TURBOPACK__module__evaluation__ (src\components\location-map.tsx:4:1)
+  2 |
+  3 | import { useEffect, useMemo } from 'react';
+> 4 | import L, { type LatLngExpression } from 'leaflet';
+    | ^
+  5 | import Link from 'next/link';
+  6 | import { MapContainer, Marker, Popup, TileLayer, ZoomControl, useMap } from 'react-leaflet';
+  7 | {
+  digest: '952929214'
+}
+ GET /property/cmo4lk28n000arn0neveqgoag 200 in 2934ms
+ GET /api/public-template-proxy/skyline-realty/images/cmo4lkcd0000ern0neykh2cdh/view?variant=medium 200 in 2591ms
+ GET /api/public-template-proxy/skyline-realty/images/cmo4lklga000grn0nchizjpcr/view?variant=medium 200 in 2475ms
+ GET /api/public-template-proxy/skyline-realty/images/cmo4lkcd0000ern0neykh2cdh/view?variant=thumbnail 200 in 4814ms
+ GET /favicon.ico?favicon.7ed73651.ico 200 in 399ms
+ GET /api/public-template-proxy/skyline-realty 200 in 4719ms
+ GET /api/public-template-proxy/skyline-realty/images/cmo4lkm1w000irn0nrm8uuj37/view?variant=thumbnail 200 in 4805ms
+ GET /api/public-template-proxy/skyline-realty/images/cmo4lklga000grn0nchizjpcr/view?variant=thumbnail 200 in 3741ms
+ GET /api/public-template-proxy/skyline-realty/images/cmo4lkm1w000irn0nrm8uuj37/view?variant=medium 200 in 9058ms
+ GET /agents/owner-skyline-4221 200 in 771ms
+ GET /favicon.ico?favicon.7ed73651.ico 200 in 1115ms
+ GET /api/public-template-proxy/skyline-realty 200 in 3276ms
+ GET /api/public-template-proxy/skyline-realty/images/cmnvawuj1000910fpgfiire91/view?variant=medium 200 in 4058ms
+ GET /api/public-template-proxy/skyline-realty/agents/owner-skyline-4221 200 in 5307ms
+ GET /api/public-template-proxy/images/cmo4lkcd0000ern0neykh2cdh/view?variant=medium 200 in 2765ms
+ GET /api/public-template-proxy/images/cmnvawuj1000910fpgfiire91/view?variant=medium 200 in 3552ms
+ ⨯ ./src/app/property/[id]/page.tsx:17:28
+Ecmascript file had an error
+[0m [90m 15 |[39m [36mimport[39m { getRequestAgencySlug } [36mfrom[39m [32m'@/lib/server-agency'[39m[33m;[39m
+ [90m 16 |[39m
+[31m[1m>[22m[39m[90m 17 |[39m [36mconst[39m [33mDynamicLocationMap[39m [33m=[39m dynamic(
+ [90m    |[39m                            [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m>[22m[39m[90m 18 |[39m     () [33m=>[39m [36mimport[39m([32m'@/components/location-map'[39m)[33m.[39mthen((mod) [33m=>[39m ({ [36mdefault[39m[33m:[39m mod[33m.[39m[33mLocationMap[39m }))[33m,[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m>[22m[39m[90m 19 |[39m     {
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m>[22m[39m[90m 20 |[39m         ssr[33m:[39m [36mfalse[39m[33m,[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m>[22m[39m[90m 21 |[39m         loading[33m:[39m () [33m=>[39m [33m<[39m[33mdiv[39m className[33m=[39m[32m"h-[400px] w-full rounded-lg border bg-card/50"[39m [33m/[39m[33m>[39m[33m,[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m>[22m[39m[90m 22 |[39m     }
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m>[22m[39m[90m 23 |[39m )[33m;[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 24 |[39m
+ [90m 25 |[39m [36mfunction[39m [33mStat[39m({ icon[33m:[39m [33mIcon[39m[33m,[39m value[33m,[39m label }[33m:[39m { icon[33m:[39m [33mReact[39m[33m.[39m[33mElementType[39m[33m,[39m value[33m:[39m string [33m|[39m number[33m,[39m label[33m:[39m string }) {
+ [90m 26 |[39m     [36mreturn[39m ([0m
+
+`ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a Client Component.
+
+
+ ○ Compiling /_error ...
+ ✓ Compiled /_error in 6.4s
+ GET /property/cmo4lk28n000arn0neveqgoag 500 in 9935ms
+ ✓ Compiled in 4.1s
+ ○ Compiling /property/[id] ...
+ ✓ Compiled /property/[id] in 1099ms
+Image with src "/api/public-template-proxy/skyline-realty/logo/view?v=logos%2Fcmm0c75t80000jjkvkw2dp6oc%2Fcompressed%2F1778043757804_czt6du7t.webp" is using a query string which is not configured in images.localPatterns. This config will be required starting in Next.js 16.
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-localpatterns
+Image with src "/api/public-template-proxy/skyline-realty/profile-assets/cmm0c766z0002jjkvs7k5qvql/avatar/view?variant=medium" is using a query string which is not configured in images.localPatterns. This config will be required starting in Next.js 16.
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-localpatterns
+ GET /property/cmo4lk28n000arn0neveqgoag 200 in 8628ms
+^C^C

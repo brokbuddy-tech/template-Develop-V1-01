@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Image as ImageIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { PropertyImage, PropertyMedia } from '@/lib/types';
@@ -37,7 +37,6 @@ export function ProgressiveImage({
 }: ProgressiveImageProps) {
   const [isHighResLoaded, setIsHighResLoaded] = useState(false);
   const [error, setError] = useState(false);
-  const loadingRef = useRef<string | null>(null);
 
   const target = source || image;
   
@@ -61,32 +60,9 @@ export function ProgressiveImage({
   }
 
   useEffect(() => {
-    if (!displayUrl || isHighResLoaded || typeof window === 'undefined') return;
-    
-    if (displayUrl === thumbUrl) {
-      setIsHighResLoaded(true);
-      return;
-    }
-
-    const img = new window.Image();
-    img.decoding = 'async';
-    img.src = displayUrl;
-    loadingRef.current = displayUrl;
-    
-    img.onload = () => {
-      if (loadingRef.current === displayUrl) {
-        setIsHighResLoaded(true);
-      }
-    };
-    
-    img.onerror = () => {
-      setError(true);
-    };
-
-    return () => {
-      loadingRef.current = null;
-    };
-  }, [displayUrl, thumbUrl, isHighResLoaded]);
+    setError(false);
+    setIsHighResLoaded(Boolean(displayUrl) && displayUrl === thumbUrl);
+  }, [displayUrl, thumbUrl]);
 
   if (!target || (error && !thumbUrl)) {
     return (

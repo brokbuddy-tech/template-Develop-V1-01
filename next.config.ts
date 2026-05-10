@@ -8,62 +8,6 @@ function normalizeApiBaseUrl(value: string) {
   return `${normalized}/api`;
 }
 
-function escapeForRegex(value: string) {
-  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
-
-const reservedRootSegments = [
-  '_next',
-  'about',
-  'agent',
-  'agents',
-  'all-listings',
-  'apartments',
-  'api',
-  'area-guides',
-  'buy',
-  'careers',
-  'city-index',
-  'commercial',
-  'contact',
-  'content-hub',
-  'favicon.ico',
-  'find-an-agent',
-  'for-developers',
-  'insights',
-  'instant-valuation',
-  'invest',
-  'map',
-  'off-plan',
-  'portals',
-  'projects',
-  'properties',
-  'property',
-  'rent',
-  'robots.txt',
-  'search',
-  'sell',
-  'services',
-  'sitemap.xml',
-  'sold',
-  'townhouses',
-  'villas',
-  'vip-portal',
-];
-
-const reservedRootPattern = reservedRootSegments.map(escapeForRegex).join('|');
-const agencySlugSegmentPattern = `((?!(?:${reservedRootPattern})$)(?!.*\\.)[^/]+)`;
-const agencySlugRewrites = [
-  {
-    source: `/:agencySlug${agencySlugSegmentPattern}`,
-    destination: '/',
-  },
-  {
-    source: `/:agencySlug${agencySlugSegmentPattern}/:path*`,
-    destination: '/:path*',
-  },
-];
-
 const apiBaseUrl = normalizeApiBaseUrl(process.env.NEXT_PUBLIC_API_URL || 'https://brokbuddy-api.onrender.com');
 const apiOrigin = apiBaseUrl.replace(/\/api$/i, '');
 const nextConfig: NextConfig = {
@@ -136,7 +80,6 @@ const nextConfig: NextConfig = {
   },
   async rewrites() {
     return {
-      beforeFiles: agencySlugRewrites,
       fallback: [
         {
           source: '/api/:path*',
