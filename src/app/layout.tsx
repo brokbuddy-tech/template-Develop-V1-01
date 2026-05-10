@@ -6,17 +6,22 @@ import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { Toaster } from '@/components/ui/toaster';
 import { Providers } from '@/components/providers';
+import { getSiteConfig } from '@/lib/public-site';
+import { getRequestAgencySlug } from '@/lib/server-agency';
 
 export const metadata: Metadata = {
   title: 'DEVELOP | Redefining Real Estate in Dubai',
   description: 'An ultra-premium, minimalist, and data-driven luxury real estate platform.',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const agencySlug = await getRequestAgencySlug();
+  const siteConfig = await getSiteConfig(agencySlug);
+
   return (
     <html lang="en">
       <head>
@@ -26,9 +31,9 @@ export default function RootLayout({
       </head>
       <body className="font-body antialiased">
         <Providers>
-          <Header />
+          <Header initialSiteConfig={siteConfig} />
           <main className="flex-1">{children}</main>
-          <Footer />
+          <Footer agencySlug={agencySlug} initialSiteConfig={siteConfig} />
           <Toaster />
         </Providers>
       </body>

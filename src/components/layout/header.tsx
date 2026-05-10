@@ -29,7 +29,7 @@ import { NAV_LINKS, SITE_NAME } from '@/lib/constants';
 import { ScrollArea } from '../ui/scroll-area';
 import type { NavLink } from '@/lib/types';
 import { usePathname, useRouter } from 'next/navigation';
-import { getSiteConfig } from '@/lib/public-site';
+import { getSiteConfig, type SiteConfig } from '@/lib/public-site';
 import { prefixAgencyPath, resolveAgencySlugFromPathname } from '@/lib/agency-routing';
 
 const DevelopLogo = () => (
@@ -228,27 +228,40 @@ const UtilitySwitcher = () => (
   </DropdownMenu>
 );
 
-export function Header() {
+export function Header({ initialSiteConfig }: { initialSiteConfig?: SiteConfig | null }) {
   const pathname = usePathname();
   const agencySlug = resolveAgencySlugFromPathname(pathname);
-  const [brandName, setBrandName] = React.useState(SITE_NAME);
-  const [brandLogo, setBrandLogo] = React.useState<string | null>(null);
+  const [brandName, setBrandName] = React.useState(
+    initialSiteConfig?.branding?.displayName || initialSiteConfig?.organization.name || SITE_NAME,
+  );
+  const [brandLogo, setBrandLogo] = React.useState<string | null>(initialSiteConfig?.profile?.logo || null);
+
+  React.useEffect(() => {
+    setBrandName(initialSiteConfig?.branding?.displayName || initialSiteConfig?.organization.name || SITE_NAME);
+    setBrandLogo(initialSiteConfig?.profile?.logo || null);
+  }, [initialSiteConfig]);
 
   React.useEffect(() => {
     let active = true;
 
     async function loadSiteConfig() {
-      const siteConfig = await getSiteConfig(agencySlug);
-      if (!active) return;
-      setBrandName(siteConfig.branding?.displayName || siteConfig.organization.name || SITE_NAME);
-      setBrandLogo(siteConfig.profile?.logo || null);
+      try {
+        const siteConfig = await getSiteConfig(agencySlug);
+        if (!active) return;
+        setBrandName(siteConfig.branding?.displayName || siteConfig.organization.name || SITE_NAME);
+        setBrandLogo(siteConfig.profile?.logo || null);
+      } catch {
+        if (!active) return;
+        setBrandName((current) => current || initialSiteConfig?.branding?.displayName || initialSiteConfig?.organization.name || SITE_NAME);
+        setBrandLogo((current) => current || initialSiteConfig?.profile?.logo || null);
+      }
     }
 
     void loadSiteConfig();
     return () => {
       active = false;
     };
-  }, [agencySlug]);
+  }, [agencySlug, initialSiteConfig]);
 
   return (
     <header className="sticky top-0 z-50 w-full shadow-sm bg-background border-b">

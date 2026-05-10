@@ -1,10 +1,11 @@
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Building, Send, Twitter, Linkedin, Instagram } from 'lucide-react';
 import { FOOTER_LINKS, SITE_NAME } from '@/lib/constants';
-import { getSiteConfig } from '@/lib/public-site';
+import { getSiteConfig, type SiteConfig } from '@/lib/public-site';
 import { prefixAgencyPath } from '@/lib/agency-routing';
 import { getRequestAgencySlug } from '@/lib/server-agency';
 
@@ -14,12 +15,19 @@ const SocialLink = ({ href, icon: Icon }: { href: string; icon: React.ElementTyp
   </Link>
 );
 
-export async function Footer() {
-  const agencySlug = await getRequestAgencySlug();
-  const siteConfig = await getSiteConfig(agencySlug);
+export async function Footer({
+  agencySlug: providedAgencySlug,
+  initialSiteConfig,
+}: {
+  agencySlug?: string | null;
+  initialSiteConfig?: SiteConfig | null;
+} = {}) {
+  const agencySlug = providedAgencySlug ?? await getRequestAgencySlug();
+  const siteConfig = initialSiteConfig ?? await getSiteConfig(agencySlug);
   const displayName = siteConfig.branding?.displayName || siteConfig.organization.name || SITE_NAME;
   const officeAddress = siteConfig.profile?.officeAddress?.trim();
   const officeEmail = siteConfig.profile?.contact?.officialEmail || siteConfig.branding?.publicEmail;
+  const logoUrl = siteConfig.profile?.logo || null;
 
   return (
     <footer className="border-t">
@@ -27,7 +35,19 @@ export async function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
           <div className="lg:col-span-2 pr-8">
             <Link href={prefixAgencyPath('/', agencySlug)} className="flex items-center gap-2 mb-4">
-              <Building className="h-7 w-7 text-primary" />
+              {logoUrl ? (
+                <span className="relative h-8 w-8 overflow-hidden rounded-md border border-border bg-card">
+                  <Image
+                    src={logoUrl}
+                    alt={`${displayName} logo`}
+                    fill
+                    className="object-contain p-1"
+                    sizes="32px"
+                  />
+                </span>
+              ) : (
+                <Building className="h-7 w-7 text-primary" />
+              )}
               <span className="text-2xl font-bold tracking-tighter uppercase">{displayName}</span>
             </Link>
             <p className="text-muted-foreground text-sm mb-4">
