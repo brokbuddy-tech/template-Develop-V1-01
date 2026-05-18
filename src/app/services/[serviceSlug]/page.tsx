@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { getSiteConfig } from '@/lib/public-site';
+import { getAgencyDisplayName, getSiteConfig } from '@/lib/public-site';
 import { prefixAgencyPath } from '@/lib/agency-routing';
 import { getRequestAgencySlug } from '@/lib/server-agency';
 import { getDevelopServicePage } from '@/lib/marketing-pages';
@@ -20,10 +20,7 @@ export default async function ServiceDetailPage({
 
   const agencySlug = await getRequestAgencySlug();
   const siteConfig = await getSiteConfig(agencySlug);
-  const agencyName =
-    siteConfig.branding?.displayName
-    || siteConfig.organization.name
-    || 'DEVELOP';
+  const agencyName = getAgencyDisplayName(siteConfig);
 
   return (
     <div className="bg-background">

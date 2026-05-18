@@ -105,6 +105,25 @@ export type SiteConfig = {
   };
 };
 
+function getPossessiveName(name: string) {
+  const trimmedName = name.trim();
+  if (!trimmedName) return 'Agency Website';
+  return /s$/i.test(trimmedName) ? `${trimmedName}'` : `${trimmedName}'s`;
+}
+
+export function getAgencyDisplayName(siteConfig?: SiteConfig | null) {
+  return siteConfig?.branding?.displayName?.trim() || siteConfig?.organization.name?.trim() || 'Agency Website';
+}
+
+export function replaceTemplateBranding(text: string, agencyName: string) {
+  const normalizedAgencyName = agencyName.trim() || 'Agency Website';
+
+  return text
+    .replace(/{{agencyName}}/g, normalizedAgencyName)
+    .replace(/DEVELOP's/gi, getPossessiveName(normalizedAgencyName))
+    .replace(/\bDEVELOP\b/gi, normalizedAgencyName);
+}
+
 type ResolvedAgencyContext = {
   organization?: {
     slug?: string;

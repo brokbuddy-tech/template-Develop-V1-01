@@ -1,4 +1,3 @@
-
 'use client';
 
 import * as React from 'react';
@@ -41,7 +40,7 @@ function TestimonialCard({ testimonial }: { testimonial: SellerTestimonial }) {
   );
 }
 
-export function SellerTestimonials() {
+export function SellerTestimonials({ agencyName }: { agencyName: string }) {
   const [api, setApi] = React.useState<CarouselApi>();
   const [current, setCurrent] = React.useState(0);
   const [count, setCount] = React.useState(0);
@@ -84,7 +83,7 @@ export function SellerTestimonials() {
               What Our Sellers Say
             </h2>
             <p className="mt-4 text-lg text-muted-foreground">
-              Don’t take our word for it. Here are some of the great things our clients have said about selling through DEVELOP.
+              Don't take our word for it. Here are some of the great things our clients have said about selling through {agencyName}.
             </p>
           </div>
           <div className="flex items-center gap-4 mt-8 md:mt-0">
@@ -127,16 +126,16 @@ export function SellerTestimonials() {
         </Carousel>
 
         <div className="flex justify-center gap-2 mt-8">
-            {Array.from({ length: count }).map((_, index) => (
-                <button
-                    key={index}
-                    onClick={() => api?.scrollTo(index)}
-                    className={cn(
-                        'h-2 rounded-full transition-all duration-300',
-                        (current - 1) === index ? 'w-8 bg-primary' : 'w-2 bg-muted'
-                    )}
-                />
-            ))}
+          {Array.from({ length: count }).map((_, index) => (
+            <button
+              key={index}
+              onClick={() => api?.scrollTo(index)}
+              className={cn(
+                'h-2 rounded-full transition-all duration-300',
+                (current - 1) === index ? 'w-8 bg-primary' : 'w-2 bg-muted'
+              )}
+            />
+          ))}
         </div>
 
       </div>

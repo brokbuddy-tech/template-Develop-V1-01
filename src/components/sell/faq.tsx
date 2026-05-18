@@ -7,6 +7,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { replaceTemplateBranding } from '@/lib/public-site';
 
 const faqs = [
   {
@@ -15,11 +16,11 @@ const faqs = [
   },
   {
     question: "How can I sell my property quickly online?",
-    answer: "To sell your property quickly, register with DEVELOP. We provide comprehensive support including professional maintenance and cleaning to ensure your property is presented in the best light, along with an expedited advertising and sales process."
+    answer: "To sell your property quickly, register with {{agencyName}}. We provide comprehensive support including professional maintenance and cleaning to ensure your property is presented in the best light, along with an expedited advertising and sales process."
   },
   {
     question: "What is the process for selling my property in Dubai?",
-    answer: "The process is designed to be hassle-free. By listing with DEVELOP, you entrust us to handle all the legal and sales aspects. We manage everything from marketing your property to coordinating with legal teams for a smooth transaction."
+    answer: "The process is designed to be hassle-free. By listing with {{agencyName}}, you entrust us to handle all the legal and sales aspects. We manage everything from marketing your property to coordinating with legal teams for a smooth transaction."
   },
   {
     question: "Can I sell my property in Dubai in 2026?",
@@ -38,18 +39,23 @@ const faqs = [
     answer: "The essential documents required to sell your property in 2026 include the Title Deed, your Emirates ID or Passport copy, and the tenancy contract if the property is currently rented."
   },
   {
-    question: "Why choose DEVELOP to sell in 2026?",
-    answer: "Choosing DEVELOP means you get a dedicated 'one team' approach. We manage the full lifecycle of the sale, from listing and marketing to conducting viewings and handling all the necessary steps for a successful transfer."
+    question: "Why choose {{agencyName}} to sell in 2026?",
+    answer: "Choosing {{agencyName}} means you get a dedicated 'one team' approach. We manage the full lifecycle of the sale, from listing and marketing to conducting viewings and handling all the necessary steps for a successful transfer."
   }
 ];
 
-export function SellerFaq() {
+export function SellerFaq({ agencyName }: { agencyName: string }) {
+  const items = faqs.map((faq) => ({
+    question: replaceTemplateBranding(faq.question, agencyName),
+    answer: replaceTemplateBranding(faq.answer, agencyName),
+  }));
+
   return (
     <section className="bg-white py-24 sm:py-32">
       <div className="w-full px-4 sm:px-6 lg:px-8">
         <h2 className="text-3xl font-bold text-center mb-12">Frequently Asked Questions:</h2>
         <Accordion type="single" collapsible className="w-full max-w-4xl mx-auto">
-          {faqs.map((faq, index) => (
+          {items.map((faq, index) => (
             <AccordionItem value={`item-${index}`} key={index} className="border-b border-gray-200">
               <AccordionTrigger className="text-lg font-bold text-black text-left hover:no-underline py-6">
                 {`${index + 1}. ${faq.question}`}

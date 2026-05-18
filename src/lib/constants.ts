@@ -1,7 +1,7 @@
 
 import type { NavLink } from './types';
 
-export const SITE_NAME = 'DEVELOP';
+export const SITE_NAME = 'Agency Website';
 
 export const NAV_LINKS: NavLink[] = [
   {

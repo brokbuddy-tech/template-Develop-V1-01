@@ -5,11 +5,12 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
+import { replaceTemplateBranding } from '@/lib/public-site';
 
 const faqs = [
   {
-    question: "What makes DEVELOP different from other real estate agencies?",
-    answer: "DEVELOP combines deep market expertise with a data-driven approach and a suite of in-house services, including property management and interior design, to provide a seamless, end-to-end luxury real estate experience."
+    question: "What makes {{agencyName}} different from other real estate agencies?",
+    answer: "{{agencyName}} combines deep market expertise with a data-driven approach and a suite of in-house services, including property management and interior design, to provide a seamless, end-to-end luxury real estate experience."
   },
   {
     question: "Do you only deal with luxury properties?",
@@ -29,13 +30,18 @@ const faqs = [
   }
 ]
 
-export function FAQ() {
+export function FAQ({ agencyName }: { agencyName: string }) {
+  const items = faqs.map((faq) => ({
+    question: replaceTemplateBranding(faq.question, agencyName),
+    answer: replaceTemplateBranding(faq.answer, agencyName),
+  }));
+
   return (
     <section className="py-16 bg-card">
       <div className="w-full px-4 sm:px-6 lg:px-8">
         <h2 className="text-3xl font-bold text-center mb-8">Frequently Asked Questions</h2>
         <Accordion type="single" collapsible className="w-full max-w-4xl mx-auto">
-          {faqs.map((faq, index) => (
+          {items.map((faq, index) => (
             <AccordionItem value={`item-${index}`} key={index}>
               <AccordionTrigger className="text-left">{faq.question}</AccordionTrigger>
               <AccordionContent className="text-muted-foreground">

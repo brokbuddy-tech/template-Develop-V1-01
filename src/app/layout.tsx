@@ -6,13 +6,21 @@ import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { Toaster } from '@/components/ui/toaster';
 import { Providers } from '@/components/providers';
-import { getSiteConfig } from '@/lib/public-site';
+import { getAgencyDisplayName, getSiteConfig } from '@/lib/public-site';
 import { getRequestAgencySlug } from '@/lib/server-agency';
 
-export const metadata: Metadata = {
-  title: 'DEVELOP | Redefining Real Estate in Dubai',
-  description: 'An ultra-premium, minimalist, and data-driven luxury real estate platform.',
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const agencySlug = await getRequestAgencySlug();
+  const siteConfig = await getSiteConfig(agencySlug);
+  const agencyName = getAgencyDisplayName(siteConfig);
+
+  return {
+    title: siteConfig.branding?.metaTitle || `${agencyName} | Redefining Real Estate in Dubai`,
+    description:
+      siteConfig.branding?.metaDescription
+      || `${agencyName} is an ultra-premium, minimalist, and data-driven luxury real estate platform.`,
+  };
+}
 
 export default async function RootLayout({
   children,

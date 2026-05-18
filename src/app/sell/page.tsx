@@ -9,8 +9,13 @@ import { SellerTestimonials } from '@/components/sell/testimonials';
 import { SellerFaq } from '@/components/sell/faq';
 import { BlogSection } from '@/components/home/blog-section';
 import { blogPosts } from '@/lib/data';
+import { getAgencyDisplayName, getSiteConfig } from '@/lib/public-site';
+import { getRequestAgencySlug } from '@/lib/server-agency';
 
-export default function SellPage() {
+export default async function SellPage() {
+  const agencySlug = await getRequestAgencySlug();
+  const siteConfig = await getSiteConfig(agencySlug);
+  const agencyName = getAgencyDisplayName(siteConfig);
   const heroImage = PlaceHolderImages.find(p => p.id === 'blog-4');
 
   return (
@@ -44,9 +49,9 @@ export default function SellPage() {
                 </div>
             </div>
         </div>
-        <WhySell />
-        <SellerTestimonials />
-        <SellerFaq />
+        <WhySell agencyName={agencyName} />
+        <SellerTestimonials agencyName={agencyName} />
+        <SellerFaq agencyName={agencyName} />
         <BlogSection blogs={blogPosts} />
     </>
   );

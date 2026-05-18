@@ -10,20 +10,24 @@ import { FAQ } from '@/components/home/faq';
 import { BlogSection } from '@/components/home/blog-section';
 import { AreaGuidesDiscovery } from '@/components/home/area-guides-discovery';
 import { getRequestAgencySlug } from '@/lib/server-agency';
+import { getAgencyDisplayName, getSiteConfig } from '@/lib/public-site';
 
 export default async function Home() {
   const agencySlug = await getRequestAgencySlug();
   const [
+    siteConfig,
     { properties: allProperties },
     dynamicAreaGuides,
     dynamicTestimonials,
     dynamicBlogs
   ] = await Promise.all([
+    getSiteConfig(agencySlug),
     getProperties(undefined, agencySlug),
     getAreaGuides(agencySlug),
     getTestimonials(agencySlug),
     getBlogs(agencySlug)
   ]);
+  const agencyName = getAgencyDisplayName(siteConfig);
 
   const propertiesToUse = allProperties.length > 0 ? allProperties : [];
   const featuredOffPlan = propertiesToUse.filter(p => p.status === 'Off-plan').slice(0, 3);
@@ -41,9 +45,9 @@ export default async function Home() {
       <AreaGuides title="Explore Dubai's Prime Areas" guides={guidesToUse} />
       <FeaturedProperties title="Ready-to-Move Residences" properties={featuredReady} />
       <AreaGuidesDiscovery />
-      <DevelopEcosystem />
+      <DevelopEcosystem agencyName={agencyName} />
       <Testimonials testimonials={testimonialsToUse} />
-      <FAQ />
+      <FAQ agencyName={agencyName} />
       <BlogSection blogs={blogsToUse} />
     </div>
   );

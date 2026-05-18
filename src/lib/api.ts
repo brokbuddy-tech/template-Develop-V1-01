@@ -398,7 +398,7 @@ function mapListingAgent(listing: any) {
         avatarId: avatar,
         avatarUrl: normalizeAssetUrl(avatar),
         title: getStringValue(publicAgent?.title, publicAgent?.tagline, legacyBroker?.brokerProfile?.tagline) || 'Property Consultant',
-        company: getStringValue(publicAgent?.company, listing?.organizationName, listing?.organization?.name) || 'Skyline Realty',
+        company: getStringValue(publicAgent?.company, listing?.organizationName, listing?.organization?.name) || 'Real Estate Brokerage',
         orn: getStringValue(publicAgent?.licenseNumber, publicAgent?.orn, legacyBroker?.licenseNumber) || '12345',
     };
 }

@@ -49,7 +49,7 @@ const WorldMap = () => (
 );
 
 
-export function WhySell() {
+export function WhySell({ agencyName }: { agencyName: string }) {
   const [api, setApi] = React.useState<CarouselApi>();
   const [current, setCurrent] = React.useState(0);
   const [count, setCount] = React.useState(0);
@@ -76,7 +76,7 @@ export function WhySell() {
   return (
     <section className="bg-white text-black relative py-24 sm:py-32">
         <div className="w-full px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl lg:text-3xl font-bold mb-12">Why Sell with DEVELOP?</h2>
+            <h2 className="text-2xl lg:text-3xl font-bold mb-12">Why Sell with {agencyName}?</h2>
 
             <Carousel setApi={setApi} className="w-full">
                 <CarouselContent>
