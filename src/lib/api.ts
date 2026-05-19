@@ -400,6 +400,9 @@ function mapListingAgent(listing: any) {
         title: getStringValue(publicAgent?.title, publicAgent?.tagline, legacyBroker?.brokerProfile?.tagline) || 'Property Consultant',
         company: getStringValue(publicAgent?.company, listing?.organizationName, listing?.organization?.name) || 'Real Estate Brokerage',
         orn: getStringValue(publicAgent?.licenseNumber, publicAgent?.orn, legacyBroker?.licenseNumber) || '12345',
+        phone: getStringValue(publicAgent?.phone, legacyBroker?.brokerProfile?.publicPhone, legacyBroker?.phone) || null,
+        email: getStringValue(publicAgent?.email, legacyBroker?.brokerProfile?.publicEmail, legacyBroker?.email) || null,
+        whatsapp: getStringValue(publicAgent?.whatsapp, legacyBroker?.brokerProfile?.whatsapp, legacyBroker?.whatsapp, legacyBroker?.brokerProfile?.publicPhone, legacyBroker?.phone) || null,
     };
 }
 

@@ -29,6 +29,9 @@ export type PropertyAgent = {
   company?: string;
   orn?: string;
   propertyCount?: number;
+  phone?: string | null;
+  email?: string | null;
+  whatsapp?: string | null;
 };
 
 export type Property = {

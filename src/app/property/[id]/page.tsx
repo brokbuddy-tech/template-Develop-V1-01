@@ -1,5 +1,5 @@
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { BedDouble, Bath, Square, MapPin, Phone, MessageCircle, Building, Check, Mail } from 'lucide-react';
+import { BedDouble, Bath, Square, MapPin, Phone, MessageCircle, Building, Check, Mail, FileText } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -13,6 +13,7 @@ import Image from 'next/image';
 import { getPropertyById, getProperties } from '@/lib/api';
 import { LocationMapShell } from '@/components/location-map-shell';
 import { getRequestAgencySlug } from '@/lib/server-agency';
+import { PropertyBrochureButton } from '@/components/property-brochure-button';
 
 function Stat({ icon: Icon, value, label }: { icon: React.ElementType, value: string | number, label: string }) {
     return (
@@ -26,7 +27,23 @@ function Stat({ icon: Icon, value, label }: { icon: React.ElementType, value: st
     )
 }
 
-function AgentContactCard({ agent }: { agent: any }) {
+function AgentContactCard({
+    agent,
+    property,
+}: {
+    agent: any;
+    property: {
+        name: string;
+        price: string;
+        location: string;
+        description: string;
+        areaSqFt: number;
+        bedrooms: number;
+        bathrooms: number;
+        galleryImages?: Array<string | { src: string }>;
+        amenities: string[];
+    };
+}) {
     if (!agent) return null;
     const isMockAvatar = agent.avatarId && agent.avatarId.startsWith('author-');
     const agentImageUrl = agent.avatarUrl || (
@@ -34,6 +51,9 @@ function AgentContactCard({ agent }: { agent: any }) {
             ? PlaceHolderImages.find(p => p.id === agent.avatarId)?.imageUrl
             : agent.avatarId
     );
+    const brochureGallery = (property.galleryImages || [])
+        .map((image) => typeof image === 'string' ? image : image.src)
+        .filter(Boolean);
 
     return (
         <Card className="overflow-hidden">
@@ -55,6 +75,33 @@ function AgentContactCard({ agent }: { agent: any }) {
                 {agent.title && <p className="text-muted-foreground text-sm">{agent.title}</p>}
                 {agent.company && <p className="font-semibold mt-2">{agent.company}</p>}
                 {agent.orn && <p className="text-muted-foreground text-sm">ORN: {agent.orn}</p>}
+
+                <PropertyBrochureButton
+                    brochure={{
+                        title: property.name,
+                        subtitle: property.location,
+                        priceLabel: property.price,
+                        description: property.description,
+                        heroImage: brochureGallery[0] || null,
+                        gallery: brochureGallery,
+                        stats: [
+                            { label: 'Bedrooms', value: property.bedrooms > 0 ? `${property.bedrooms}` : 'Studio' },
+                            { label: 'Bathrooms', value: `${property.bathrooms}` },
+                            { label: 'Area', value: `${property.areaSqFt.toLocaleString()} sqft` },
+                        ],
+                        features: property.amenities,
+                        agentName: agent.name,
+                        agentTitle: agent.title,
+                        agentImage: agentImageUrl || null,
+                        company: agent.company,
+                        contactPhone: agent.phone,
+                        contactEmail: agent.email,
+                    }}
+                >
+                    <Button variant="outline" className="w-full mt-4">
+                        <FileText className="mr-2 h-4 w-4" /> Download Brochure
+                    </Button>
+                </PropertyBrochureButton>
 
                 <Button variant="default" className="w-full mt-4">Contact</Button>
 
@@ -199,7 +246,7 @@ export default async function PropertyDetailPage(props: { params: Promise<{ id: 
 
                     <div className="lg:col-span-1">
                         <div className="sticky top-24 space-y-4">
-                            <AgentContactCard agent={prop.agent} />
+                            <AgentContactCard agent={prop.agent} property={prop} />
                         </div>
                     </div>
                 </div>
