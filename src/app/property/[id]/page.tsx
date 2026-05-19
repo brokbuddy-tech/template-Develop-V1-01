@@ -1,6 +1,5 @@
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { BedDouble, Bath, Square, MapPin, Phone, MessageCircle, Building, Check, Mail, FileText } from 'lucide-react';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { BedDouble, Bath, Square, MapPin, Phone, MessageCircle, Building, Check, Mail, FileText, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
@@ -12,8 +11,10 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import Image from 'next/image';
 import { getPropertyById, getProperties } from '@/lib/api';
 import { LocationMapShell } from '@/components/location-map-shell';
+import { prefixAgencyPath } from '@/lib/agency-routing';
 import { getRequestAgencySlug } from '@/lib/server-agency';
 import { PropertyBrochureButton } from '@/components/property-brochure-button';
+import type { Property, PropertyAgent } from '@/lib/types';
 
 function Stat({ icon: Icon, value, label }: { icon: React.ElementType, value: string | number, label: string }) {
     return (
@@ -27,22 +28,40 @@ function Stat({ icon: Icon, value, label }: { icon: React.ElementType, value: st
     )
 }
 
+type AgentCardProperty = Pick<
+    Property,
+    'id' | 'name' | 'price' | 'location' | 'description' | 'areaSqFt' | 'bedrooms' | 'bathrooms' | 'galleryImages' | 'amenities' | 'purpose'
+>;
+
+function getAgentInitials(name: string) {
+    return name
+        .split(/\s+/)
+        .filter(Boolean)
+        .slice(0, 2)
+        .map((part) => part.charAt(0).toUpperCase())
+        .join('') || 'AG';
+}
+
+function getWhatsAppHref(value?: string | null, propertyName?: string) {
+    if (!value) return null;
+    const digits = value.replace(/\D/g, '');
+    if (!digits) return null;
+
+    const message = propertyName
+        ? `Hi, I am interested in ${propertyName}. Please share more details.`
+        : null;
+
+    return `https://wa.me/${digits}${message ? `?text=${encodeURIComponent(message)}` : ''}`;
+}
+
 function AgentContactCard({
     agent,
     property,
+    agencySlug,
 }: {
-    agent: any;
-    property: {
-        name: string;
-        price: string;
-        location: string;
-        description: string;
-        areaSqFt: number;
-        bedrooms: number;
-        bathrooms: number;
-        galleryImages?: Array<string | { src: string }>;
-        amenities: string[];
-    };
+    agent?: PropertyAgent;
+    property: AgentCardProperty;
+    agencySlug?: string | null;
 }) {
     if (!agent) return null;
     const isMockAvatar = agent.avatarId && agent.avatarId.startsWith('author-');
@@ -54,62 +73,170 @@ function AgentContactCard({
     const brochureGallery = (property.galleryImages || [])
         .map((image) => typeof image === 'string' ? image : image.src)
         .filter(Boolean);
+    const whatsappHref = getWhatsAppHref(agent.whatsapp || agent.phone, property.name);
+    const phoneHref = agent.phone ? `tel:${agent.phone}` : null;
+    const emailHref = agent.email
+        ? `mailto:${agent.email}?subject=${encodeURIComponent(`Inquiry about ${property.name}`)}`
+        : null;
+    const inquiryHref = prefixAgencyPath(`/contact?listingId=${encodeURIComponent(property.id)}`, agencySlug);
+    const availabilityCopy = agent.propertyCount
+        ? `${agent.propertyCount}+ live listings`
+        : 'Private viewings available';
 
     return (
-        <Card className="overflow-hidden">
-            <CardHeader className="bg-muted p-2">
-                <h3 className="text-center font-semibold text-sm text-muted-foreground">SELLER</h3>
-            </CardHeader>
-            <CardContent className="p-4 text-center">
-                {agentImageUrl && (
-                    <div className="relative h-48 w-full mb-4">
-                        <Image
-                            src={agentImageUrl}
-                            alt={agent.name}
-                            fill
-                            className="object-cover rounded-md"
-                        />
+        <Card className="overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-[0_24px_60px_-32px_rgba(15,23,42,0.35)]">
+            <CardContent className="p-0">
+                <div className="bg-gradient-to-br from-primary/15 via-primary/5 to-white px-6 pb-6 pt-5">
+                    <div className="flex flex-wrap items-center gap-2">
+                        <span className="inline-flex rounded-full bg-primary px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.28em] text-primary-foreground">
+                            Listing Advisor
+                        </span>
+                        {agent.orn ? (
+                            <span className="inline-flex rounded-full border border-primary/15 bg-white/80 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-600">
+                                ORN {agent.orn}
+                            </span>
+                        ) : null}
                     </div>
-                )}
-                <h4 className="font-bold text-lg">{agent.name}</h4>
-                {agent.title && <p className="text-muted-foreground text-sm">{agent.title}</p>}
-                {agent.company && <p className="font-semibold mt-2">{agent.company}</p>}
-                {agent.orn && <p className="text-muted-foreground text-sm">ORN: {agent.orn}</p>}
 
-                <PropertyBrochureButton
-                    brochure={{
-                        title: property.name,
-                        subtitle: property.location,
-                        priceLabel: property.price,
-                        description: property.description,
-                        heroImage: brochureGallery[0] || null,
-                        gallery: brochureGallery,
-                        stats: [
-                            { label: 'Bedrooms', value: property.bedrooms > 0 ? `${property.bedrooms}` : 'Studio' },
-                            { label: 'Bathrooms', value: `${property.bathrooms}` },
-                            { label: 'Area', value: `${property.areaSqFt.toLocaleString()} sqft` },
-                        ],
-                        features: property.amenities,
-                        agentName: agent.name,
-                        agentTitle: agent.title,
-                        agentImage: agentImageUrl || null,
-                        company: agent.company,
-                        contactPhone: agent.phone,
-                        contactEmail: agent.email,
-                    }}
-                >
-                    <Button variant="outline" className="w-full mt-4">
-                        <FileText className="mr-2 h-4 w-4" /> Download Brochure
-                    </Button>
-                </PropertyBrochureButton>
+                    <div className="mt-5 flex items-center gap-4">
+                        <div className="relative flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-[22px] border border-white bg-white shadow-sm">
+                            {agentImageUrl ? (
+                                <Image
+                                    src={agentImageUrl}
+                                    alt={agent.name}
+                                    fill
+                                    className="object-cover"
+                                />
+                            ) : (
+                                <span className="text-lg font-bold text-primary">{getAgentInitials(agent.name)}</span>
+                            )}
+                        </div>
 
-                <Button variant="default" className="w-full mt-4">Contact</Button>
+                        <div className="min-w-0 flex-1">
+                            <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-primary/70">
+                                {agent.company || 'Real Estate Brokerage'}
+                            </p>
+                            <h3 className="mt-2 text-2xl font-bold tracking-tight text-slate-900">{agent.name}</h3>
+                            <p className="mt-1 text-sm text-muted-foreground">
+                                {agent.title || 'Property Consultant'}
+                            </p>
+                        </div>
+                    </div>
 
-                {agent.propertyCount > 0 && (
-                    <Link href="#" className="text-sm text-muted-foreground mt-2 block hover:underline">
-                        {agent.propertyCount} properties more
-                    </Link>
-                )}
+                    <p className="mt-5 text-sm leading-6 text-slate-600">
+                        Get the brochure, arrange a viewing, or speak directly with the listing specialist for this{' '}
+                        {property.purpose.toLowerCase()} opportunity.
+                    </p>
+                </div>
+
+                <div className="space-y-5 p-6">
+                    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
+                        <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4">
+                            <p className="text-[10px] font-semibold uppercase tracking-[0.26em] text-slate-400">Phone</p>
+                            <p className="mt-2 text-sm font-semibold text-slate-800">
+                                {agent.phone || 'Shared after inquiry'}
+                            </p>
+                        </div>
+                        <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4">
+                            <p className="text-[10px] font-semibold uppercase tracking-[0.26em] text-slate-400">Availability</p>
+                            <p className="mt-2 text-sm font-semibold text-slate-800">{availabilityCopy}</p>
+                        </div>
+                        {agent.email ? (
+                            <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4 sm:col-span-2 lg:col-span-1">
+                                <p className="text-[10px] font-semibold uppercase tracking-[0.26em] text-slate-400">Email</p>
+                                <p className="mt-2 break-all text-sm font-semibold text-slate-800">{agent.email}</p>
+                            </div>
+                        ) : null}
+                    </div>
+
+                    <div className="space-y-3">
+                        <PropertyBrochureButton
+                            brochure={{
+                                title: property.name,
+                                subtitle: property.location,
+                                priceLabel: property.price,
+                                description: property.description,
+                                heroImage: brochureGallery[0] || null,
+                                gallery: brochureGallery,
+                                stats: [
+                                    { label: 'Bedrooms', value: property.bedrooms > 0 ? `${property.bedrooms}` : 'Studio' },
+                                    { label: 'Bathrooms', value: `${property.bathrooms}` },
+                                    { label: 'Area', value: `${property.areaSqFt.toLocaleString()} sqft` },
+                                ],
+                                features: property.amenities,
+                                agentName: agent.name,
+                                agentTitle: agent.title,
+                                agentImage: agentImageUrl || null,
+                                company: agent.company,
+                                contactPhone: agent.phone,
+                                contactEmail: agent.email,
+                            }}
+                        >
+                            <Button
+                                variant="outline"
+                                className="h-11 w-full rounded-xl border-primary/20 bg-primary/5 font-semibold text-primary hover:bg-primary/10 hover:text-primary"
+                            >
+                                <FileText className="h-4 w-4" />
+                                Download Brochure (PDF)
+                            </Button>
+                        </PropertyBrochureButton>
+
+                        <Button asChild className="h-11 w-full rounded-xl text-sm font-semibold">
+                            <Link href={inquiryHref}>
+                                Contact Agent
+                                <ArrowRight className="h-4 w-4" />
+                            </Link>
+                        </Button>
+
+                        {(phoneHref || whatsappHref || emailHref) ? (
+                            <div className="grid grid-cols-2 gap-3">
+                                {phoneHref ? (
+                                    <Button asChild variant="outline" className="h-11 rounded-xl font-semibold">
+                                        <a href={phoneHref}>
+                                            <Phone className="h-4 w-4" />
+                                            Call
+                                        </a>
+                                    </Button>
+                                ) : (
+                                    <Button asChild variant="outline" className="h-11 rounded-xl font-semibold">
+                                        <Link href={inquiryHref}>
+                                            <Phone className="h-4 w-4" />
+                                            Contact
+                                        </Link>
+                                    </Button>
+                                )}
+
+                                {whatsappHref ? (
+                                    <Button asChild variant="outline" className="h-11 rounded-xl font-semibold">
+                                        <a href={whatsappHref} target="_blank" rel="noreferrer">
+                                            <MessageCircle className="h-4 w-4" />
+                                            WhatsApp
+                                        </a>
+                                    </Button>
+                                ) : emailHref ? (
+                                    <Button asChild variant="outline" className="h-11 rounded-xl font-semibold">
+                                        <a href={emailHref}>
+                                            <Mail className="h-4 w-4" />
+                                            Email
+                                        </a>
+                                    </Button>
+                                ) : (
+                                    <Button asChild variant="outline" className="h-11 rounded-xl font-semibold">
+                                        <Link href={inquiryHref}>
+                                            <MessageCircle className="h-4 w-4" />
+                                            Message
+                                        </Link>
+                                    </Button>
+                                )}
+                            </div>
+                        ) : null}
+                    </div>
+
+                    <p className="text-center text-xs leading-5 text-muted-foreground">
+                        Prefer a quick walkthrough first? Download the brochure and then reach out for pricing,
+                        availability, or a private viewing.
+                    </p>
+                </div>
             </CardContent>
         </Card>
     );
@@ -247,7 +374,7 @@ export default async function PropertyDetailPage(props: { params: Promise<{ id: 
 
                     <div className="lg:col-span-1">
                         <div className="sticky top-24 space-y-4">
-                            <AgentContactCard agent={prop.agent} property={prop} />
+                            <AgentContactCard agent={prop.agent} property={prop} agencySlug={agencySlug} />
                         </div>
                     </div>
                 </div>
