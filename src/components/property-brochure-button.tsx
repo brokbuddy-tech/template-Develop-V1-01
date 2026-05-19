@@ -2,6 +2,7 @@
 
 import {
   cloneElement,
+  isValidElement,
   useMemo,
   useState,
   type MouseEvent,
@@ -34,6 +35,8 @@ type BrochureButtonProps = {
   };
   children: ReactElement<{
     disabled?: boolean;
+    onClick?: (event: MouseEvent<HTMLElement>) => void;
+    type?: 'button' | 'submit' | 'reset';
     children?: ReactNode;
   }>;
 };
@@ -52,7 +55,17 @@ export function PropertyBrochureButton({ brochure, children }: BrochureButtonPro
   const features = (brochure.features || []).filter(Boolean).slice(0, 8);
   const summary = truncateText(brochure.description || 'Property details available on request.', 900);
 
-  function handleDownload(event: MouseEvent<HTMLDivElement>) {
+  const trigger = isValidElement(children) ? children : null;
+  const triggerContent = trigger?.props?.children ?? null;
+  const triggerDisabled = Boolean(trigger?.props?.disabled);
+
+  function handleDownload(event: MouseEvent<HTMLElement>) {
+    trigger?.props?.onClick?.(event);
+
+    if (event.defaultPrevented || isPreparing || triggerDisabled) {
+      return;
+    }
+
     event.preventDefault();
     setIsPreparing(true);
 
@@ -64,19 +77,19 @@ export function PropertyBrochureButton({ brochure, children }: BrochureButtonPro
 
   return (
     <>
-      <div onClick={handleDownload} className="w-full cursor-pointer">
-        {cloneElement(children, {
-          disabled: isPreparing,
-          children: isPreparing ? (
-            <span className="flex items-center justify-center gap-2">
-              <Loader2 className="h-4 w-4 animate-spin" />
-              PREPARING...
-            </span>
-          ) : (
-            children.props.children
-          ),
-        })}
-      </div>
+      {trigger ? cloneElement(trigger, {
+        disabled: isPreparing || triggerDisabled,
+        onClick: handleDownload,
+        type: trigger.props?.type ?? 'button',
+        children: isPreparing ? (
+          <span className="flex items-center justify-center gap-2">
+            <Loader2 className="h-4 w-4 animate-spin" />
+            PREPARING...
+          </span>
+        ) : (
+          triggerContent
+        ),
+      }) : null}
 
       <div
         id="develop-brochure-print-root"
