@@ -7,3 +7,51 @@
  ✓ Ready in 13.7s
  ○ Compiling / ...
  ✓ Compiled / in 16.3s (1244 modules)
+Image with src "/api/public-template-proxy/skyline-realty/logo/view?v=logos%2Fcmm0c75t80000jjkvkw2dp6oc%2Fcompressed%2F1778043757804_czt6du7t.webp" is using a query string which is not configured in images.localPatterns. This config will be required starting in Next.js 16.
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-localpatterns
+ ✓ Compiled in 1891ms (485 modules)
+ GET / 200 in 18351ms
+ ○ Compiling /api/public-template-proxy/[...path] ...
+ ✓ Compiled /api/public-template-proxy/[...path] in 2.2s (1222 modules)
+Image with src "/api/public-template-proxy/skyline-realty/logo/view?v=logos%2Fcmm0c75t80000jjkvkw2dp6oc%2Fcompressed%2F1778043757804_czt6du7t.webp" is using a query string which is not configured in images.localPatterns. This config will be required starting in Next.js 16.
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-localpatterns
+ GET / 200 in 1818ms
+ ○ Compiling /property/[id] ...
+ ✓ Compiled /api/public-template-proxy/[...path] in 3.5s (1369 modules)
+ GET /api/public-template-proxy/skyline-realty/logo/view?v=logos%2Fcmm0c75t80000jjkvkw2dp6oc%2Fcompressed%2F1778043757804_czt6du7t.webp 200 in 4240ms
+ GET /api/public-template-proxy/skyline-realty/images/cmpb8rw0k005o7oo5129nrfzg/view?variant=thumbnail 200 in 5504ms
+ GET /api/public-template-proxy/skyline-realty/images/cmpb937yb00777oo5az2c954n/view?variant=thumbnail 200 in 5554ms
+ GET /api/public-template-proxy/skyline-realty/images/cmpb937yb00777oo5az2c954n/view?variant=medium 200 in 5823ms
+ GET /api/public-template-proxy/skyline-realty/images/cmpb8rw0k005o7oo5129nrfzg/view?variant=medium 200 in 5848ms
+Image with src "/api/public-template-proxy/skyline-realty/logo/view?v=logos%2Fcmm0c75t80000jjkvkw2dp6oc%2Fcompressed%2F1778043757804_czt6du7t.webp" is using a query string which is not configured in images.localPatterns. This config will be required starting in Next.js 16.
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-localpatterns
+ GET /api/public-template-proxy/skyline-realty 200 in 1931ms
+ GET /api/public-template-proxy/skyline-realty/images/cmpb7xod1004s7oo5ix1jhdtu/view?variant=thumbnail 200 in 597ms
+ GET /api/public-template-proxy/listings?page=1&limit=12&sort=newest 200 in 645ms
+Image with src "/api/public-template-proxy/skyline-realty/profile-assets/cmm0c76nq0006jjkv5r7tpqbb/avatar/view?variant=medium" is using a query string which is not configured in images.localPatterns. This config will be required starting in Next.js 16.
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-localpatterns
+ GET /property/cmpb8ygmr006w7oo5ocj4yc63 200 in 7339ms
+ GET /api/public-template-proxy/skyline-realty/images/cmpb93dll007b7oo54mre1kyx/view?variant=thumbnail 200 in 1710ms
+ GET /api/public-template-proxy/skyline-realty/profile-assets/cmm0c76nq0006jjkv5r7tpqbb/avatar/view?variant=medium 200 in 1859ms
+ GET /api/public-template-proxy/skyline-realty/images/cmpb93dl600797oo5tdt18xp0/view?variant=medium 200 in 1876ms
+ GET /api/public-template-proxy/skyline-realty/images/cmpb93dl600797oo5tdt18xp0/view?variant=thumbnail 200 in 1957ms
+ GET /api/public-template-proxy/skyline-realty/images/cmpb7xod1004s7oo5ix1jhdtu/view?variant=thumbnail 200 in 2278ms
+ GET /api/public-template-proxy/skyline-realty/images/cmpb93dll007b7oo54mre1kyx/view?variant=medium 200 in 2620ms
+ GET /api/public-template-proxy/skyline-realty/images/cmpb7otov003m7oo5qo3l3ue2/view?variant=thumbnail 200 in 1897ms
+ GET /api/public-template-proxy/skyline-realty/images/cmpb7xod1004s7oo5ix1jhdtu/view?variant=medium 200 in 2048ms
+ GET /api/public-template-proxy/skyline-realty/images/cmpb7otov003m7oo5qo3l3ue2/view?variant=medium 200 in 2211ms
+ GET /api/public-template-proxy/skyline-realty/images/cmpb7ghcu002c7oo5009eq868/view?variant=thumbnail 200 in 2804ms
+ GET /api/public-template-proxy/skyline-realty/images/cmpb7ghcu002c7oo5009eq868/view?variant=medium 200 in 2654ms
+ GET /api/public-template-proxy/skyline-realty/images/cmpb73qwi001q7oo5tmi016yd/view?variant=medium 200 in 1674ms
+ GET /api/public-template-proxy/skyline-realty/images/cmpb6smwn000i7oo5da5y4qxc/view?variant=thumbnail 200 in 1762ms
+ GET /api/public-template-proxy/skyline-realty/images/cmpb937yb00777oo5az2c954n/view?variant=medium 304 in 981ms
+ GET /api/public-template-proxy/skyline-realty/images/cmpb73qwi001q7oo5tmi016yd/view?variant=thumbnail 200 in 2585ms
+ GET /api/public-template-proxy/skyline-realty/images/cmpb93dl600797oo5tdt18xp0/view?variant=medium 304 in 1134ms
+ GET /api/public-template-proxy/skyline-realty/images/cmpb93dll007b7oo54mre1kyx/view?variant=medium 304 in 957ms
+ GET /api/public-template-proxy/skyline-realty/images/cmpb6smwn000i7oo5da5y4qxc/view?variant=medium 200 in 1825ms
+ GET /api/public-template-proxy/skyline-realty/profile-assets/cmm0c76nq0006jjkv5r7tpqbb/avatar/view?variant=medium 304 in 1195ms
+ GET /api/public-template-proxy/skyline-realty 200 in 6353ms
+ GET /api/public-template-proxy/skyline-realty/images/cmpb93dnx007d7oo50jd7p3sh/view?variant=medium 200 in 1729ms
+ GET /api/public-template-proxy/skyline-realty/images/cmpb93dtl007h7oo55ixprize/view?variant=medium 200 in 1735ms
+ GET /api/public-template-proxy/skyline-realty/profile-assets/cmm0c76nq0006jjkv5r7tpqbb/avatar/view?variant=medium 304 in 1078ms
+ GET /api/public-template-proxy/skyline-realty/images/cmpb93dny007f7oo54d1kf63u/view?variant=medium 200 in 2237ms
