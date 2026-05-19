@@ -84,22 +84,22 @@ function AgentContactCard({
         : 'Private viewings available';
 
     return (
-        <Card className="overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-[0_24px_60px_-32px_rgba(15,23,42,0.35)]">
+        <Card className="overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-[0_20px_56px_-34px_rgba(15,23,42,0.35)]">
             <CardContent className="p-0">
-                <div className="bg-gradient-to-br from-primary/15 via-primary/5 to-white px-6 pb-6 pt-5">
+                <div className="bg-gradient-to-br from-primary/15 via-primary/5 to-white px-5 pb-5 pt-4 sm:px-6">
                     <div className="flex flex-wrap items-center gap-2">
-                        <span className="inline-flex rounded-full bg-primary px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.28em] text-primary-foreground">
+                        <span className="inline-flex rounded-full bg-primary px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.26em] text-primary-foreground">
                             Listing Advisor
                         </span>
                         {agent.orn ? (
-                            <span className="inline-flex rounded-full border border-primary/15 bg-white/80 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-600">
+                            <span className="inline-flex rounded-full border border-primary/15 bg-white/80 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-600">
                                 ORN {agent.orn}
                             </span>
                         ) : null}
                     </div>
 
-                    <div className="mt-5 flex items-center gap-4">
-                        <div className="relative flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-[22px] border border-white bg-white shadow-sm">
+                    <div className="mt-4 flex items-center gap-3.5">
+                        <div className="relative flex h-[72px] w-[72px] shrink-0 items-center justify-center overflow-hidden rounded-[20px] border border-white bg-white shadow-sm">
                             {agentImageUrl ? (
                                 <Image
                                     src={agentImageUrl}
@@ -113,43 +113,43 @@ function AgentContactCard({
                         </div>
 
                         <div className="min-w-0 flex-1">
-                            <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-primary/70">
+                            <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-primary/70">
                                 {agent.company || 'Real Estate Brokerage'}
                             </p>
-                            <h3 className="mt-2 text-2xl font-bold tracking-tight text-slate-900">{agent.name}</h3>
-                            <p className="mt-1 text-sm text-muted-foreground">
+                            <h3 className="mt-1.5 text-[1.75rem] font-bold tracking-tight leading-tight text-slate-900">{agent.name}</h3>
+                            <p className="mt-1 text-[15px] text-muted-foreground">
                                 {agent.title || 'Property Consultant'}
                             </p>
                         </div>
                     </div>
 
-                    <p className="mt-5 text-sm leading-6 text-slate-600">
+                    <p className="mt-4 text-[15px] leading-6 text-slate-600">
                         Get the brochure, arrange a viewing, or speak directly with the listing specialist for this{' '}
                         {property.purpose.toLowerCase()} opportunity.
                     </p>
                 </div>
 
-                <div className="space-y-5 p-6">
-                    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
-                        <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4">
+                <div className="space-y-4 p-5 sm:p-6">
+                    <div className="grid gap-2.5 sm:grid-cols-2 lg:grid-cols-1">
+                        <div className="rounded-[20px] border border-slate-200 bg-slate-50 px-4 py-3">
                             <p className="text-[10px] font-semibold uppercase tracking-[0.26em] text-slate-400">Phone</p>
-                            <p className="mt-2 text-sm font-semibold text-slate-800">
+                            <p className="mt-1.5 text-sm font-semibold text-slate-800">
                                 {agent.phone || 'Shared after inquiry'}
                             </p>
                         </div>
-                        <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4">
+                        <div className="rounded-[20px] border border-slate-200 bg-slate-50 px-4 py-3">
                             <p className="text-[10px] font-semibold uppercase tracking-[0.26em] text-slate-400">Availability</p>
-                            <p className="mt-2 text-sm font-semibold text-slate-800">{availabilityCopy}</p>
+                            <p className="mt-1.5 text-sm font-semibold text-slate-800">{availabilityCopy}</p>
                         </div>
                         {agent.email ? (
-                            <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4 sm:col-span-2 lg:col-span-1">
+                            <div className="rounded-[20px] border border-slate-200 bg-slate-50 px-4 py-3 sm:col-span-2 lg:col-span-1">
                                 <p className="text-[10px] font-semibold uppercase tracking-[0.26em] text-slate-400">Email</p>
-                                <p className="mt-2 break-all text-sm font-semibold text-slate-800">{agent.email}</p>
+                                <p className="mt-1.5 break-all text-sm font-semibold text-slate-800">{agent.email}</p>
                             </div>
                         ) : null}
                     </div>
 
-                    <div className="space-y-3">
+                    <div className="space-y-2.5">
                         <PropertyBrochureButton
                             brochure={{
                                 title: property.name,
@@ -174,14 +174,14 @@ function AgentContactCard({
                         >
                             <Button
                                 variant="outline"
-                                className="h-11 w-full rounded-xl border-primary/20 bg-primary/5 font-semibold text-primary hover:bg-primary/10 hover:text-primary"
+                                className="h-10 w-full rounded-xl border-primary/20 bg-primary/5 text-[12px] font-semibold uppercase tracking-[0.18em] text-primary hover:bg-primary/10 hover:text-primary"
                             >
                                 <FileText className="h-4 w-4" />
-                                Download Brochure (PDF)
+                                Download Brochure
                             </Button>
                         </PropertyBrochureButton>
 
-                        <Button asChild className="h-11 w-full rounded-xl text-sm font-semibold">
+                        <Button asChild className="h-10 w-full rounded-xl text-sm font-semibold">
                             <Link href={inquiryHref}>
                                 Contact Agent
                                 <ArrowRight className="h-4 w-4" />
@@ -191,14 +191,14 @@ function AgentContactCard({
                         {(phoneHref || whatsappHref || emailHref) ? (
                             <div className="grid grid-cols-2 gap-3">
                                 {phoneHref ? (
-                                    <Button asChild variant="outline" className="h-11 rounded-xl font-semibold">
+                                    <Button asChild variant="outline" className="h-10 rounded-xl font-semibold">
                                         <a href={phoneHref}>
                                             <Phone className="h-4 w-4" />
                                             Call
                                         </a>
                                     </Button>
                                 ) : (
-                                    <Button asChild variant="outline" className="h-11 rounded-xl font-semibold">
+                                    <Button asChild variant="outline" className="h-10 rounded-xl font-semibold">
                                         <Link href={inquiryHref}>
                                             <Phone className="h-4 w-4" />
                                             Contact
@@ -207,21 +207,21 @@ function AgentContactCard({
                                 )}
 
                                 {whatsappHref ? (
-                                    <Button asChild variant="outline" className="h-11 rounded-xl font-semibold">
+                                    <Button asChild variant="outline" className="h-10 rounded-xl font-semibold">
                                         <a href={whatsappHref} target="_blank" rel="noreferrer">
                                             <MessageCircle className="h-4 w-4" />
                                             WhatsApp
                                         </a>
                                     </Button>
                                 ) : emailHref ? (
-                                    <Button asChild variant="outline" className="h-11 rounded-xl font-semibold">
+                                    <Button asChild variant="outline" className="h-10 rounded-xl font-semibold">
                                         <a href={emailHref}>
                                             <Mail className="h-4 w-4" />
                                             Email
                                         </a>
                                     </Button>
                                 ) : (
-                                    <Button asChild variant="outline" className="h-11 rounded-xl font-semibold">
+                                    <Button asChild variant="outline" className="h-10 rounded-xl font-semibold">
                                         <Link href={inquiryHref}>
                                             <MessageCircle className="h-4 w-4" />
                                             Message
@@ -231,11 +231,6 @@ function AgentContactCard({
                             </div>
                         ) : null}
                     </div>
-
-                    <p className="text-center text-xs leading-5 text-muted-foreground">
-                        Prefer a quick walkthrough first? Download the brochure and then reach out for pricing,
-                        availability, or a private viewing.
-                    </p>
                 </div>
             </CardContent>
         </Card>
