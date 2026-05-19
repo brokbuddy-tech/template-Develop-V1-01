@@ -139,7 +139,7 @@ export function PropertyGallery({
                     {/* Close Button */}
                     <button
                         onClick={() => setIsOpen(false)}
-                        className="absolute top-6 left-6 text-white text-sm bg-black/50 px-4 py-2 rounded-lg z-50 hover:bg-black/70 transition-colors"
+                        className="absolute left-4 top-4 z-[70] rounded-lg bg-black/60 px-4 py-2 text-sm text-white shadow-lg transition-colors hover:bg-black/80 md:left-6 md:top-6"
                     >
                         ← Back to gallery
                     </button>
@@ -175,23 +175,29 @@ export function PropertyGallery({
                     </div>
 
                     {/* Left Arrow */}
-                    <button
-                        onClick={handlePrev}
-                        className="absolute left-6 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/40 text-white p-3 rounded-full"
-                    >
-                        <ChevronLeft className="h-6 w-6" />
-                    </button>
+                    {images.length > 1 ? (
+                        <button
+                            onClick={handlePrev}
+                            aria-label="Show previous image"
+                            className="absolute left-3 top-1/2 z-[70] -translate-y-1/2 rounded-full border border-white/20 bg-black/55 p-2.5 text-white shadow-lg backdrop-blur-sm transition-colors hover:bg-black/75 md:left-6 md:p-3"
+                        >
+                            <ChevronLeft className="h-6 w-6" />
+                        </button>
+                    ) : null}
 
                     {/* Right Arrow */}
-                    <button
-                        onClick={handleNext}
-                        className="absolute right-6 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/40 text-white p-3 rounded-full"
-                    >
-                        <ChevronRight className="h-6 w-6" />
-                    </button>
+                    {images.length > 1 ? (
+                        <button
+                            onClick={handleNext}
+                            aria-label="Show next image"
+                            className="absolute right-3 top-1/2 z-[70] -translate-y-1/2 rounded-full border border-white/20 bg-black/55 p-2.5 text-white shadow-lg backdrop-blur-sm transition-colors hover:bg-black/75 md:right-6 md:p-3"
+                        >
+                            <ChevronRight className="h-6 w-6" />
+                        </button>
+                    ) : null}
 
                     {/* Image Counter */}
-                    <div className="absolute bottom-6 right-6 text-white text-sm bg-black/50 px-3 py-1 rounded">
+                    <div className="absolute bottom-4 right-4 z-[70] rounded bg-black/60 px-3 py-1 text-sm text-white shadow-lg md:bottom-6 md:right-6">
                         {safeIndex + 1} / {images.length}
                     </div>
                 </div>,
