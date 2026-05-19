@@ -56,6 +56,7 @@ export type Property = {
   mapAddress?: string;
   latitude?: number | null;
   longitude?: number | null;
+  virtualTourUrl?: string | null;
   agent?: PropertyAgent;
   description: string;
   amenities: string[];

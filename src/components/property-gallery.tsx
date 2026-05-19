@@ -3,17 +3,24 @@
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { cn } from '@/lib/utils';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Video } from 'lucide-react';
 import type { PropertyImage } from '@/lib/types';
 import { ProgressiveImage } from '@/components/progressive-image';
+import { Button } from '@/components/ui/button';
 
 interface PropertyGalleryProps {
     galleryImages?: PropertyImage[];
     galleryImageIds?: string[];
     propertyName?: string;
+    virtualTourUrl?: string | null;
 }
 
-export function PropertyGallery({ galleryImages, galleryImageIds = [], propertyName = 'Property' }: PropertyGalleryProps) {
+export function PropertyGallery({
+    galleryImages,
+    galleryImageIds = [],
+    propertyName = 'Property',
+    virtualTourUrl,
+}: PropertyGalleryProps) {
     const [mainImageIndex, setMainImageIndex] = useState(0);
     const images = (galleryImages && galleryImages.length > 0 ? galleryImages : galleryImageIds).filter(Boolean);
     const [isOpen, setIsOpen] = useState(false);
@@ -66,6 +73,19 @@ export function PropertyGallery({ galleryImages, galleryImageIds = [], propertyN
                     sizes="(max-width: 768px) 100vw, 66vw"
                     imageClassName="object-cover"
                 />
+                {virtualTourUrl ? (
+                    <Button
+                        type="button"
+                        onClick={(event) => {
+                            event.stopPropagation();
+                            window.open(virtualTourUrl, '_blank', 'noopener,noreferrer');
+                        }}
+                        className="absolute bottom-4 left-4 rounded-full bg-white/90 px-5 text-slate-900 shadow-lg hover:bg-white"
+                    >
+                        <Video className="mr-2 h-4 w-4" />
+                        Virtual Tour
+                    </Button>
+                ) : null}
             </div>
 
             {/* RIGHT - Two Images */}
