@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -43,6 +43,97 @@ function getAgentImage(seed: string, avatar?: string | null) {
       .join("") || "AG";
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f4f6f8"/><stop offset="1" stop-color="#d5dde6"/></linearGradient></defs><rect width="800" height="1000" fill="url(#g)"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#526273" font-family="Arial, sans-serif" font-size="240" font-weight="700">${initials}</text></svg>`;
   return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+}
+
+function getAgentRole(agent: SiteAgent) {
+  return agent.jobTitle || agent.title || agent.tagline || "Property Consultant";
+}
+
+function getAgentProfilePath(agent: SiteAgent) {
+  return agent.slug || agent.id || agent.name;
+}
+
+function isLeadershipAgent(agent: SiteAgent) {
+  const role = [
+    agent.name,
+    agent.jobTitle,
+    agent.title,
+    agent.tagline,
+    agent.bio,
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+
+  return [
+    "owner",
+    "manager",
+    "founder",
+    "director",
+    "ceo",
+    "chief",
+    "head",
+    "principal",
+    "partner",
+  ].some((keyword) => role.includes(keyword));
+}
+
+function AgentSection({
+  title,
+  emptyMessage,
+  agents,
+  agencySlug,
+  displayName,
+}: {
+  title: string;
+  emptyMessage: string;
+  agents: SiteAgent[];
+  agencySlug: string | null;
+  displayName: string;
+}) {
+  return (
+    <section className="space-y-6">
+      <h3 className="text-3xl font-semibold text-center">{title}</h3>
+      {agents.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {agents.map((agent) => (
+            <Link
+              key={getAgentProfilePath(agent)}
+              href={prefixAgencyPath(
+                `/agents/${getAgentProfilePath(agent)}`,
+                agencySlug,
+              )}
+              className="rounded-[10px] border bg-card overflow-hidden"
+            >
+              <div className="relative h-64 w-full">
+                <Image
+                  src={getAgentImage(
+                    agent.slug || agent.id || agent.name,
+                    agent.avatar,
+                  )}
+                  alt={agent.name}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              <div className="p-6">
+                <h4 className="text-lg font-semibold">{agent.name}</h4>
+                <p className="text-primary text-sm mt-1">
+                  {getAgentRole(agent)}
+                </p>
+                <p className="text-sm text-muted-foreground mt-4">
+                  {agent.bio ||
+                    `${agent.name} is part of the active public roster for ${displayName}.`}
+                </p>
+              </div>
+            </Link>
+          ))}
+        </div>
+      ) : (
+        <p className="text-sm text-muted-foreground">{emptyMessage}</p>
+      )}
+    </section>
+  );
 }
 
 function normalizeTestimonials(input: unknown[]): Testimonial[] {
@@ -149,6 +240,14 @@ export function DevelopAboutPageContent({
   const vision =
     siteConfig?.profile?.vision?.trim() ||
     `To build a public real estate presence for ${displayName} that feels trustworthy, current, and easy for every client to act on.`;
+  const leadershipAgents = useMemo(
+    () => agents.filter(isLeadershipAgent).slice(0, 6),
+    [agents],
+  );
+  const expertAgents = useMemo(
+    () => agents.filter((agent) => !isLeadershipAgent(agent)).slice(0, 6),
+    [agents],
+  );
 
   return (
     <div className="relative">
@@ -188,47 +287,28 @@ export function DevelopAboutPageContent({
           ))}
         </div>
         <div>
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8">
-            <h2 className="text-3xl font-bold">Meet Our Public Agents</h2>
+          <div className="flex justify-end gap-4 mb-8">
             <Link href={prefixAgencyPath("/agents", agencySlug)}>
               <Button className="bg-primary text-primary-foreground">
                 View All Agents
               </Button>
             </Link>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {agents.slice(0, 6).map((agent) => (
-              <Link
-                key={agent.slug || agent.id || agent.name}
-                href={prefixAgencyPath(
-                  `/agents/${agent.slug || ""}`,
-                  agencySlug,
-                )}
-                className="rounded-[10px] border bg-card overflow-hidden"
-              >
-                <div className="relative h-64 w-full">
-                  <Image
-                    src={getAgentImage(agent.slug || agent.name, agent.avatar)}
-                    alt={agent.name}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <div className="p-6">
-                  <h3 className="text-lg font-semibold">{agent.name}</h3>
-                  <p className="text-primary text-sm mt-1">
-                    {agent.jobTitle ||
-                      agent.title ||
-                      agent.tagline ||
-                      "Property Consultant"}
-                  </p>
-                  <p className="text-sm text-muted-foreground mt-4">
-                    {agent.bio ||
-                      `${agent.name} is part of the active public roster for ${displayName}.`}
-                  </p>
-                </div>
-              </Link>
-            ))}
+          <div className="space-y-12">
+            <AgentSection
+              title="Meet Our Leadership"
+              emptyMessage="No owners or managers are published on the public roster yet."
+              agents={leadershipAgents}
+              agencySlug={agencySlug}
+              displayName={displayName}
+            />
+            <AgentSection
+              title="Meet Our Expert Agents"
+              emptyMessage="No broker profiles are published on the public roster yet."
+              agents={expertAgents}
+              agencySlug={agencySlug}
+              displayName={displayName}
+            />
           </div>
         </div>
         <AwardsSection awards={awards} />
