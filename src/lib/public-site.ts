@@ -42,6 +42,8 @@ export type SiteAgent = {
 export type SiteProfile = {
   logo?: string | null;
   aboutCompany?: string;
+  mission?: string;
+  vision?: string;
   officeAddress?: string;
   officeTimings?: string;
   primaryColor?: string;
@@ -245,6 +247,8 @@ export function hasMeaningfulSiteConfig(siteConfig?: SiteConfig | null) {
 
   if (siteConfig.profile?.logo) return true;
   if (siteConfig.profile?.aboutCompany?.trim()) return true;
+  if (siteConfig.profile?.mission?.trim()) return true;
+  if (siteConfig.profile?.vision?.trim()) return true;
   if (siteConfig.profile?.officeAddress?.trim()) return true;
   if (siteConfig.profile?.contact?.officialEmail) return true;
   if (siteConfig.profile?.contact?.primaryPhone) return true;

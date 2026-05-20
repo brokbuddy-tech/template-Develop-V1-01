@@ -5,8 +5,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { Testimonials } from "@/components/home/testimonials";
+import { getTestimonials } from "@/lib/api";
 import { getAgents, getSiteConfig, hasMeaningfulSiteConfig, type SiteAgent, type SiteConfig } from "@/lib/public-site";
 import { prefixAgencyPath, resolveAgencySlugFromPathname } from "@/lib/agency-routing";
+import type { Testimonial } from "@/lib/types";
 
 function getDisplayName(siteConfig: SiteConfig | null) {
   return siteConfig?.branding?.displayName || siteConfig?.organization.name || "Agency Website";
@@ -24,30 +27,74 @@ function getAgentImage(seed: string, avatar?: string | null) {
   return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
 }
 
+function normalizeTestimonials(input: unknown[]): Testimonial[] {
+  const normalized: Testimonial[] = [];
+
+  input.forEach((item, index) => {
+    const testimonial = item as {
+      id?: string;
+      author?: string | null;
+      name?: string | null;
+      clientName?: string | null;
+      quote?: string | null;
+      content?: string | null;
+      image?: string | null;
+      imageId?: string | null;
+      rating?: number | null;
+    };
+
+    const quote = testimonial.quote?.trim() || testimonial.content?.trim() || "";
+    if (!quote) return;
+
+    const name =
+      testimonial.author?.trim() ||
+      testimonial.name?.trim() ||
+      testimonial.clientName?.trim() ||
+      "Anonymous";
+
+    normalized.push({
+      id: testimonial.id || `${name}-${index}`,
+      name,
+      quote,
+      imageId: testimonial.image?.trim() || testimonial.imageId?.trim() || null,
+      rating: typeof testimonial.rating === "number" ? testimonial.rating : 5,
+    });
+  });
+
+  return normalized;
+}
+
 export function DevelopAboutPageContent({
   initialSiteConfig = null,
   initialAgents = [],
+  initialTestimonials = [],
 }: {
   initialSiteConfig?: SiteConfig | null;
   initialAgents?: SiteAgent[];
+  initialTestimonials?: unknown[];
 }) {
   const pathname = usePathname();
   const agencySlug = resolveAgencySlugFromPathname(pathname);
   const [siteConfig, setSiteConfig] = useState<SiteConfig | null>(initialSiteConfig);
   const [agents, setAgents] = useState<SiteAgent[]>(initialAgents);
+  const [testimonials, setTestimonials] = useState<Testimonial[]>(() =>
+    normalizeTestimonials(initialTestimonials),
+  );
 
   useEffect(() => {
     setSiteConfig((current) => initialSiteConfig ?? current ?? null);
     setAgents((current) => (initialAgents.length > 0 ? initialAgents : current));
-  }, [initialSiteConfig, initialAgents]);
+    setTestimonials(normalizeTestimonials(initialTestimonials));
+  }, [initialAgents, initialSiteConfig, initialTestimonials]);
 
   useEffect(() => {
     let active = true;
 
     async function load() {
-      const [nextSiteConfig, nextAgents] = await Promise.all([
+      const [nextSiteConfig, nextAgents, nextTestimonials] = await Promise.all([
         getSiteConfig(agencySlug),
         getAgents(agencySlug),
+        getTestimonials(agencySlug),
       ]);
 
       if (!active) return;
@@ -59,6 +106,7 @@ export function DevelopAboutPageContent({
           ? nextAgents.agents
           : current
       ));
+      setTestimonials(normalizeTestimonials(nextTestimonials));
     }
 
     void load();
@@ -72,6 +120,12 @@ export function DevelopAboutPageContent({
     siteConfig?.profile?.aboutCompany?.trim() ||
     siteConfig?.branding?.bio?.trim() ||
     `${displayName} keeps its public identity, agents, and listings in sync with Broker OS through slug-aware routing and hex-code secured public APIs.`;
+  const mission =
+    siteConfig?.profile?.mission?.trim() ||
+    `${displayName} helps clients make confident property decisions with clear guidance, responsive communication, and dependable advice at every stage of the deal.`;
+  const vision =
+    siteConfig?.profile?.vision?.trim() ||
+    `To build a public real estate presence for ${displayName} that feels trustworthy, current, and easy for every client to act on.`;
 
   return (
     <div className="relative">
@@ -96,11 +150,8 @@ export function DevelopAboutPageContent({
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
           {[
-            { title: "Organization Profile", body: aboutCompany },
-            {
-              title: "Public Data Flow",
-              body: "Public pages stay on root-based routes, while organization, agent, listing, logo, and profile media requests are resolved server-side through the public template proxy contract.",
-            },
+            { title: "Our Mission", body: mission },
+            { title: "Our Vision", body: vision },
           ].map((card) => (
             <div key={card.title} className="bg-card/80 backdrop-blur-sm border border-border rounded-[10px] p-6">
               <h2 className="text-xl font-semibold">{card.title}</h2>
@@ -108,7 +159,6 @@ export function DevelopAboutPageContent({
             </div>
           ))}
         </div>
-
         <div>
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8">
             <h2 className="text-3xl font-bold">Meet Our Public Agents</h2>
@@ -131,6 +181,11 @@ export function DevelopAboutPageContent({
             ))}
           </div>
         </div>
+         {testimonials.length > 0 ? (
+          <div className="mb-16">
+            <Testimonials testimonials={testimonials} />
+          </div>
+        ) : null}
       </div>
     </div>
   );
