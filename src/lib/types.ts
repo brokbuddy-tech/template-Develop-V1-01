@@ -78,7 +78,10 @@ export type Testimonial = {
   clientName?: string; // Backend uses clientName
   quote?: string;
   content?: string; // Backend uses content
+  message?: string;
   imageId?: string | null;
+  imageUrl?: string | null;
+  badgeLabel?: string | null;
   rating?: number;
 };
 

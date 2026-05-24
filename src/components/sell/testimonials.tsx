@@ -7,7 +7,6 @@ import {
   CarouselItem,
   type CarouselApi,
 } from '@/components/ui/carousel';
-import { sellerTestimonials } from '@/lib/data';
 import type { SellerTestimonial } from '@/lib/types';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
@@ -15,7 +14,36 @@ import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight, Quote } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-function TestimonialCard({ testimonial }: { testimonial: SellerTestimonial }) {
+type PublicSellerTestimonial = SellerTestimonial & {
+  clientName?: string;
+  message?: string;
+  location?: string;
+  badgeLabel?: string;
+};
+
+function normalizeTestimonial(testimonial: PublicSellerTestimonial, index: number): SellerTestimonial & { badgeLabel?: string } | null {
+  const name = testimonial.clientName?.trim() || testimonial.name?.trim();
+  const quote = testimonial.message?.trim() || testimonial.quote?.trim();
+
+  if (!name || !quote) return null;
+
+  return {
+    id: testimonial.id || `${name}-${index}`,
+    name,
+    property: testimonial.location?.trim() || testimonial.property?.trim() || testimonial.badgeLabel || 'Client testimonial',
+    quote,
+    avatarFallback:
+      testimonial.avatarFallback ||
+      name
+        .split(/\s+/)
+        .slice(0, 2)
+        .map((part) => part.charAt(0).toUpperCase())
+        .join(''),
+    badgeLabel: testimonial.badgeLabel,
+  };
+}
+
+function TestimonialCard({ testimonial }: { testimonial: SellerTestimonial & { badgeLabel?: string } }) {
   return (
     <Card className="bg-slate-50 rounded-2xl h-full border-0 shadow-sm">
       <CardContent className="p-8 relative flex flex-col h-full">
@@ -29,6 +57,9 @@ function TestimonialCard({ testimonial }: { testimonial: SellerTestimonial }) {
           <div>
             <p className="font-bold text-foreground">{testimonial.name}</p>
             <p className="text-sm text-muted-foreground">{testimonial.property}</p>
+            {testimonial.badgeLabel ? (
+              <p className="mt-1 text-xs font-medium text-primary">{testimonial.badgeLabel}</p>
+            ) : null}
           </div>
         </div>
         <p className="text-muted-foreground leading-relaxed flex-1">
@@ -40,10 +71,19 @@ function TestimonialCard({ testimonial }: { testimonial: SellerTestimonial }) {
   );
 }
 
-export function SellerTestimonials({ agencyName }: { agencyName: string }) {
+export function SellerTestimonials({
+  agencyName,
+  testimonials = [],
+}: {
+  agencyName: string;
+  testimonials?: PublicSellerTestimonial[];
+}) {
   const [api, setApi] = React.useState<CarouselApi>();
   const [current, setCurrent] = React.useState(0);
   const [count, setCount] = React.useState(0);
+  const normalizedTestimonials = testimonials
+    .map(normalizeTestimonial)
+    .filter((testimonial): testimonial is SellerTestimonial & { badgeLabel?: string } => Boolean(testimonial));
 
   React.useEffect(() => {
     if (!api) {
@@ -73,6 +113,8 @@ export function SellerTestimonials({ agencyName }: { agencyName: string }) {
       api.off('select', onSelect);
     };
   }, [api]);
+
+  if (!normalizedTestimonials.length) return null;
 
   return (
     <section className="bg-white py-24 sm:py-32">
@@ -115,7 +157,7 @@ export function SellerTestimonials({ agencyName }: { agencyName: string }) {
 
         <Carousel setApi={setApi}>
           <CarouselContent>
-            {sellerTestimonials.map((testimonial) => (
+            {normalizedTestimonials.map((testimonial) => (
               <CarouselItem key={testimonial.id} className="md:basis-1/2 lg:basis-1/3">
                 <div className="p-1 h-full">
                   <TestimonialCard testimonial={testimonial} />

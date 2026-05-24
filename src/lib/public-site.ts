@@ -18,6 +18,8 @@ export type SiteAgent = {
   email?: string | null;
   phone?: string | null;
   whatsapp?: string | null;
+  brn?: string | null;
+  licenseNumber?: string | null;
   avatar?: string | null;
   avatarUrl?: string | null;
   coverImage?: string | null;

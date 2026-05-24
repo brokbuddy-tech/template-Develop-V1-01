@@ -31,6 +31,9 @@ const Rating = ({ rating = 5 }: { rating?: number }) => (
 
 export function Testimonials({ testimonials }: TestimonialsProps) {
   const [api, setApi] = React.useState<CarouselApi>();
+  const testimonialsToRender = testimonials.filter((testimonial) =>
+    Boolean((testimonial.message || testimonial.content || testimonial.quote || "").trim()),
+  );
 
   React.useEffect(() => {
     if (!api) return;
@@ -41,6 +44,8 @@ export function Testimonials({ testimonials }: TestimonialsProps) {
 
     return () => clearInterval(interval);
   }, [api]);
+
+  if (!testimonialsToRender.length) return null;
 
   return (
     <section className="py-16 bg-card">
@@ -57,16 +62,17 @@ export function Testimonials({ testimonials }: TestimonialsProps) {
           className="w-full max-w-4xl mx-auto"
         >
           <CarouselContent>
-            {testimonials.map((testimonial) => {
-              const testImage = testimonial.imageId
-                ? testimonial.imageId.startsWith("http")
-                  ? { imageUrl: testimonial.imageId, id: "api", imageHint: "" }
-                  : PlaceHolderImages.find((p) => p.id === testimonial.imageId)
+            {testimonialsToRender.map((testimonial) => {
+              const imageSource = testimonial.imageUrl || testimonial.imageId;
+              const testImage = imageSource
+                ? imageSource.startsWith("http")
+                  ? { imageUrl: imageSource, id: "api", imageHint: "" }
+                  : PlaceHolderImages.find((p) => p.id === imageSource)
                 : null;
 
               const name =
                 testimonial.clientName || testimonial.name || "Anonymous";
-              const quote = testimonial.content || testimonial.quote || "";
+              const quote = testimonial.message || testimonial.content || testimonial.quote || "";
 
               return (
                 <CarouselItem key={testimonial.id}>
@@ -93,6 +99,11 @@ export function Testimonials({ testimonials }: TestimonialsProps) {
                         <Rating rating={testimonial.rating} />
                         <p className="mt-4 text-lg italic">"{quote}"</p>
                         <p className="mt-4 font-semibold">{name}</p>
+                        {testimonial.badgeLabel ? (
+                          <p className="mt-1 text-xs font-medium text-primary">
+                            {testimonial.badgeLabel}
+                          </p>
+                        ) : null}
                       </CardContent>
                     </Card>
                   </div>

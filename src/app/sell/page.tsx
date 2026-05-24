@@ -9,12 +9,16 @@ import { SellerTestimonials } from '@/components/sell/testimonials';
 import { SellerFaq } from '@/components/sell/faq';
 import { BlogSection } from '@/components/home/blog-section';
 import { blogPosts } from '@/lib/data';
+import { getTestimonials } from '@/lib/api';
 import { getAgencyDisplayName, getSiteConfig } from '@/lib/public-site';
 import { getRequestAgencySlug } from '@/lib/server-agency';
 
 export default async function SellPage() {
   const agencySlug = await getRequestAgencySlug();
-  const siteConfig = await getSiteConfig(agencySlug);
+  const [siteConfig, testimonials] = await Promise.all([
+    getSiteConfig(agencySlug),
+    getTestimonials(agencySlug),
+  ]);
   const agencyName = getAgencyDisplayName(siteConfig);
   const heroImage = PlaceHolderImages.find(p => p.id === 'blog-4');
 
@@ -50,7 +54,7 @@ export default async function SellPage() {
             </div>
         </div>
         <WhySell agencyName={agencyName} />
-        <SellerTestimonials agencyName={agencyName} />
+        <SellerTestimonials agencyName={agencyName} testimonials={testimonials} />
         <SellerFaq agencyName={agencyName} />
         <BlogSection blogs={blogPosts} />
     </>

@@ -145,15 +145,21 @@ function normalizeTestimonials(input: unknown[]): Testimonial[] {
       author?: string | null;
       name?: string | null;
       clientName?: string | null;
+      message?: string | null;
       quote?: string | null;
       content?: string | null;
       image?: string | null;
       imageId?: string | null;
+      imageUrl?: string | null;
       rating?: number | null;
+      badgeLabel?: string | null;
     };
 
     const quote =
-      testimonial.quote?.trim() || testimonial.content?.trim() || "";
+      testimonial.message?.trim() ||
+      testimonial.quote?.trim() ||
+      testimonial.content?.trim() ||
+      "";
     if (!quote) return;
 
     const name =
@@ -166,8 +172,13 @@ function normalizeTestimonials(input: unknown[]): Testimonial[] {
       id: testimonial.id || `${name}-${index}`,
       name,
       quote,
-      imageId: testimonial.image?.trim() || testimonial.imageId?.trim() || null,
+      imageId:
+        testimonial.imageUrl?.trim() ||
+        testimonial.image?.trim() ||
+        testimonial.imageId?.trim() ||
+        null,
       rating: typeof testimonial.rating === "number" ? testimonial.rating : 5,
+      badgeLabel: testimonial.badgeLabel?.trim() || undefined,
     });
   });
 

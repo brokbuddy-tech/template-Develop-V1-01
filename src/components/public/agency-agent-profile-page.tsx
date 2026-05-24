@@ -85,6 +85,7 @@ export function DevelopAgentProfilePageContent({
     profile.agent.whatsapp || profile.agent.phone || profile.profile?.contact?.whatsappNumber,
     `Hi ${profile.agent.name}, I would like to discuss your listings with ${displayName}.`
   );
+  const brokerRegistrationNumber = profile.agent.brn || profile.agent.licenseNumber;
 
   return (
     <div className="w-full px-4 sm:px-6 lg:px-8 py-12">
@@ -96,6 +97,11 @@ export function DevelopAgentProfilePageContent({
           <div className="p-6 space-y-4">
             <h1 className="text-3xl font-bold">{profile.agent.name}</h1>
             <p className="text-primary">{profile.agent.jobTitle || profile.agent.title || profile.agent.tagline || "Property Consultant"}</p>
+            {brokerRegistrationNumber ? (
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+                BRN {brokerRegistrationNumber}
+              </p>
+            ) : null}
             <div className="grid gap-3">
               {profile.agent.phone ? (
                 <a href={`tel:${profile.agent.phone}`}>
