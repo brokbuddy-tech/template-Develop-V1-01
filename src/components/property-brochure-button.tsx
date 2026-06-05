@@ -10,8 +10,9 @@ import {
   type ReactElement,
   type ReactNode,
 } from 'react';
-import { Building2, CheckCircle2, Loader2, Mail, Phone } from 'lucide-react';
+import { Building2, Loader2, Mail, Phone } from 'lucide-react';
 import { createPortal } from 'react-dom';
+import { AmenityIcon } from '@/components/amenity-icon';
 
 type BrochureStat = {
   label: string;
@@ -282,7 +283,7 @@ export function PropertyBrochureButton({ brochure, children }: BrochureButtonPro
                         <div className="grid grid-cols-2 gap-x-4 gap-y-2">
                           {features.map((feature) => (
                             <div key={feature} className="flex items-center gap-2">
-                              <CheckCircle2 className="w-3 h-3 text-primary" />
+                              <AmenityIcon name={feature} className="h-3 w-3" />
                               <span className="text-[8.5px] font-bold uppercase tracking-widest text-black/60 truncate">{feature}</span>
                             </div>
                           ))}

@@ -1,5 +1,5 @@
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { BedDouble, Bath, Square, MapPin, Phone, MessageCircle, Building, Check, Mail, FileText, ArrowRight } from 'lucide-react';
+import { BedDouble, Bath, Square, MapPin, Phone, MessageCircle, Building, Mail, FileText, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
@@ -15,6 +15,7 @@ import { prefixAgencyPath } from '@/lib/agency-routing';
 import { getRequestAgencySlug } from '@/lib/server-agency';
 import { PropertyBrochureButton } from '@/components/property-brochure-button';
 import type { Property, PropertyAgent } from '@/lib/types';
+import { AmenityIcon } from '@/components/amenity-icon';
 
 function Stat({ icon: Icon, value, label }: { icon: React.ElementType, value: string | number, label: string }) {
     return (
@@ -319,7 +320,7 @@ export default async function PropertyDetailPage(props: { params: Promise<{ id: 
                                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                                         {prop.amenities.map(amenity => (
                                             <div key={amenity} className="flex items-center gap-2">
-                                                <Check className="h-5 w-5 text-primary" />
+                                                <AmenityIcon name={amenity} className="h-5 w-5" />
                                                 <span className="text-muted-foreground">{amenity}</span>
                                             </div>
                                         ))}
