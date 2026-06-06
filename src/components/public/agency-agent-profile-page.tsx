@@ -6,8 +6,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Mail, MessageCircle, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ReviewCarousel } from "@/components/review-carousel";
 import { getAgentProfile } from "@/lib/public-site";
 import { prefixAgencyPath, resolveAgencySlugFromPathname } from "@/lib/agency-routing";
+import { normalizeBrokerReviewCards } from "@/lib/reviews";
 
 function getAgentImage(seed: string, avatar?: string | null) {
   if (avatar) return avatar;
@@ -86,6 +88,7 @@ export function DevelopAgentProfilePageContent({
     `Hi ${profile.agent.name}, I would like to discuss your listings with ${displayName}.`
   );
   const brokerRegistrationNumber = profile.agent.brn || profile.agent.licenseNumber;
+  const brokerReviews = normalizeBrokerReviewCards(profile.agent.reviewSources);
 
   return (
     <div className="w-full px-4 sm:px-6 lg:px-8 py-12">
@@ -139,6 +142,14 @@ export function DevelopAgentProfilePageContent({
               {profile.agent.bio || `${profile.agent.name} is part of the public-facing team for ${displayName}.`}
             </p>
           </div>
+
+          <ReviewCarousel
+            title="What My Clients Say"
+            description={`Verified feedback from clients who worked directly with ${profile.agent.name}.`}
+            items={brokerReviews}
+            variant="light"
+            className="rounded-[10px] border"
+          />
 
           <div className="rounded-[10px] border bg-card p-6">
             <h3 className="text-xl font-semibold">Active Listings</h3>

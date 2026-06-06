@@ -1,4 +1,5 @@
 import type { Property } from './types';
+import type { BrokerReviewSources } from './reviews';
 import { getDefaultAgencySlug, getEffectiveAgencySlug } from './agency-routing';
 import {
   PUBLIC_API_BASE_URLS,
@@ -39,6 +40,7 @@ export type SiteAgent = {
   primaryColor?: string | null;
   metaTitle?: string | null;
   metaDescription?: string | null;
+  reviewSources?: BrokerReviewSources | null;
 };
 
 export type SiteProfile = {
