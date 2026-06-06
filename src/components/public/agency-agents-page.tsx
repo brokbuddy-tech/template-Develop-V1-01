@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Search } from "lucide-react";
+import { ArrowRight, Mail, Phone, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { getAgents, getSiteConfig, hasMeaningfulSiteConfig, type SiteAgent, type SiteConfig } from "@/lib/public-site";
@@ -111,18 +111,47 @@ export function DevelopAgentsPageContent({
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3">
         {filteredAgents.map((agent) => (
-          <Link key={agent.slug || agent.id || agent.name} href={prefixAgencyPath(`/agents/${agent.slug || ""}`, agencySlug)} className="rounded-[10px] border bg-card overflow-hidden">
-            <div className="relative h-64 w-full">
+          <article key={agent.slug || agent.id || agent.name} className="flex h-full flex-col overflow-hidden rounded-2xl border bg-card shadow-sm">
+            <div className="relative aspect-[4/3] bg-muted">
               <Image src={getAgentImage(agent.slug || agent.name, agent.avatar)} alt={agent.name} fill className="object-cover" />
             </div>
-            <div className="p-6">
-              <h3 className="text-lg font-semibold">{agent.name}</h3>
-              <p className="text-primary text-sm mt-1">{agent.jobTitle || agent.title || agent.tagline || "Property Consultant"}</p>
-              <p className="text-sm text-muted-foreground mt-4">{agent.bio || `${agent.name} is part of the active public roster for ${displayName}.`}</p>
+            <div className="flex min-h-[276px] flex-1 flex-col space-y-4 p-6">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
+                  {agent.jobTitle || agent.title || agent.tagline || "Property Consultant"}
+                </p>
+                <h3 className="mt-2 text-2xl font-semibold">{agent.name}</h3>
+                <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">
+                  {agent.bio || `${agent.name} is part of the active public roster for ${displayName}.`}
+                </p>
+              </div>
+
+              <div className="space-y-2 text-sm text-muted-foreground">
+                {agent.email ? (
+                  <a href={`mailto:${agent.email}`} className="flex items-center gap-2 break-all hover:text-primary">
+                    <Mail className="h-4 w-4" />
+                    {agent.email}
+                  </a>
+                ) : null}
+                {agent.phone ? (
+                  <a href={`tel:${agent.phone}`} className="flex items-center gap-2 hover:text-primary">
+                    <Phone className="h-4 w-4" />
+                    {agent.phone}
+                  </a>
+                ) : null}
+              </div>
+
+              <Link
+                href={prefixAgencyPath(`/agents/${agent.slug || ""}`, agencySlug)}
+                className="mt-auto inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.25em] text-primary"
+              >
+                View Profile
+                <ArrowRight className="h-4 w-4" />
+              </Link>
             </div>
-          </Link>
+          </article>
         ))}
       </div>
 
