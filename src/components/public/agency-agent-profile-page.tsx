@@ -91,13 +91,55 @@ export function DevelopAgentProfilePageContent({
   const brokerReviews = normalizeBrokerReviewCards(profile.agent.reviewSources);
 
   return (
-    <div className="w-full px-4 sm:px-6 lg:px-8 py-12">
-      <div className="grid grid-cols-1 lg:grid-cols-[320px_minmax(0,1fr)] gap-12">
-        <div className="rounded-[10px] border bg-card overflow-hidden">
-          <div className="relative h-80 w-full">
+    <div className="w-full bg-background">
+      <section className="border-b bg-muted/30 px-4 py-16 sm:px-6 lg:px-8">
+        <div className="mx-auto grid max-w-[1600px] grid-cols-1 items-end gap-12 lg:grid-cols-[280px_minmax(0,1fr)]">
+          <div className="relative aspect-square w-full max-w-[280px] overflow-hidden rounded-[10px] border bg-card shadow-sm">
             <Image src={getAgentImage(profile.agent.slug || profile.agent.name, profile.agent.avatar)} alt={profile.agent.name} fill className="object-cover" />
           </div>
-          <div className="p-6 space-y-4">
+
+          <div className="space-y-6">
+            <div>
+              <p className="text-sm font-medium text-muted-foreground">{displayName}</p>
+              <h1 className="mt-3 text-4xl font-bold tracking-tight md:text-6xl">{profile.agent.name}</h1>
+              <p className="mt-3 text-primary">
+                {profile.agent.jobTitle || profile.agent.title || profile.agent.tagline || "Property Consultant"}
+              </p>
+            </div>
+
+            <div className="flex flex-wrap gap-6 text-sm text-muted-foreground">
+              {brokerRegistrationNumber ? (
+                <span className="flex items-center gap-2">
+                  <span className="font-semibold text-primary">BRN</span>
+                  {brokerRegistrationNumber}
+                </span>
+              ) : null}
+              {profile.agent.email ? (
+                <a href={`mailto:${profile.agent.email}`} className="flex items-center gap-2 hover:text-primary">
+                  <Mail className="h-4 w-4 text-primary" />
+                  {profile.agent.email}
+                </a>
+              ) : null}
+              {profile.agent.phone ? (
+                <a href={`tel:${profile.agent.phone}`} className="flex items-center gap-2 hover:text-primary">
+                  <Phone className="h-4 w-4 text-primary" />
+                  {profile.agent.phone}
+                </a>
+              ) : null}
+              {whatsappHref ? (
+                <a href={whatsappHref} target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-primary">
+                  <MessageCircle className="h-4 w-4 text-primary" />
+                  WhatsApp
+                </a>
+              ) : null}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto grid max-w-[1600px] grid-cols-1 gap-16 px-4 py-12 sm:px-6 lg:grid-cols-[320px_minmax(0,1fr)] lg:px-8">
+        <aside className="space-y-6 rounded-[10px] border bg-card p-6 shadow-sm">
+          <div className="space-y-4">
             <h1 className="text-3xl font-bold">{profile.agent.name}</h1>
             <p className="text-primary">{profile.agent.jobTitle || profile.agent.title || profile.agent.tagline || "Property Consultant"}</p>
             {brokerRegistrationNumber ? (
@@ -132,7 +174,7 @@ export function DevelopAgentProfilePageContent({
               ) : null}
             </div>
           </div>
-        </div>
+        </aside>
 
         <div className="space-y-8">
           <div className="rounded-[10px] border bg-card p-6">
@@ -153,7 +195,7 @@ export function DevelopAgentProfilePageContent({
 
           <div className="rounded-[10px] border bg-card p-6">
             <h3 className="text-xl font-semibold">Active Listings</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+            <div className="mt-6 grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3">
               {profile.activeListings.map((listing: any) => (
                 <Link key={listing.id} href={prefixAgencyPath(`/property/${listing.id}`, agencySlug)} className="rounded-[10px] border overflow-hidden">
                   <div className="relative h-56 w-full">
@@ -172,7 +214,7 @@ export function DevelopAgentProfilePageContent({
             ) : null}
           </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 }
