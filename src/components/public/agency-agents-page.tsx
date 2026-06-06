@@ -117,7 +117,7 @@ export function DevelopAgentsPageContent({
             <div className="relative aspect-[4/3] bg-muted">
               <Image src={getAgentImage(agent.slug || agent.name, agent.avatar)} alt={agent.name} fill className="object-cover" />
             </div>
-            <div className="flex min-h-[276px] flex-1 flex-col space-y-4 p-6">
+            <div className="flex min-h-[276px] flex-1 flex-col gap-4 p-6">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
                   {agent.jobTitle || agent.title || agent.tagline || "Property Consultant"}
