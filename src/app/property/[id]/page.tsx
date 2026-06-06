@@ -123,33 +123,9 @@ function AgentContactCard({
                             </p>
                         </div>
                     </div>
-
-                    <p className="mt-4 text-[15px] leading-6 text-slate-600">
-                        Get the brochure, arrange a viewing, or speak directly with the listing specialist for this{' '}
-                        {property.purpose.toLowerCase()} opportunity.
-                    </p>
                 </div>
 
                 <div className="space-y-4 p-5 sm:p-6">
-                    <div className="grid gap-2.5 sm:grid-cols-2 lg:grid-cols-1">
-                        <div className="rounded-[20px] border border-slate-200 bg-slate-50 px-4 py-3">
-                            <p className="text-[10px] font-semibold uppercase tracking-[0.26em] text-slate-400">Phone</p>
-                            <p className="mt-1.5 text-sm font-semibold text-slate-800">
-                                {agent.phone || 'Shared after inquiry'}
-                            </p>
-                        </div>
-                        <div className="rounded-[20px] border border-slate-200 bg-slate-50 px-4 py-3">
-                            <p className="text-[10px] font-semibold uppercase tracking-[0.26em] text-slate-400">Availability</p>
-                            <p className="mt-1.5 text-sm font-semibold text-slate-800">{availabilityCopy}</p>
-                        </div>
-                        {agent.email ? (
-                            <div className="rounded-[20px] border border-slate-200 bg-slate-50 px-4 py-3 sm:col-span-2 lg:col-span-1">
-                                <p className="text-[10px] font-semibold uppercase tracking-[0.26em] text-slate-400">Email</p>
-                                <p className="mt-1.5 break-all text-sm font-semibold text-slate-800">{agent.email}</p>
-                            </div>
-                        ) : null}
-                    </div>
-
                     <div className="space-y-2.5">
                         <PropertyBrochureButton
                             brochure={{
