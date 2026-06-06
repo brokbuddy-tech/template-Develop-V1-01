@@ -33,6 +33,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { Textarea } from './ui/textarea';
 import { cn } from '@/lib/utils';
 import { getOrgConfig, PROPERTY_TYPES_MAPPING } from '@/lib/api';
+import { cleanQueryForCategory, normalizeCategory } from '@/lib/search-utils';
 
 // Property types and amenities will be fetched from the backend config
 // const propertyTypes = ["Apartment", "Villa", "Penthouse", "Townhouse", "Duplex", "Office", "Warehouse", "Plot"];
@@ -87,10 +88,12 @@ export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
 
     const buildSearchParams = (appliedFilters = filters) => {
         const params = new URLSearchParams();
+        const normalizedCategory = normalizeCategory(appliedFilters.category) || appliedFilters.category;
+        const cleanedQuery = cleanQueryForCategory(appliedFilters.q, normalizedCategory);
         const mapping: Array<[string, unknown]> = [
-            ['q', appliedFilters.q],
+            ['q', cleanedQuery],
             ['group', appliedFilters.propertyType?.toLowerCase()],
-            ['category', appliedFilters.category],
+            ['category', normalizedCategory],
             ['readiness', appliedFilters.readiness],
             ['minPrice', appliedFilters.price_min],
             ['maxPrice', appliedFilters.price_max],

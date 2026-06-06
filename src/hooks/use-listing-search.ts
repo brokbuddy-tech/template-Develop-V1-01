@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getPublicTemplateUrl } from '@/lib/api';
 import { useSearchContext } from '@/context/search-context';
+import { cleanQueryForCategory, matchesTemplateCategory, normalizeCategory } from '@/lib/search-utils';
 
 export interface ListingSearchFilters {
   // Tier 1
@@ -92,8 +93,17 @@ export function useListingSearch({ defaults = {} }: UseListingSearchOptions = {}
 
   const fetchListings = async (appliedFilters: ListingSearchFilters) => {
     const params = new URLSearchParams();
+    const categoryFilter = appliedFilters.category;
+    const apiFilters: ListingSearchFilters = {
+      ...appliedFilters,
+      q: cleanQueryForCategory(appliedFilters.q, categoryFilter),
+    };
+
+    if (normalizeCategory(categoryFilter)) {
+      delete apiFilters.category;
+    }
     
-    Object.entries(appliedFilters).forEach(([key, value]) => {
+    Object.entries(apiFilters).forEach(([key, value]) => {
       if (value !== undefined && value !== null && value !== '') {
         params.append(key, value.toString());
       }
@@ -103,7 +113,32 @@ export function useListingSearch({ defaults = {} }: UseListingSearchOptions = {}
     if (!response.ok) {
       throw new Error('Network response was not ok');
     }
-    return response.json();
+    const data = await response.json();
+    const listings = Array.isArray(data) ? data : (data.listings || []);
+    const filteredListings = normalizeCategory(categoryFilter)
+      ? listings.filter((listing: any) => matchesTemplateCategory({
+        category: listing.category,
+        type: listing.type || listing.propertyType,
+        title: listing.title,
+        description: listing.description,
+        searchableText: [
+          listing.searchableText,
+          listing.location,
+          listing.address,
+          listing.area,
+          listing.subArea,
+        ].filter(Boolean).join(' '),
+      }, categoryFilter))
+      : listings;
+
+    if (Array.isArray(data)) return filteredListings;
+
+    return {
+      ...data,
+      listings: filteredListings,
+      total: filteredListings.length,
+      totalPages: Math.max(1, Math.ceil(filteredListings.length / (appliedFilters.limit || data.limit || 20))),
+    };
   };
 
   const { data, isLoading, isFetching, error, refetch } = useQuery({
