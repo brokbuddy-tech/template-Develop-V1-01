@@ -62,7 +62,7 @@ function TestimonialCard({ testimonial }: { testimonial: SellerTestimonial & { b
             ) : null}
           </div>
         </div>
-        <p className="text-muted-foreground leading-relaxed flex-1">
+        <p className="line-clamp-2 flex-1 text-muted-foreground leading-relaxed">
           {testimonial.quote}
         </p>
         <Quote className="absolute bottom-6 right-6 h-12 w-12 text-primary/10 transform rotate-180" />
