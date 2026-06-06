@@ -51,6 +51,8 @@ interface SearchFiltersProps {
 export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
     const router = useRouter();
     const { filters, updateFilter, setFilters, resetFilters } = useListingSearch();
+    const [aiQuery, setAiQuery] = useState('');
+    const [isAiSearching, setIsAiSearching] = useState(false);
 
     const [propertyTypes, setPropertyTypes] = useState<string[]>([]);
     const [amenitiesList, setAmenitiesList] = useState<string[]>([]);
@@ -64,7 +66,7 @@ export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
     }, []);
 
     // Derived UI state
-    const purpose = filters.transactionType?.toLowerCase() || 'buy';
+    const purpose = filters.readiness === 'OFFPLAN' ? 'off-plan' : filters.transactionType?.toLowerCase() || 'buy';
     const propertyGroup = filters.propertyType?.toLowerCase() || 'residential';
     const search = filters.q || '';
     const selectedCategory = filters.category || '';
@@ -76,8 +78,42 @@ export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
     const bedrooms = filters.bedrooms !== undefined ? (filters.bedrooms === 0 ? 'Studio' : (filters.bedrooms >= 5 ? '5+' : filters.bedrooms.toString())) : '';
     const bathrooms = filters.bathrooms !== undefined ? (filters.bathrooms >= 5 ? '5+' : filters.bathrooms.toString()) : '';
 
+    const getResultsPath = (appliedFilters = filters) => {
+        if (appliedFilters.propertyType === 'COMMERCIAL') return '/commercial';
+        if (appliedFilters.readiness === 'OFFPLAN') return '/off-plan';
+        if (appliedFilters.transactionType === 'RENT') return '/rent';
+        return '/buy';
+    };
+
+    const buildSearchParams = (appliedFilters = filters) => {
+        const params = new URLSearchParams();
+        const mapping: Array<[string, unknown]> = [
+            ['q', appliedFilters.q],
+            ['group', appliedFilters.propertyType?.toLowerCase()],
+            ['category', appliedFilters.category],
+            ['readiness', appliedFilters.readiness],
+            ['minPrice', appliedFilters.price_min],
+            ['maxPrice', appliedFilters.price_max],
+            ['bedrooms', appliedFilters.bedrooms],
+            ['bathrooms', appliedFilters.bathrooms],
+            ['minArea', appliedFilters.builtUpArea_min],
+            ['maxArea', appliedFilters.builtUpArea_max],
+            ['sort', appliedFilters.sort],
+        ];
+
+        mapping.forEach(([key, value]) => {
+            if (value !== undefined && value !== null && value !== '') params.set(key, value.toString());
+        });
+
+        return params;
+    };
+
     const handlePurposeChange = (val: string) => {
-        updateFilter('transactionType', val === 'rent' ? 'RENT' : 'SALE');
+        if (val === 'off-plan') {
+            setFilters({ transactionType: 'SALE', readiness: 'OFFPLAN' });
+            return;
+        }
+        setFilters({ transactionType: val === 'rent' ? 'RENT' : 'SALE', readiness: undefined });
     };
 
     const handleCategoryChange = (val: string) => {
@@ -86,11 +122,79 @@ export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
 
     const handleSearch = () => {
         if (context === 'hero') {
-            const params = new URLSearchParams();
-            Object.entries(filters).forEach(([k, v]) => {
-                if (v !== undefined && v !== null && v !== '') params.set(k, v.toString());
+            const params = buildSearchParams(filters);
+            router.push(`${getResultsPath(filters)}${params.toString() ? `?${params.toString()}` : ''}`);
+        }
+    };
+
+    const handleAiSearch = async () => {
+        if (!aiQuery.trim()) return;
+        setIsAiSearching(true);
+        try {
+            const response = await fetch('/api/ai-search', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    query: aiQuery,
+                    filters: {
+                        q: search,
+                        transactionType: filters.transactionType,
+                        propertyType: filters.propertyType,
+                        category: filters.category,
+                        readiness: filters.readiness,
+                        bedrooms: filters.bedrooms?.toString(),
+                        bathrooms: filters.bathrooms?.toString(),
+                        minPrice: filters.price_min?.toString(),
+                        maxPrice: filters.price_max?.toString(),
+                        minArea: filters.builtUpArea_min?.toString(),
+                        maxArea: filters.builtUpArea_max?.toString(),
+                    },
+                }),
             });
-            router.push(`/search?${params.toString()}`);
+
+            if (!response.ok) throw new Error('AI search failed');
+            const data = await response.json() as {
+                filters?: {
+                    q?: string;
+                    transactionType?: 'SALE' | 'RENT';
+                    propertyType?: 'RESIDENTIAL' | 'COMMERCIAL';
+                    category?: string;
+                    readiness?: 'READY' | 'OFFPLAN';
+                    bedrooms?: string;
+                    bathrooms?: string;
+                    minPrice?: string;
+                    maxPrice?: string;
+                    minArea?: string;
+                    maxArea?: string;
+                };
+            };
+            const aiFilters = data.filters || {};
+            const nextFilters = {
+                q: aiFilters.q || aiQuery.trim(),
+                transactionType: aiFilters.transactionType,
+                propertyType: aiFilters.propertyType,
+                category: aiFilters.category,
+                readiness: aiFilters.readiness,
+                bedrooms: aiFilters.bedrooms ? Number(aiFilters.bedrooms) : undefined,
+                bathrooms: aiFilters.bathrooms ? Number(aiFilters.bathrooms) : undefined,
+                price_min: aiFilters.minPrice ? Number(aiFilters.minPrice) : undefined,
+                price_max: aiFilters.maxPrice ? Number(aiFilters.maxPrice) : undefined,
+                builtUpArea_min: aiFilters.minArea ? Number(aiFilters.minArea) : undefined,
+                builtUpArea_max: aiFilters.maxArea ? Number(aiFilters.maxArea) : undefined,
+            };
+
+            setFilters(nextFilters);
+            if (context === 'hero') {
+                const mergedFilters = { ...filters, ...nextFilters };
+                const params = buildSearchParams(mergedFilters);
+                router.push(`${getResultsPath(mergedFilters)}${params.toString() ? `?${params.toString()}` : ''}`);
+            }
+        } catch {
+            const nextFilters = { q: aiQuery.trim() };
+            setFilters(nextFilters);
+            if (context === 'hero') router.push(`/buy?q=${encodeURIComponent(aiQuery.trim())}`);
+        } finally {
+            setIsAiSearching(false);
         }
     };
 
@@ -356,12 +460,14 @@ export function SearchFilters({ context = 'hero' }: SearchFiltersProps) {
                      <div className="bg-white/95 backdrop-blur-sm p-4 rounded-xl shadow-lg focus-within:shadow-xl transition-shadow duration-300 flex flex-col gap-4">
                          <Textarea
                             placeholder="e.g., I'm looking for a 3-bedroom villa in Dubai Hills with a private pool and a modern kitchen, suitable for a young family. My budget is around AED 5M."
+                            value={aiQuery}
+                            onChange={(event) => setAiQuery(event.target.value)}
                             className="w-full text-foreground bg-transparent border rounded-md p-3 focus-visible:ring-1 focus-visible:ring-offset-0 text-base h-auto"
                             rows={3}
                         />
-                        <Button className="bg-primary text-primary-foreground rounded-md h-12 w-full text-base">
+                        <Button className="bg-primary text-primary-foreground rounded-md h-12 w-full text-base" onClick={handleAiSearch} disabled={isAiSearching || !aiQuery.trim()}>
                             <Sparkles className="mr-2 h-5 w-5" />
-                            Find My Property with AI
+                            {isAiSearching ? 'Searching...' : 'Find My Property with AI'}
                         </Button>
                     </div>
                 </TabsContent>
