@@ -57,6 +57,9 @@ export type Property = {
   latitude?: number | null;
   longitude?: number | null;
   virtualTourUrl?: string | null;
+  featured?: boolean;
+  createdAt?: string;
+  recentlyListed?: boolean;
   agent?: PropertyAgent;
   description: string;
   amenities: string[];

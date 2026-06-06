@@ -406,6 +406,40 @@ function mapListingAgent(listing: any) {
     };
 }
 
+const RECENTLY_LISTED_WINDOW_MS = 15 * 24 * 60 * 60 * 1000;
+
+function isTruthyListingFlag(value: unknown) {
+    if (typeof value === 'boolean') return value;
+    if (typeof value === 'number') return value !== 0;
+    if (typeof value === 'string') {
+        return ['true', '1', 'yes', 'y', 'on'].includes(value.trim().toLowerCase());
+    }
+    return Boolean(value);
+}
+
+function isFeaturedListing(listing: any) {
+    return [
+        listing.isFeatured,
+        listing.featured,
+        listing.fields?.isFeatured,
+        listing.fields?.featured,
+    ].some(isTruthyListingFlag);
+}
+
+function getCreatedAtIso(value: unknown) {
+    if (!value) return undefined;
+    const date = value instanceof Date ? value : new Date(String(value));
+    return Number.isNaN(date.getTime()) ? undefined : date.toISOString();
+}
+
+function isRecentlyListed(createdAt?: string) {
+    if (!createdAt) return false;
+    const createdTime = Date.parse(createdAt);
+    if (!Number.isFinite(createdTime)) return false;
+    const ageMs = Date.now() - createdTime;
+    return ageMs >= 0 && ageMs <= RECENTLY_LISTED_WINDOW_MS;
+}
+
 /**
  * Maps a backend listing object to the frontend Property type.
  */
@@ -458,6 +492,8 @@ export function mapListingToProperty(listing: any, agencySlug?: string | null): 
 
     const priceValue = getNumberValue(listing.price, fields.price) || 0;
     const builtUpArea = getNumberValue(listing.builtUpArea, listing.size, listing.areaSqFt, fields.builtUpArea) || 0;
+    const createdAt = getCreatedAtIso(listing.createdAt);
+    const featured = isFeaturedListing(listing);
 
     return {
         id: listing.id,
@@ -497,6 +533,9 @@ export function mapListingToProperty(listing: any, agencySlug?: string | null): 
             fields.videoTourUrl,
             fields.matterportUrl,
         ) || null,
+        featured,
+        createdAt,
+        recentlyListed: isRecentlyListed(createdAt),
         description: normalizeListingDescription(listing.description),
         amenities: Array.isArray(listing.amenities) ? listing.amenities : [],
         galleryImageIds: media.map(m => m.url),

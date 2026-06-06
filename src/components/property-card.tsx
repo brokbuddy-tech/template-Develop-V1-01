@@ -50,6 +50,20 @@ export function PropertyCard({ property }: { property: Property }) {
           <div className="absolute top-3 left-3 bg-background/80 text-foreground px-2 py-1 text-xs font-semibold rounded-md backdrop-blur-sm">
             {property.category}
           </div>
+          {(property.featured || property.recentlyListed) && (
+            <div className="absolute right-3 top-3 z-10 flex flex-col items-end gap-2">
+              {property.featured && (
+                <span className="rounded-md bg-primary px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-primary-foreground shadow-sm">
+                  Featured
+                </span>
+              )}
+              {property.recentlyListed && (
+                <span className="rounded-md bg-background/85 px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-foreground shadow-sm backdrop-blur-sm">
+                  Recently Listed
+                </span>
+              )}
+            </div>
+          )}
           <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/60 to-transparent" />
         </div>
 
