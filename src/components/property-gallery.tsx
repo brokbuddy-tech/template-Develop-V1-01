@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { cn } from '@/lib/utils';
-import { ChevronLeft, ChevronRight, Video } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Images, Video } from 'lucide-react';
 import type { PropertyImage } from '@/lib/types';
 import { ProgressiveImage } from '@/components/progressive-image';
 import { Button } from '@/components/ui/button';
@@ -125,12 +125,11 @@ export function PropertyGallery({
                         />
                     )}
 
-                    {/* Optional overlay count */}
-                    {images.length > 3 && (
-                        <div className="absolute bottom-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded">
-                            +{images.length - 3}
-                        </div>
-                    )}
+                    <div className="pointer-events-none absolute bottom-3 right-3 inline-flex items-center gap-2 rounded-md bg-black/70 px-3 py-2 text-xs font-bold uppercase tracking-[0.18em] text-white shadow-lg backdrop-blur-md">
+                        <Images className="h-4 w-4" />
+                        View More
+                        {images.length > 3 ? <span>+{images.length - 3}</span> : null}
+                    </div>
                 </div>
             </div>
             {isOpen && typeof document !== 'undefined' && createPortal(
