@@ -138,53 +138,60 @@ export function DevelopAgentProfilePageContent({
       </section>
 
       <section className="mx-auto grid max-w-[1600px] grid-cols-1 gap-16 px-4 py-12 sm:px-6 lg:grid-cols-[320px_minmax(0,1fr)] lg:px-8">
-        <aside className="space-y-6 rounded-[10px] border bg-card p-6 shadow-sm">
-          <div className="space-y-4">
-            <h1 className="text-3xl font-bold">{profile.agent.name}</h1>
-            <p className="text-primary">{profile.agent.jobTitle || profile.agent.title || profile.agent.tagline || "Property Consultant"}</p>
-            {brokerRegistrationNumber ? (
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-                BRN {brokerRegistrationNumber}
-              </p>
-            ) : null}
-            <div className="grid gap-3">
-              {profile.agent.phone ? (
-                <a href={`tel:${profile.agent.phone}`}>
-                  <Button className="w-full bg-primary text-primary-foreground">
-                    <Phone className="mr-2 h-4 w-4" />
-                    Call
-                  </Button>
-                </a>
-              ) : null}
-              {profile.agent.email ? (
-                <a href={`mailto:${profile.agent.email}`}>
-                  <Button variant="outline" className="w-full">
-                    <Mail className="mr-2 h-4 w-4" />
-                    Email
-                  </Button>
-                </a>
-              ) : null}
-              {whatsappHref ? (
-                <a href={whatsappHref} target="_blank" rel="noreferrer">
-                  <Button variant="outline" className="w-full">
-                    <MessageCircle className="mr-2 h-4 w-4" />
-                    WhatsApp
-                  </Button>
-                </a>
-              ) : null}
+        <aside className="space-y-10">
+          <div className="space-y-6 rounded-[10px] border bg-card p-6 shadow-sm">
+            <h2 className="text-sm font-semibold uppercase tracking-[0.3em] text-primary">Profile</h2>
+            <div className="space-y-4 text-sm leading-7 text-muted-foreground">
+              <p>{profile.agent.bio || profile.agent.tagline || `${profile.agent.name} is part of the public-facing team for ${displayName}.`}</p>
+              <div className="space-y-3">
+                {(profile.agent.languages || []).length > 0 ? (
+                  <div>
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-muted-foreground/70">Languages</p>
+                    <p>{(profile.agent.languages || []).join(", ")}</p>
+                  </div>
+                ) : null}
+                {(profile.agent.specializations || []).length > 0 ? (
+                  <div>
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-muted-foreground/70">Specializations</p>
+                    <p>{(profile.agent.specializations || []).join(", ")}</p>
+                  </div>
+                ) : null}
+                {profile.agent.yearsExperience ? (
+                  <div>
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-muted-foreground/70">Experience</p>
+                    <p>{profile.agent.yearsExperience}+ years</p>
+                  </div>
+                ) : null}
+                {brokerRegistrationNumber ? (
+                  <div>
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-muted-foreground/70">BRN</p>
+                    <p>{brokerRegistrationNumber}</p>
+                  </div>
+                ) : null}
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-6 rounded-[10px] border bg-card p-6 shadow-sm">
+            <h2 className="text-sm font-semibold uppercase tracking-[0.3em] text-primary">Live Stats</h2>
+            <div className="grid grid-cols-3 gap-4 text-center">
+              <div>
+                <p className="text-2xl font-bold text-foreground">{profile.stats.activeListings}</p>
+                <p className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">Active</p>
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-foreground">{profile.stats.soldListings}</p>
+                <p className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">Sold</p>
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-foreground">{profile.stats.rentedListings}</p>
+                <p className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">Rented</p>
+              </div>
             </div>
           </div>
         </aside>
 
         <div className="space-y-8">
-          <div className="rounded-[10px] border bg-card p-6">
-            <p className="text-sm text-muted-foreground">{displayName}</p>
-            <h2 className="text-2xl font-bold mt-2">Public Agent Branding</h2>
-            <p className="mt-4 text-muted-foreground">
-              {profile.agent.bio || `${profile.agent.name} is part of the public-facing team for ${displayName}.`}
-            </p>
-          </div>
-
           <ReviewCarousel
             title="What My Clients Say"
             description={`Verified feedback from clients who worked directly with ${profile.agent.name}.`}
