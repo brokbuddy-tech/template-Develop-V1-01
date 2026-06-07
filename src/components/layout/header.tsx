@@ -28,6 +28,7 @@ import { Menu, Settings, ChevronDown } from 'lucide-react';
 import { NAV_LINKS, SITE_NAME } from '@/lib/constants';
 import { ScrollArea } from '../ui/scroll-area';
 import type { NavLink } from '@/lib/types';
+import { cn } from '@/lib/utils';
 import { usePathname, useRouter } from 'next/navigation';
 import { getSiteConfig, hasMeaningfulSiteConfig, type SiteConfig } from '@/lib/public-site';
 import { prefixAgencyPath, resolveAgencySlugFromPathname } from '@/lib/agency-routing';
@@ -69,12 +70,27 @@ const Logo = ({
   </Link>
 );
 
+const isHrefActive = (pathname: string, href: string) => {
+  const hrefPath = href.split('?')[0] || '/';
+  return pathname === hrefPath || (hrefPath !== '/' && pathname.startsWith(`${hrefPath}/`));
+};
+
+const isNavLinkActive = (pathname: string, agencySlug: string | null | undefined, link: NavLink) => {
+  if (isHrefActive(pathname, prefixAgencyPath(link.href, agencySlug))) {
+    return true;
+  }
+
+  return link.children?.some((child) => isHrefActive(pathname, prefixAgencyPath(child.href, agencySlug))) ?? false;
+};
+
 const HoverDropdownMenu = ({
   link,
   agencySlug,
+  isActive,
 }: {
   link: NavLink;
   agencySlug?: string | null;
+  isActive?: boolean;
 }) => {
   const [open, setOpen] = React.useState(false);
   const router = useRouter();
@@ -87,10 +103,11 @@ const HoverDropdownMenu = ({
   
   if (!link.children) {
     return (
-      <Button asChild variant="ghost" className="font-semibold text-sm">
+      <Button asChild variant="ghost" className={cn("relative z-10 font-semibold text-sm", isActive && "text-foreground")}>
         <Link
           href={linkHref}
-          className="text-muted-foreground transition-colors hover:text-foreground p-2"
+          aria-current={isActive ? 'page' : undefined}
+          className={cn("text-muted-foreground transition-colors hover:text-foreground p-2", isActive && "text-foreground")}
         >
           {link.label}
         </Link>
@@ -105,7 +122,12 @@ const HoverDropdownMenu = ({
         onPointerEnter={() => setOpen(true)}
         onPointerLeave={() => setOpen(false)}
       >
-        <Button variant="ghost" className="font-semibold text-sm p-2 pr-1" onClick={handleButtonClick}>
+        <Button
+          variant="ghost"
+          className={cn("relative z-10 font-semibold text-sm p-2 pr-1", isActive && "text-foreground")}
+          aria-current={isActive ? 'page' : undefined}
+          onClick={handleButtonClick}
+        >
             {link.label}
         </Button>
         <DropdownMenuTrigger asChild>
@@ -129,11 +151,73 @@ const HoverDropdownMenu = ({
   );
 };
 
-const DesktopNav = ({ agencySlug }: { agencySlug?: string | null }) => (
-  <nav className="hidden lg:flex items-center gap-2 text-sm font-semibold">
-    {NAV_LINKS.map((link) => <HoverDropdownMenu key={link.label} link={link} agencySlug={agencySlug} />)}
-  </nav>
-);
+const DesktopNav = ({
+  agencySlug,
+  pathname,
+}: {
+  agencySlug?: string | null;
+  pathname: string;
+}) => {
+  const navRef = React.useRef<HTMLElement | null>(null);
+  const itemRefs = React.useRef<Record<string, HTMLDivElement | null>>({});
+  const activeLink = NAV_LINKS.find((link) => isNavLinkActive(pathname, agencySlug, link));
+  const activeKey = activeLink?.label;
+  const [activeUnderline, setActiveUnderline] = React.useState<{ left: number; width: number } | null>(null);
+
+  React.useEffect(() => {
+    const updateUnderline = () => {
+      if (!activeKey || !navRef.current) {
+        setActiveUnderline(null);
+        return;
+      }
+
+      const activeItem = itemRefs.current[activeKey];
+      if (!activeItem) {
+        setActiveUnderline(null);
+        return;
+      }
+
+      const navRect = navRef.current.getBoundingClientRect();
+      const itemRect = activeItem.getBoundingClientRect();
+      setActiveUnderline({
+        left: itemRect.left - navRect.left,
+        width: itemRect.width,
+      });
+    };
+
+    updateUnderline();
+    window.addEventListener('resize', updateUnderline);
+    return () => window.removeEventListener('resize', updateUnderline);
+  }, [activeKey]);
+
+  return (
+    <nav ref={navRef} className="relative hidden lg:flex items-center gap-2 pb-1 text-sm font-semibold">
+      {activeUnderline && (
+        <span
+          className="pointer-events-none absolute bottom-0 h-0.5 rounded-full bg-primary transition-all duration-300 ease-out"
+          style={{
+            left: activeUnderline.left,
+            width: activeUnderline.width,
+          }}
+        />
+      )}
+      {NAV_LINKS.map((link) => (
+        <div
+          key={link.label}
+          ref={(node) => {
+            itemRefs.current[link.label] = node;
+          }}
+        >
+          <HoverDropdownMenu
+            link={link}
+            agencySlug={agencySlug}
+            isActive={link.label === activeKey}
+          />
+        </div>
+      ))}
+    </nav>
+  );
+};
 
 const MobileNav = ({
   agencySlug,
@@ -271,7 +355,7 @@ export function Header({ initialSiteConfig }: { initialSiteConfig?: SiteConfig |
           <Logo brandName={brandName} agencySlug={agencySlug} logoUrl={brandLogo} />
         </div>
         <div className="flex-1 flex justify-center">
-          <DesktopNav agencySlug={agencySlug} />
+          <DesktopNav agencySlug={agencySlug} pathname={pathname} />
         </div>
         <div className="flex items-center justify-end gap-2 md:gap-4 lg:w-1/4">
           <div className="hidden lg:flex items-center gap-2">
