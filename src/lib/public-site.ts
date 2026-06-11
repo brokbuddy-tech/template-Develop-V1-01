@@ -473,6 +473,29 @@ export async function getSiteConfig(agencySlug?: string | null): Promise<SiteCon
   };
 }
 
+export async function submitOrgInquiry(payload: Record<string, unknown>, agencySlug?: string | null) {
+  const response = await fetchTemplateResponse('/inquiry', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  }, agencySlug);
+
+  if (!response.ok) {
+    let message = 'We could not submit your request right now. Please try again shortly.';
+    try {
+      const errorPayload = await response.json() as { message?: string };
+      if (response.status < 500 && errorPayload.message) {
+        message = errorPayload.message;
+      }
+    } catch {
+      // Keep the visitor-facing fallback above.
+    }
+    throw new Error(message);
+  }
+
+  return response.json();
+}
+
 export async function getAgents(agencySlug?: string | null) {
   const response = await fetchTemplateResponse('/agents', { next: { revalidate: 300 } } as RequestInit, agencySlug);
   const fallback = await getSiteConfig(agencySlug);

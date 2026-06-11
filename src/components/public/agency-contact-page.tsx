@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import Image from "next/image";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { getSiteConfig, hasMeaningfulSiteConfig, type SiteConfig } from "@/lib/public-site";
+import { getSiteConfig, hasMeaningfulSiteConfig, submitOrgInquiry, type SiteConfig } from "@/lib/public-site";
 import { resolveAgencySlugFromPathname } from "@/lib/agency-routing";
 import { usePathname } from "next/navigation";
 
@@ -22,6 +22,8 @@ export function DevelopContactPageContent({
   const pathname = usePathname();
   const agencySlug = resolveAgencySlugFromPathname(pathname);
   const [siteConfig, setSiteConfig] = useState<SiteConfig | null>(initialSiteConfig);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitFeedback, setSubmitFeedback] = useState<{ type: "success" | "error"; message: string } | null>(null);
 
   useEffect(() => {
     setSiteConfig((current) => initialSiteConfig ?? current ?? null);
@@ -56,6 +58,43 @@ export function DevelopContactPageContent({
     siteConfig?.leadAgent?.phone ||
     "Phone available on request";
 
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
+    setSubmitFeedback(null);
+
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+    const subject = String(formData.get("subject") || "").trim();
+    const message = String(formData.get("message") || "").trim();
+
+    try {
+      await submitOrgInquiry({
+        name: String(formData.get("name") || "").trim(),
+        email: String(formData.get("email") || "").trim(),
+        phone: String(formData.get("phone") || "").trim(),
+        message: subject ? `Subject: ${subject}\n\n${message}` : message,
+        templateName: "Develop V1",
+        formContext: "contact-page",
+      }, agencySlug);
+
+      form.reset();
+      setSubmitFeedback({
+        type: "success",
+        message: `Thank you. ${displayName} will contact you shortly.`,
+      });
+    } catch (error) {
+      setSubmitFeedback({
+        type: "error",
+        message: error instanceof Error ? error.message : "Please try again in a moment.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
   return (
     <div className="relative isolate">
       <div className="absolute inset-0 -z-10">
@@ -80,25 +119,37 @@ export function DevelopContactPageContent({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           <div className="bg-background/80 backdrop-blur-sm border-gray-600 rounded-[10px] p-6">
             <h2 className="text-xl font-semibold">Send us a Message</h2>
-            <form className="space-y-6 mt-6">
+            <form className="space-y-6 mt-6" onSubmit={handleSubmit}>
               <div className="space-y-2">
                 <label className="text-sm">Full Name</label>
-                <Input placeholder="John Doe" />
+                <Input name="name" placeholder="John Doe" required />
               </div>
               <div className="space-y-2">
                 <label className="text-sm">Email Address</label>
-                <Input placeholder="john.doe@example.com" />
+                <Input name="email" type="email" placeholder="john.doe@example.com" required />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm">Phone</label>
+                <Input name="phone" type="tel" placeholder="+971 50 123 4567" />
               </div>
               <div className="space-y-2">
                 <label className="text-sm">Subject</label>
-                <Input placeholder="How can we help?" />
+                <Input name="subject" placeholder="How can we help?" required />
               </div>
               <div className="space-y-2">
                 <label className="text-sm">Message</label>
-                <Textarea placeholder={`Tell ${displayName} how the team can help.`} rows={5} />
+                <Textarea name="message" placeholder={`Tell ${displayName} how the team can help.`} rows={5} required minLength={10} />
               </div>
-              <Button className="w-full bg-primary text-primary-foreground">
-                Send Message
+              {submitFeedback ? (
+                <p
+                  className={submitFeedback.type === "success" ? "text-sm font-medium text-emerald-600" : "text-sm font-medium text-destructive"}
+                  aria-live="polite"
+                >
+                  {submitFeedback.message}
+                </p>
+              ) : null}
+              <Button type="submit" disabled={isSubmitting} className="w-full bg-primary text-primary-foreground disabled:opacity-70">
+                {isSubmitting ? "Sending..." : "Send Message"}
               </Button>
             </form>
           </div>
