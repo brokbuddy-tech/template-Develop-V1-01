@@ -6,8 +6,9 @@ import { Mail, MapPin, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
 import { getSiteConfig, hasMeaningfulSiteConfig, submitOrgInquiry, type SiteConfig } from "@/lib/public-site";
-import { resolveAgencySlugFromPathname } from "@/lib/agency-routing";
+import { getEffectiveAgencySlug, resolveAgencySlugFromPathname } from "@/lib/agency-routing";
 import { usePathname } from "next/navigation";
 
 function getDisplayName(siteConfig: SiteConfig | null) {
@@ -20,10 +21,12 @@ export function DevelopContactPageContent({
   initialSiteConfig?: SiteConfig | null;
 }) {
   const pathname = usePathname();
-  const agencySlug = resolveAgencySlugFromPathname(pathname);
+  const agencySlug = getEffectiveAgencySlug(
+    resolveAgencySlugFromPathname(pathname) || initialSiteConfig?.organization.slug,
+  );
   const [siteConfig, setSiteConfig] = useState<SiteConfig | null>(initialSiteConfig);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitFeedback, setSubmitFeedback] = useState<{ type: "success" | "error"; message: string } | null>(null);
+  const { toast } = useToast();
 
   useEffect(() => {
     setSiteConfig((current) => initialSiteConfig ?? current ?? null);
@@ -60,10 +63,10 @@ export function DevelopContactPageContent({
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    event.stopPropagation();
     if (isSubmitting) return;
 
     setIsSubmitting(true);
-    setSubmitFeedback(null);
 
     const form = event.currentTarget;
     const formData = new FormData(form);
@@ -81,14 +84,15 @@ export function DevelopContactPageContent({
       }, agencySlug);
 
       form.reset();
-      setSubmitFeedback({
-        type: "success",
-        message: `Thank you. ${displayName} will contact you shortly.`,
+      toast({
+        title: "Message sent",
+        description: `Thank you. ${displayName} will contact you shortly.`,
       });
     } catch (error) {
-      setSubmitFeedback({
-        type: "error",
-        message: error instanceof Error ? error.message : "Please try again in a moment.",
+      toast({
+        title: "Unable to send message",
+        description: error instanceof Error ? error.message : "Please try again in a moment.",
+        variant: "destructive",
       });
     } finally {
       setIsSubmitting(false);
@@ -119,7 +123,13 @@ export function DevelopContactPageContent({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           <div className="bg-background/80 backdrop-blur-sm border-gray-600 rounded-[10px] p-6">
             <h2 className="text-xl font-semibold">Send us a Message</h2>
-            <form className="space-y-6 mt-6" onSubmit={handleSubmit}>
+            <form
+              className="space-y-6 mt-6"
+              method="post"
+              action="#"
+              noValidate
+              onSubmit={handleSubmit}
+            >
               <div className="space-y-2">
                 <label className="text-sm">Full Name</label>
                 <Input name="name" placeholder="John Doe" required />
@@ -140,14 +150,6 @@ export function DevelopContactPageContent({
                 <label className="text-sm">Message</label>
                 <Textarea name="message" placeholder={`Tell ${displayName} how the team can help.`} rows={5} required minLength={10} />
               </div>
-              {submitFeedback ? (
-                <p
-                  className={submitFeedback.type === "success" ? "text-sm font-medium text-emerald-600" : "text-sm font-medium text-destructive"}
-                  aria-live="polite"
-                >
-                  {submitFeedback.message}
-                </p>
-              ) : null}
               <Button type="submit" disabled={isSubmitting} className="w-full bg-primary text-primary-foreground disabled:opacity-70">
                 {isSubmitting ? "Sending..." : "Send Message"}
               </Button>

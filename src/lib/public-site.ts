@@ -167,6 +167,10 @@ function buildBackendPublicUrl(publicApiBaseUrl: string, agencySlug: string, hex
     return `${publicApiBaseUrl}/listings${appendHexToSearch(search ? `?${search}` : '', hexCode)}`;
   }
 
+  if (segments[0] === 'inquiry') {
+    return `${publicApiBaseUrl}/inquiries${appendHexToSearch(search ? `?${search}` : '', hexCode)}`;
+  }
+
   return `${publicApiBaseUrl}/organization${appendHexToSearch(search ? `?${search}` : '', hexCode)}`;
 }
 
