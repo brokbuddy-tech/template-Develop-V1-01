@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { MortgageCalculator } from '@/components/mortgage-calculator';
 import { PropertyCard } from '@/components/property-card';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Image from 'next/image';
 import { getPropertyById, getProperties } from '@/lib/api';
 import { LocationMapShell } from '@/components/location-map-shell';
@@ -237,6 +238,9 @@ export default async function PropertyDetailPage(props: { params: Promise<{ id: 
     }
 
     const prop = property as NonNullable<typeof property>;
+    const availableFloorPlans = (prop.floorPlans ?? []).filter(
+        (fp) => typeof fp?.url === 'string' && fp.url.trim().length > 0
+    );
 
     const { properties: allProperties } = await getProperties(undefined, agencySlug);
     const relatedProperties = allProperties.filter(p => p.type === prop.type && p.id !== prop.id).slice(0, 6);
@@ -273,8 +277,14 @@ export default async function PropertyDetailPage(props: { params: Promise<{ id: 
                         <div>
                             <h2 className="text-2xl font-bold mb-6">Property Details</h2>
                             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                <Stat icon={BedDouble} value={prop.bedrooms > 0 ? prop.bedrooms : 'Studio'} label="Bedrooms" />
-                                <Stat icon={Bath} value={prop.bathrooms} label="Bathrooms" />
+                                {prop.bedrooms > 0 ? (
+                                    <Stat icon={BedDouble} value={prop.bedrooms} label="Bedrooms" />
+                                ) : prop.type === 'Studio' || prop.category === 'Studio' ? (
+                                    <Stat icon={BedDouble} value="Studio" label="Bedrooms" />
+                                ) : null}
+                                {prop.bathrooms > 0 && (
+                                    <Stat icon={Bath} value={prop.bathrooms} label="Bathrooms" />
+                                )}
                                 <Stat icon={Square} value={prop.areaSqFt.toLocaleString()} label="Area (sqft)" />
                                 <Stat icon={Building} value={prop.type} label="Type" />
                             </div>
@@ -286,6 +296,38 @@ export default async function PropertyDetailPage(props: { params: Promise<{ id: 
                             <h2 className="text-2xl font-bold mb-4">Description</h2>
                             <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">{prop.description}</p>
                         </div>
+
+                        {availableFloorPlans.length > 0 && (
+                            <>
+                                <Separator className="my-8" />
+                                <div>
+                                    <h2 className="text-2xl font-bold mb-4">Floor Plans</h2>
+                                    <Tabs defaultValue={availableFloorPlans[0]?.type || '0'} className="w-full">
+                                        <TabsList className="w-full justify-start border-b rounded-none h-auto p-0 bg-transparent mb-6 overflow-x-auto flex-nowrap">
+                                            {availableFloorPlans.map((fp, i) => (
+                                                <TabsTrigger
+                                                    key={i}
+                                                    value={fp.type || `${i}`}
+                                                    className="data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:shadow-none rounded-none px-4 py-3 text-sm font-semibold whitespace-nowrap"
+                                                >
+                                                    {fp.type || fp.title || `Plan ${i + 1}`}
+                                                </TabsTrigger>
+                                            ))}
+                                        </TabsList>
+                                        {availableFloorPlans.map((fp, i) => (
+                                            <TabsContent key={i} value={fp.type || `${i}`} className="mt-0 focus-visible:outline-none focus-visible:ring-0">
+                                                <div className="relative aspect-[16/9] w-full border rounded-lg overflow-hidden bg-muted/20">
+                                                    <Image src={fp.url} alt={fp.title || fp.type || 'Floor Plan'} fill className="object-contain" />
+                                                </div>
+                                                {fp.title && fp.title !== fp.type && (
+                                                    <p className="mt-3 text-sm text-muted-foreground">{fp.title}</p>
+                                                )}
+                                            </TabsContent>
+                                        ))}
+                                    </Tabs>
+                                </div>
+                            </>
+                        )}
 
                         <Separator className="my-8" />
 
@@ -308,6 +350,35 @@ export default async function PropertyDetailPage(props: { params: Promise<{ id: 
 
                         <MortgageCalculator propertyPriceString={prop.price} />
 
+                        {(prop.trakheesi || prop.reraPermit || prop.dldPermitNo || prop.agent?.brn || prop.dldPermitLink) && (
+                            <>
+                                <Separator className="my-8" />
+                                <Card>
+                                    <CardHeader>
+                                        <CardTitle>Regulatory Information</CardTitle>
+                                    </CardHeader>
+                                    <CardContent className="flex flex-col sm:flex-row items-center gap-6">
+                                        {prop.dldPermitLink && (
+                                            <div className="w-32 h-32 bg-muted flex items-center justify-center rounded-md overflow-hidden relative border shrink-0 p-2">
+                                                <Image src={prop.dldPermitLink} alt="Trakheesi Permit QR Code" fill className="object-contain" />
+                                            </div>
+                                        )}
+                                        <div className="flex-1 space-y-4">
+                                            {(prop.trakheesi || prop.dldPermitNo) && (
+                                                <p className="text-sm font-semibold">Permit Number: <span className="font-mono bg-muted px-2 py-1 rounded-md">{prop.trakheesi || prop.dldPermitNo}</span></p>
+                                            )}
+                                            {prop.reraPermit && (
+                                                <p className="text-sm font-semibold">RERA Project Number: <span className="font-mono bg-muted px-2 py-1 rounded-md">{prop.reraPermit}</span></p>
+                                            )}
+                                            {prop.agent?.brn && (
+                                                <p className="text-sm font-semibold">BRN Number: <span className="font-mono bg-muted px-2 py-1 rounded-md">{prop.agent.brn}</span></p>
+                                            )}
+                                        </div>
+                                    </CardContent>
+                                </Card>
+                            </>
+                        )}
+
                         <Separator className="my-8" />
 
                         <div>
@@ -319,28 +390,6 @@ export default async function PropertyDetailPage(props: { params: Promise<{ id: 
                                 addressLabel={prop.mapAddress}
                             />
                         </div>
-
-                        <Separator className="my-8" />
-
-                        <Card>
-                            <CardHeader>
-                                <CardTitle>RERA Permit Information</CardTitle>
-                            </CardHeader>
-                            <CardContent className="flex flex-col sm:flex-row items-center gap-6">
-                                <div className="w-32 h-32 bg-muted flex items-center justify-center rounded-md">
-                                    <p className="text-xs text-muted-foreground">QR Code</p>
-                                </div>
-                                <div className="flex-1">
-                                    <p className="text-muted-foreground">
-                                        This listing is compliant with the Real Estate Regulatory Agency (RERA) regulations in Dubai.
-                                    </p>
-                                    <p className="text-muted-foreground mt-2">
-                                        Scan the QR code to verify the official permit and view detailed property information on the DLD/Trakheesi system.
-                                    </p>
-                                    <p className="text-sm font-semibold mt-4">Permit No: <span className="font-mono bg-muted px-2 py-1 rounded-md">7117457559</span></p>
-                                </div>
-                            </CardContent>
-                        </Card>
 
                     </div>
 

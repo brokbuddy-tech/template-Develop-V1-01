@@ -78,8 +78,14 @@ export function PropertyCard({ property }: { property: Property }) {
               <p className="text-xs text-muted-foreground truncate">{property.name}</p>
             </div>
             <div className="flex items-center gap-4 mt-3 border-t pt-3">
-              <Stat icon={BedDouble} value={property.bedrooms > 0 ? `${property.bedrooms} Beds` : 'Studio'} />
-              <Stat icon={Bath} value={`${property.bathrooms} Baths`} />
+              {property.bedrooms > 0 ? (
+                <Stat icon={BedDouble} value={`${property.bedrooms} Beds`} />
+              ) : property.type === 'Studio' || property.category === 'Studio' ? (
+                <Stat icon={BedDouble} value="Studio" />
+              ) : null}
+              {property.bathrooms > 0 && (
+                <Stat icon={Bath} value={`${property.bathrooms} Baths`} />
+              )}
               <Stat icon={Square} value={`${property.areaSqFt.toLocaleString()} sqft`} />
             </div>
 

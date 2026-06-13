@@ -403,6 +403,7 @@ function mapListingAgent(listing: any) {
         phone: getStringValue(publicAgent?.phone, legacyBroker?.brokerProfile?.publicPhone, legacyBroker?.phone) || null,
         email: getStringValue(publicAgent?.email, legacyBroker?.brokerProfile?.publicEmail, legacyBroker?.email) || null,
         whatsapp: getStringValue(publicAgent?.whatsapp, legacyBroker?.brokerProfile?.whatsapp, legacyBroker?.whatsapp, legacyBroker?.brokerProfile?.publicPhone, legacyBroker?.phone) || null,
+        brn: getStringValue(publicAgent?.brn, legacyBroker?.brokerProfile?.brn, legacyBroker?.brn) || null,
     };
 }
 
@@ -548,6 +549,11 @@ export function mapListingToProperty(listing: any, agencySlug?: string | null): 
         })),
         media,
         agent: mapListingAgent(listing),
+        dldPermitNo: getStringValue(listing.dldPermitNo, listing.permitNumber, fields.dldPermitNo, fields.permitNumber, fields.trakheesiPermit),
+        trakheesi: getStringValue(listing.trakheesi, listing.permitNumber, fields.trakheesi, fields.permitNumber, fields.trakheesiPermit),
+        reraPermit: getStringValue(listing.reraPermit, listing.reraNumber, listing.reraProjectNumber, fields.reraPermit, fields.reraNumber, fields.reraProjectNumber),
+        dldPermitLink: getStringValue(listing.dldPermitLink, fields.dldPermitLink) || null,
+        floorPlans: Array.isArray(listing.floorPlans) ? listing.floorPlans : Array.isArray(fields.floorPlans) ? fields.floorPlans : [],
     };
 }
 

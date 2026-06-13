@@ -32,6 +32,7 @@ export type PropertyAgent = {
   phone?: string | null;
   email?: string | null;
   whatsapp?: string | null;
+  brn?: string | null;
 };
 
 export type Property = {
@@ -66,6 +67,11 @@ export type Property = {
   galleryImageIds: string[];
   galleryImages?: PropertyImage[];
   media?: PropertyMedia[];
+  dldPermitNo?: string;
+  trakheesi?: string;
+  reraPermit?: string;
+  dldPermitLink?: string | null;
+  floorPlans?: any[];
 };
 
 export type Area = {
