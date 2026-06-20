@@ -551,7 +551,7 @@ export function mapListingToProperty(listing: any, agencySlug?: string | null): 
         agent: mapListingAgent(listing),
         dldPermitNo: getStringValue(listing.trakheesiPermitNumber, listing.dldPermitNo, listing.permitNumber, listing.trakheesi, fields.dldPermitNo, fields.permitNumber, fields.trakheesiPermit),
         trakheesi: getStringValue(listing.trakheesiPermitNumber, listing.trakheesi, listing.permitNumber, listing.dldPermitNo, fields.trakheesi, fields.permitNumber, fields.trakheesiPermit),
-        reraPermit: getStringValue(listing.reraPermitNumber, listing.reraPermit, listing.reraNumber, listing.reraProjectNumber, fields.reraPermit, fields.reraNumber, fields.reraProjectNumber),
+        reraPermit: getStringValue(listing.reraPermitNumber, listing.reraPermit, listing.reraNumber, listing.reraProjectNumber != null ? String(listing.reraProjectNumber) : undefined, fields.reraPermit, fields.reraNumber, fields.reraProjectNumber != null ? String(fields.reraProjectNumber) : undefined),
         dldPermitLink: getStringValue(listing.dldPermitLink, listing.trakheesiPermitLink, fields.dldPermitLink) || null,
         floorPlans: Array.isArray(listing.floorPlans) ? listing.floorPlans : Array.isArray(fields.floorPlans) ? fields.floorPlans : [],
     };

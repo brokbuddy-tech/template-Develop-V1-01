@@ -359,8 +359,20 @@ export default async function PropertyDetailPage(props: { params: Promise<{ id: 
                                     </CardHeader>
                                     <CardContent className="flex flex-col sm:flex-row items-center gap-6">
                                         {prop.dldPermitLink && (
-                                            <div className="w-32 h-32 bg-muted flex items-center justify-center rounded-md overflow-hidden relative border shrink-0 p-2">
-                                                <Image src={prop.dldPermitLink} alt="Trakheesi Permit QR Code" fill className="object-contain" />
+                                            <div className="flex flex-col items-center shrink-0">
+                                                <div className="w-32 h-32 bg-white flex items-center justify-center rounded-md overflow-hidden border p-2">
+                                                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                                                    <img
+                                                        src={`https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encodeURIComponent(prop.dldPermitLink)}`}
+                                                        alt="Trakheesi Permit QR Code"
+                                                        width={120}
+                                                        height={120}
+                                                        className="object-contain"
+                                                    />
+                                                </div>
+                                                <a href={prop.dldPermitLink} target="_blank" rel="noopener noreferrer" className="mt-2 text-xs text-primary hover:underline">
+                                                    Verify Permit →
+                                                </a>
                                             </div>
                                         )}
                                         <div className="flex-1 space-y-4">
@@ -368,7 +380,7 @@ export default async function PropertyDetailPage(props: { params: Promise<{ id: 
                                                 <p className="text-sm font-semibold">Permit Number: <span className="font-mono bg-muted px-2 py-1 rounded-md">{prop.trakheesi || prop.dldPermitNo}</span></p>
                                             )}
                                             {prop.reraPermit && (
-                                                <p className="text-sm font-semibold">RERA Project Number: <span className="font-mono bg-muted px-2 py-1 rounded-md">{prop.reraPermit}</span></p>
+                                                <p className="text-sm font-semibold">RERA Licence: <span className="font-mono bg-muted px-2 py-1 rounded-md">{prop.reraPermit}</span></p>
                                             )}
                                             {prop.agent?.brn && (
                                                 <p className="text-sm font-semibold">BRN Number: <span className="font-mono bg-muted px-2 py-1 rounded-md">{prop.agent.brn}</span></p>
